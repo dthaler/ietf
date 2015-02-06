@@ -5,10 +5,20 @@
            see the references section at the end.  This line tells the
            tool to pull the reference from the database. -->
       <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+      <!ENTITY rfc3972 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3972.xml">
+      <!ENTITY rfc4944 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4944.xml">
+      <!ENTITY rfc6282 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6282.xml">
+      <!ENTITY rfc6775 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6775.xml">
+      <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
+      <!ENTITY rfc7217 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7217.xml">
       <!-- For each Internet Draft you want to reference, add a line like
            below and then see the references section at the end. -->
-      <!ENTITY I-D.ietf-6man-uri-zoneid PUBLIC ''
-          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-uri-zoneid.xml'>
+      <!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml'>
+      <!ENTITY I-D.ietf-6man-default-iids PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-default-iids.xml'>
+      <!ENTITY I-D.ietf-6man-stable-privacy-addresses PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-stable-privacy-addresses.xml'>
       ]>
 <?rfc toc='yes' ?>
 <?rfc symrefs='yes' ?>
@@ -17,10 +27,10 @@
 <!-- <?rfc-ext parse-xml-in-artwork='yes' ?> -->
 <!-- <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?> -->
 
-<rfc docName="draft-bensley-tcpm-dctcp-00" ipr="trust200902" category="std">
+<rfc docName="draft-thaler-6lo-privacy-addrs-00" ipr="trust200902" category="std">
   <front>
-    <title abbrev='Abbreviated Title Goes Here'>Full Title Goes Here</title>
-    <author initials='S.' surname='Bensley' fullname='Stephen Bensley'>
+    <title abbrev='6LoWPAN Privacy Addresses'>Enabling Privacy Addressing With 6LoWPAN Technologies</title>
+    <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
       <organization>Microsoft</organization>
       <address>
         <postal>
@@ -30,48 +40,48 @@
           <code>98052</code>
           <country>USA</country>
         </postal>
-        <email>sbens@microsoft.com</email>
-      </address>
-    </author>
-    <author initials='L.' surname='Eggert' fullname='Lars Eggert'>
-      <organization>Netapp</organization>
-      <address>
-        <postal>
-          <street>123 Some Street</street>
-          <city>Anytown</city>
-          <region>State</region>
-          <code>Zip</code>
-          <country>USA</country>
-        </postal>
-        <email>email@example.com</email>
-      </address>
-    </author>
-    <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
-      <organization>Microsoft</organization>
-      <address>
-        <phone>+1 425 703 8835</phone>
         <email>dthaler@microsoft.com</email>
       </address>
     </author>
-    <date year='2014' />
-    <area>Transport</area>
-    <keyword>Some keyword</keyword>
-    <keyword>Another keyword</keyword>
+    <date year='2015' />
+    <area>Internet</area>
+    <keyword>unlinkability</keyword>
+    <keyword>anonymity</keyword>
+    <keyword>IPv6</keyword>
+    <keyword>Secure Neighbor Discovery</keyword>
     <abstract>
-      <t> Some abstract goes here...
-      </t>
-      <t> Second paragraph of abstract.  Blah blah blah...
+      <t> A potentially common misconception is that IPHC <xref target='RFC6282'/> is incompatible with the notion
+          of using addresses with sufficient entropy.  This draft attempts to dispel that notion, and specifies
+          how privacy addressing can be used on 6LoWPAN technologies, without any additional overhead in data
+          packets.
       </t>
     </abstract>
   </front>
   
   <middle>
     <section title='Introduction'>
-      <t> Some introduction might go here...
+      <t> RFC 6973 <xref target='RFC6973'/>, especially section 5, discusses privacy, and
+          Section 3 of <xref target='I-D.ietf-6man-ipv6-address-generation-privacy'/> provides further elaboration.
+      </t>
+      <t> RFC 6282 <xref target='RFC6282'/> defines a method for deriving IIDs from the source and/or 
+          destination addresses in the encapsulation header.  Unicast IPv6 addresses may be compressed 
+          to 64, 16, or 0 bits in the encoded IPv6 header.
+      </t>
+      <t> A stable per-network random ID generation mechanism could be at layer 2 and that essentially becomes 
+          another variant way to implement <xref target='I-D.ietf-6man-stable-privacy-addresses'/> if it's 
+          64 bits of entropy.   An IID generated from a random 16-bit address per 
+          Section 3.2.2 of <xref target='RFC6973'/> is not sufficient to mitigate address scanning, and also
+          does not sufficiently increase the size of the "anonymity set" defined in <xref target='RFC6973'/>.
+          The size of the address scan search space depends on the entropy in the IID.  An
+          adversary could also use statisical methods to determine the size of the L2 address space and 
+          thereby make some inference regarding the underlying technology on a given link.
+      </t>
+      <t> However, either way it doesn't expand the packet if there's 0 address bits in the packet.
       </t>
       <t> Second paragraph of introduction... Here's a cross reference
-          to <xref target='RFC2119'/> and 
-          <xref target='I-D.ietf-6man-uri-zoneid'/>. 
+          to <xref target='RFC2119'/>,
+          <xref target='I-D.ietf-6man-default-iids'/>
+          and
           And here's a bulleted list:
       </t>
       <t><list style='symbols'> 
@@ -159,12 +169,7 @@
     </section>
 
     <section title='Security Considerations'>
-      <t> Security considerations go here.
-      </t>
-    </section>
-    
-    <section title='Acknowledgements'>
-      <t> Thanks to various people.
+      <t> This entire document is about security considerations and mitigations.
       </t>
     </section>
   </middle>
@@ -172,28 +177,20 @@
   <back>
     <references title='Normative References'>
       &rfc2119;
-      &I-D.ietf-6man-uri-zoneid;
+      &rfc4944;
+      &rfc6282;
+      &rfc6775;
+
     </references>
     
     <references title='Informative References'>
-      <!-- Here's an example of a reference to something that's not an RFC
-           or an Internet Draft:
-        -->
-      <reference anchor='W3CWebArch' target='http://www.w3.org/TR/webarch/'>
-        <front>
-          <title>Architecture of the World Wide Web, Volume One</title>
-          <author>
-            <organization abbrev="W3C TAG">W3C Technical Architecture Group</organization>
-          </author>
-          <date year="2004" month="December"/>
-        </front>
-      </reference>
+      &rfc3972;
+      &rfc6973;
+      &rfc7217;
+      &I-D.ietf-6man-ipv6-address-generation-privacy;
+      &I-D.ietf-6man-default-iids;
+      &I-D.ietf-6man-stable-privacy-addresses;
     </references>
-
-    <section title="Here's An Appendix">
-      <t> Some content.
-      </t>
-    </section>
 
   </back>
 </rfc>
