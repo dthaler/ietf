@@ -8,7 +8,9 @@
       <!ENTITY rfc3972 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3972.xml">
       <!ENTITY rfc4941 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml">
       <!ENTITY rfc4944 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4944.xml">
+      <!ENTITY rfc5535 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5535.xml">
       <!ENTITY rfc6282 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6282.xml">
+      <!ENTITY rfc6496 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6496.xml">
       <!ENTITY rfc6724 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6724.xml">
       <!ENTITY rfc6775 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6775.xml">
       <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
@@ -94,6 +96,12 @@
           (often up to 6, per the default periods) old ones for long-lived connections.  This is in addition to
           zero or more "stable" addresses that might be used for connections that are linkable to more permanent
           identifiers such as DNS names or user names.
+      </t>
+      <t> Finally, allowing efficient use of addresses that are not IEEE-identifier based also has additional
+          security benefits not specific to privacy.  For example, addresses such as
+          Cryptographically Generated Addresses (CGAs) <xref target='RFC3972'/> and 
+          Hash-Based Addresses (HBAs) <xref target='RFC5535'/> can be used in security protocols
+          such as Secure Neighbor Discovery (SeND) <xref target='RFC6496'/>, IPsec, etc.
       </t>
       <t> There has been some concern that such approaches would necessarily interfere with efficient header
           compression for IPv6 over IEEE 802.15.4-based networks <xref target='RFC6282'/>, as it is important
@@ -220,21 +228,30 @@
     <section title='Security Considerations'>
       <t> This entire document is about security considerations and mitigations.
       </t>
+      <t> RFC 6775 <xref target='RFC6775'/> section 11 states,
+          "In some future deployments, one might want to use SEcure Neighbor
+           Discovery (SEND) [RFC3971] [RFC3972].  This is possible with the ARO
+           as sent between hosts and routers, since the address that is being
+           registered is the IPv6 source address of the NS and SEND verifies the
+           IPv6 source address of the packet."
+      </t>
     </section>
   </middle>
 
   <back>
+
     <references title='Normative References'>
       &rfc2119;
       &rfc4944;
       &rfc6282;
       &rfc6775;
-
     </references>
     
     <references title='Informative References'>
       &rfc3972;
       &rfc4941;
+      &rfc5535;
+      &rfc6496;
       &rfc6724;
       &rfc6973;
       &rfc7217;
