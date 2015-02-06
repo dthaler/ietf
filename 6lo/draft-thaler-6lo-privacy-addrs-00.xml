@@ -111,6 +111,8 @@
           rely on having around 60 or more bits of entropy in the address to provide sufficient
           cryptographic protection.
       </t>
+      <t> TODO: add mention of <xref target='I-D.ietf-6man-default-iids'/>
+      </t>
       <t> There has been some concern that such approaches would necessarily interfere with efficient header
           compression for IPv6 over IEEE 802.15.4-based networks <xref target='RFC6282'/>, as it is important
           to keep data packets small on such networks.  This document specifies how to use such addresses
@@ -202,6 +204,9 @@
           </t>
         </section>
         <section title='Context Identifier'>
+          <t> When non-IEEE-identifier-based addresses are used as specified in
+              this document, each address MUST be associated with a separate context.
+          </t>
           <t> LOWPAN_IPHC supports up to 16 source address contexts and 16 destination address contexts,
               allowing for simultaneous use of up to 16 source addresses and 16 destination addresses
               that are not IEEE-identifier based.  Context 0 is the default context if the CID
@@ -226,91 +231,16 @@
               MUST be per-network, and not used on other networks.
           </t>
         </section>
-      </section>
-    </section>
 
-    <section title='Details'>
-      <t> Second paragraph of introduction... Here's a cross reference
-          <xref target='I-D.ietf-6man-default-iids'/>
-          and
-          And here's a bulleted list:
-      </t>
-      <t><list style='symbols'>
-          <t> First bullet.
+        <section title='Context Distribution'>
+          <t> TODO: read and reference RFC 6775 (and determine whether that is sufficient or needs an
+              extension), especially Section 8.1, regarding context negotiation.
           </t>
-          <t> Second bullet.
+          <t> Section 4.2 of <xref target='RFC6775'/> defines the 6LoWPAN Context Option (6CO) for use in
+              Neighbor Discovery.  Since each non-IEEE-identifier-based address requires its own context,
+              the Context Length field MUST be set to 128 in the 6CO containing such context informaiton.
           </t>
-        </list>
-      </t>
-      <t> Now here's a sample ASCII art figure.
-      </t>
-      <figure align="center" anchor="processes">
-          <artwork><![CDATA[
-              +------------+
-              |  Holder of |     1. Generation
-              | identifier +<---------+
-              +----+-------+          |
-                   |                  | Match
-                   |                  v/
-                   |          +-------+-------+
-                   +----------+ Repository of |
-                   |          |  identifiers  |
-                   |          +-------+-------+
-   2. Distribution |                  ^\
-                   |                  | Match
-                   v                  |
-         +---------+-------+          |
-         |      User of    |          |
-         |    identifier   +----------+
-         +-----------------+    3. Use
-        ]]></artwork>
-        <postamble>Typical Identifier Processes
-        </postamble>
-      </figure>
-    </section>
-
-    <section title='Some Level 1 Title' anchor='somesection'>
-      <t> Here's a numbered list:
-      </t>
-      <t><list style='numbers'>
-         <t> First numbered item.
-         </t>
-         <t> Second numbered item.
-         </t>
-      </list>
-      </t>
-
-      <section title='Some Level 2 Title' anchor='somesubsection'>
-        <t> Here's a glossary style list of terms.
-        </t>
-        <t><list style='hanging' hangIndent='2'>
-          <t hangText='Widget:'> <vspace />
-            Some description of a widget.
-          </t>
-          <t hangText='Foobar:'> <vspace />
-            Some definition of a foobar.
-          </t>
-        </list>
-        </t>
-      </section>
-
-      <section title='Another Level 2 Title'>
-        <t> This section needs no anchor since there's no cross-reference
-            to it from elsewhere, unlike <xref target='somesection'/>
-            and <xref target='somesubsection'/>.
-        </t>
-        <t> Here's a sample packet diagram.
-        </t>
-        <figure align="center" anchor="tlv">
-            <artwork align="left"><![CDATA[
-                         1                   2                   3
-     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |     Type      |    Length     |            Value              |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            ]]></artwork>
-            <postamble>Type Length Value Packet</postamble>
-        </figure>
+        </section>
       </section>
     </section>
 

@@ -69,16 +69,13 @@ Table of Contents
        3.3.1.  Source Address  . . . . . . . . . . . . . . . . . . .   5
        3.3.2.  Destination Address . . . . . . . . . . . . . . . . .   5
        3.3.3.  Context Identifier  . . . . . . . . . . . . . . . . .   6
-   4.  Details . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   5.  Some Level 1 Title  . . . . . . . . . . . . . . . . . . . . .   7
-     5.1.  Some Level 2 Title  . . . . . . . . . . . . . . . . . . .   7
-     5.2.  Another Level 2 Title . . . . . . . . . . . . . . . . . .   7
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   9
+       3.3.4.  Context Distribution  . . . . . . . . . . . . . . . .   6
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   7
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
 
@@ -106,6 +103,9 @@ Table of Contents
    sure the IEEE identifier contains around 60 bits of entropy and is
    changed if a device moves to a different network.
 
+   Furthermore, to mitigate the threat of correlation of activities over
+   time, [RFC4941] specifies the notion of a "temporary" address to be
+   used for sessions that should not be linkable to more permanent
 
 
 
@@ -114,9 +114,6 @@ Thaler                   Expires August 10, 2015                [Page 2]
 Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 
-   Furthermore, to mitigate the threat of correlation of activities over
-   time, [RFC4941] specifies the notion of a "temporary" address to be
-   used for sessions that should not be linkable to more permanent
    identifiers (such as a DNS name, user name, or stable hardware
    address).  Such temporary addresses are appropriate for connections
    (typically locally-initiated outbound sessions) that an attacker
@@ -153,11 +150,14 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    having around 60 or more bits of entropy in the address to provide
    sufficient cryptographic protection.
 
+   TODO: add mention of [I-D.ietf-6man-default-iids]
+
    There has been some concern that such approaches would necessarily
    interfere with efficient header compression for IPv6 over IEEE
    802.15.4-based networks [RFC6282], as it is important to keep data
    packets small on such networks.  This document specifies how to use
    such addresses on these networks while avoiding extra overhead.
+
 
 
 
@@ -284,6 +284,10 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 3.3.3.  Context Identifier
 
+   When non-IEEE-identifier-based addresses are used as specified in
+   this document, each address MUST be associated with a separate
+   context.
+
    LOWPAN_IPHC supports up to 16 source address contexts and 16
    destination address contexts, allowing for simultaneous use of up to
    16 source addresses and 16 destination addresses that are not IEEE-
@@ -313,20 +317,16 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    any context information MUST be per-network, and not used on other
    networks.
 
-4.  Details
+3.3.4.  Context Distribution
 
-   Second paragraph of introduction... Here's a cross reference
-   [I-D.ietf-6man-default-iids] and And here's a bulleted list:
+   TODO: read and reference RFC 6775 (and determine whether that is
+   sufficient or needs an extension), especially Section 8.1, regarding
+   context negotiation.
 
-   o  First bullet.
-
-   o  Second bullet.
-
-   Now here's a sample ASCII art figure.
-
-
-
-
+   Section 4.2 of [RFC6775] defines the 6LoWPAN Context Option (6CO) for
+   use in Neighbor Discovery.  Since each non-IEEE-identifier-based
+   address requires its own context, the Context Length field MUST be
+   set to 128 in the 6CO containing such context informaiton.
 
 
 
@@ -338,77 +338,11 @@ Thaler                   Expires August 10, 2015                [Page 6]
 Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 
-                 +------------+
-                 |  Holder of |     1. Generation
-                 | identifier +<---------+
-                 +----+-------+          |
-                      |                  | Match
-                      |                  v/
-                      |          +-------+-------+
-                      +----------+ Repository of |
-                      |          |  identifiers  |
-                      |          +-------+-------+
-      2. Distribution |                  ^\
-                      |                  | Match
-                      v                  |
-            +---------+-------+          |
-            |      User of    |          |
-            |    identifier   +----------+
-            +-----------------+    3. Use
-
-                       Typical Identifier Processes
-
-                                 Figure 1
-
-5.  Some Level 1 Title
-
-   Here's a numbered list:
-
-   1.  First numbered item.
-
-   2.  Second numbered item.
-
-5.1.  Some Level 2 Title
-
-   Here's a glossary style list of terms.
-
-   Widget:
-     Some description of a widget.
-
-   Foobar:
-     Some definition of a foobar.
-
-5.2.  Another Level 2 Title
-
-   This section needs no anchor since there's no cross-reference to it
-   from elsewhere, unlike Section 5 and Section 5.1.
-
-   Here's a sample packet diagram.
-
-
-
-
-
-Thaler                   Expires August 10, 2015                [Page 7]
-
-Internet-Draft          6LoWPAN Privacy Addresses          February 2015
-
-
-                            1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |    Length     |            Value              |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                         Type Length Value Packet
-
-                                 Figure 2
-
-6.  IANA Considerations
+4.  IANA Considerations
 
    This document has no actions for IANA.
 
-7.  Security Considerations
+5.  Security Considerations
 
    This entire document is about security considerations and
    mitigations.
@@ -420,9 +354,9 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    source address of the NS and SEND verifies the IPv6 source address of
    the packet."
 
-8.  References
+6.  References
 
-8.1.  Normative References
+6.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -440,17 +374,7 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
               Wireless Personal Area Networks (6LoWPANs)", RFC 6775,
               November 2012.
 
-
-
-
-
-
-Thaler                   Expires August 10, 2015                [Page 8]
-
-Internet-Draft          6LoWPAN Privacy Addresses          February 2015
-
-
-8.2.  Informative References
+6.2.  Informative References
 
    [RFC3972]  Aura, T., "Cryptographically Generated Addresses (CGA)",
               RFC 3972, March 2005.
@@ -461,6 +385,14 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
    [RFC5535]  Bagnulo, M., "Hash-Based Addresses (HBA)", RFC 5535, June
               2009.
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 7]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
 
    [RFC6496]  Krishnan, S., Laganier, J., Bonola, M., and A. Garcia-
               Martinez, "Secure Proxy ND Support for SEcure Neighbor
@@ -493,19 +425,6 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 Author's Address
 
-
-
-
-
-
-
-
-
-Thaler                   Expires August 10, 2015                [Page 9]
-
-Internet-Draft          6LoWPAN Privacy Addresses          February 2015
-
-
    Dave Thaler
    Microsoft
    One Microsoft Way
@@ -526,35 +445,4 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thaler                   Expires August 10, 2015               [Page 10]
+Thaler                   Expires August 10, 2015                [Page 8]
