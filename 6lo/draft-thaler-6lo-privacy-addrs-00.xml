@@ -6,8 +6,10 @@
            tool to pull the reference from the database. -->
       <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
       <!ENTITY rfc3972 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3972.xml">
+      <!ENTITY rfc4941 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml">
       <!ENTITY rfc4944 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4944.xml">
       <!ENTITY rfc6282 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6282.xml">
+      <!ENTITY rfc6724 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6724.xml">
       <!ENTITY rfc6775 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6775.xml">
       <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
       <!ENTITY rfc7217 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7217.xml">
@@ -50,19 +52,67 @@
     <keyword>IPv6</keyword>
     <keyword>Secure Neighbor Discovery</keyword>
     <abstract>
-      <t> A potentially common misconception is that IPHC <xref target='RFC6282'/> is incompatible with the notion
-          of using addresses with sufficient entropy.  This draft attempts to dispel that notion, and specifies
-          how privacy addressing can be used on 6LoWPAN technologies, without any additional overhead in data
-          packets.
+      <t> A potentially common misconception is that header 6LowPAN header compression is incompatible (or at least
+          inefficient) with the notion of using addresses with sufficient entropy.  This draft attempts to dispel 
+          that notion, and specifies how privacy addressing can be used on 6LoWPAN technologies, without
+          additional overhead in data packets.
       </t>
     </abstract>
   </front>
   
   <middle>
     <section title='Introduction'>
-      <t> RFC 6973 <xref target='RFC6973'/>, especially section 5, discusses privacy, and
-          Section 3 of <xref target='I-D.ietf-6man-ipv6-address-generation-privacy'/> provides further elaboration.
+      <t> RFC 6973 <xref target='RFC6973'/> discusses privacy considerations for Internet protocols, and Section 5.2
+          in particular covers a number of privacy-specific threats.  In the context of IPv6 address,
+          Section 3 of <xref target='I-D.ietf-6man-ipv6-address-generation-privacy'/> provides further
+          elaboration on the applicability of the privacy threats.  When interface identifiers (IIDs) are
+          generated without sufficient entropy, devices and users become vulnerable to
+          the various threats discussed there, including correlation of activities over time, location tracking,
+          address scanning, and device-specific vulnerability exploitation.
       </t>
+      <t> Interfaces identifiers formed from IEEE identifiers can have insufficient entropy unless the
+          IEEE identifier itself has sufficient entropy, has enough (typically 64 or more) bits of entropy 
+          carried over into the IPv6 address to have a sufficiently large "anonymity set" as defined
+          in <xref target='RFC6973'/>.  Furthermore, IEEE-identifier-based IIDs are also insufficient to
+          prevent location tracking unless the IEEE identifier itself is different at each network location.
+          This observation suggests that the privacy threats can be mitigated in either of two ways:
+          either make sure the IEEE identifier contains 64 bits of entropy and is changed if a device moves
+          to a different network, or else use an IPv6 address generation mechanism that is not IEEE-identifier-based.
+      </t>
+      <t> Furthermore, to mitigate the threat of correlation of activities over time, <xref target='RFC4941'/>
+          specifies the notion of a "temporary" address to be used for sessions that should not be linkable
+          to more permanent identifiers (such as a DNS name or stable hardware address).  Such temporary addresses
+          are appropriate for connections (typically locally-initiated outbound sessions) that do not use a 
+          stable identifier at a higher layer, such as a user name or hostname.  Indeed, the default
+          address selection rules <xref target='RFC6724'/> now prefer temporary addresses by default for
+          outgoing connections.  A new temporary address is periodically (default is 1 day in xref target='RFC4941'/>)
+          generated, which limits the threat of correlation of activies over time to that period.  The address itself
+          though may still be usable for existing long-lived connections (but not new connections) for
+          some longer period (default is 1 week); this allows for not breaking application sessions, especially
+          those that might be initiated shortly before a new temporary address is generated.  This fact means
+          that multiple temporary addresses will exist at the same time, one for new connections, and one or more
+          (often up to 6, per the default periods) old ones for long-lived connections.  This is in addition to
+          zero or more "stable" addresses that might be used for connections that are linkable to more permanent
+          identifiers such as DNS names or user names.
+      </t>
+      <t> There has been some concern that such approaches would necessarily interfere with efficient header
+          compression for IPv6 over IEEE 802.15.4-based networks <xref target='RFC6282'/>, as it is important
+          to keep data packets small on such networks.  This document specifies how to use such addresses
+          on these networks while avoiding extra overhead.
+      </t>
+    </section>
+
+    <section title='Terminology'>
+      <t> This document uses the terminology defined in Section 3 of <xref target='RFC6973'/>, including
+          terms such as "(un)linkability" and "anonymity set".
+      </t>
+      <t>  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+           "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+           document are to be interpreted as described in <xref target='RFC2119'/>.
+      </t>
+    </section>
+
+    <section title='Details'>
       <t> RFC 6282 <xref target='RFC6282'/> defines a method for deriving IIDs from the source and/or 
           destination addresses in the encapsulation header.  Unicast IPv6 addresses may be compressed 
           to 64, 16, or 0 bits in the encoded IPv6 header.
@@ -79,7 +129,6 @@
       <t> However, either way it doesn't expand the packet if there's 0 address bits in the packet.
       </t>
       <t> Second paragraph of introduction... Here's a cross reference
-          to <xref target='RFC2119'/>,
           <xref target='I-D.ietf-6man-default-iids'/>
           and
           And here's a bulleted list:
@@ -185,6 +234,8 @@
     
     <references title='Informative References'>
       &rfc3972;
+      &rfc4941;
+      &rfc6724;
       &rfc6973;
       &rfc7217;
       &I-D.ietf-6man-ipv6-address-generation-privacy;
