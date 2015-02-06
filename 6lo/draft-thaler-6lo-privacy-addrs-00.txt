@@ -1,0 +1,392 @@
+
+
+
+
+Network Working Group                                          D. Thaler
+Internet-Draft                                                 Microsoft
+Intended status: Standards Track                        February 5, 2015
+Expires: August 9, 2015
+
+
+         Enabling Privacy Addressing With 6LoWPAN Technologies
+                   draft-thaler-6lo-privacy-addrs-00
+
+Abstract
+
+   A potentially common misconception is that header 6LowPAN header
+   compression is incompatible (or at least inefficient) with the notion
+   of using addresses with sufficient entropy.  This draft attempts to
+   dispel that notion, and specifies how privacy addressing can be used
+   on 6LoWPAN technologies, without additional overhead in data packets.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on August 9, 2015.
+
+Copyright Notice
+
+   Copyright (c) 2015 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 1]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Details . . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   4.  Some Level 1 Title  . . . . . . . . . . . . . . . . . . . . .   4
+     4.1.  Some Level 2 Title  . . . . . . . . . . . . . . . . . . .   5
+     4.2.  Another Level 2 Title . . . . . . . . . . . . . . . . . .   5
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   6
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
+
+1.  Introduction
+
+   RFC 6973 [RFC6973] discusses privacy considerations for Internet
+   protocols, and Section 5.2 in particular covers a number of privacy-
+   specific threats.  In the context of IPv6 address, Section 3 of
+   [I-D.ietf-6man-ipv6-address-generation-privacy] provides further
+   elaboration on the applicability of the privacy threats.  When
+   interface identifiers (IIDs) are generated without sufficient
+   entropy, devices and users become vulnerable to the various threats
+   discussed there, including correlation of activities over time,
+   location tracking, address scanning, and device-specific
+   vulnerability exploitation.
+
+   Interfaces identifiers formed from IEEE identifiers can have
+   insufficient entropy unless the IEEE identifier itself has sufficient
+   entropy, has enough (typically 64 or more) bits of entropy carried
+   over into the IPv6 address to have a sufficiently large "anonymity
+   set" as defined in [RFC6973].  Furthermore, IEEE-identifier-based
+   IIDs are also insufficient to prevent location tracking unless the
+   IEEE identifier itself is different at each network location.  This
+   observation suggests that the privacy threats can be mitigated in
+   either of two ways: either make sure the IEEE identifier contains 64
+   bits of entropy and is changed if a device moves to a different
+   network, or else use an IPv6 address generation mechanism that is not
+   IEEE-identifier-based.
+
+   Furthermore, to mitigate the threat of correlation of activities over
+   time, [RFC4941] specifies the notion of a "temporary" address to be
+   used for sessions that should not be linkable to more permanent
+   identifiers (such as a DNS name or stable hardware address).  Such
+   temporary addresses are appropriate for connections (typically
+   locally-initiated outbound sessions) that do not use a stable
+   identifier at a higher layer, such as a user name or hostname.
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 2]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+   Indeed, the default address selection rules [RFC6724] now prefer
+   temporary addresses by default for outgoing connections.  A new
+   temporary address is periodically (default is 1 day in xref
+   target='RFC4941'/>) generated, which limits the threat of correlation
+   of activies over time to that period.  The address itself though may
+   still be usable for existing long-lived connections (but not new
+   connections) for some longer period (default is 1 week); this allows
+   for not breaking application sessions, especially those that might be
+   initiated shortly before a new temporary address is generated.  This
+   fact means that multiple temporary addresses will exist at the same
+   time, one for new connections, and one or more (often up to 6, per
+   the default periods) old ones for long-lived connections.  This is in
+   addition to zero or more "stable" addresses that might be used for
+   connections that are linkable to more permanent identifiers such as
+   DNS names or user names.
+
+   Finally, allowing efficient use of addresses that are not IEEE-
+   identifier based also has additional security benefits not specific
+   to privacy.  For example, addresses such as Cryptographically
+   Generated Addresses (CGAs) [RFC3972] and Hash-Based Addresses (HBAs)
+   [RFC5535] can be used in security protocols such as Secure Neighbor
+   Discovery (SeND) [RFC6496], IPsec, etc.
+
+   There has been some concern that such approaches would necessarily
+   interfere with efficient header compression for IPv6 over IEEE
+   802.15.4-based networks [RFC6282], as it is important to keep data
+   packets small on such networks.  This document specifies how to use
+   such addresses on these networks while avoiding extra overhead.
+
+2.  Terminology
+
+   This document uses the terminology defined in Section 3 of [RFC6973],
+   including terms such as "(un)linkability" and "anonymity set".
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+3.  Details
+
+   RFC 6282 [RFC6282] defines a method for deriving IIDs from the source
+   and/or destination addresses in the encapsulation header.  Unicast
+   IPv6 addresses may be compressed to 64, 16, or 0 bits in the encoded
+   IPv6 header.
+
+   A stable per-network random ID generation mechanism could be at layer
+   2 and that essentially becomes another variant way to implement
+   [I-D.ietf-6man-stable-privacy-addresses] if it's 64 bits of entropy.
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 3]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+   An IID generated from a random 16-bit address per Section 3.2.2 of
+   [RFC6973] is not sufficient to mitigate address scanning, and also
+   does not sufficiently increase the size of the "anonymity set"
+   defined in [RFC6973].  The size of the address scan search space
+   depends on the entropy in the IID.  An adversary could also use
+   statisical methods to determine the size of the L2 address space and
+   thereby make some inference regarding the underlying technology on a
+   given link.
+
+   However, either way it doesn't expand the packet if there's 0 address
+   bits in the packet.
+
+   Second paragraph of introduction... Here's a cross reference
+   [I-D.ietf-6man-default-iids] and And here's a bulleted list:
+
+   o  First bullet.
+
+   o  Second bullet.
+
+   Now here's a sample ASCII art figure.
+
+                 +------------+
+                 |  Holder of |     1. Generation
+                 | identifier +<---------+
+                 +----+-------+          |
+                      |                  | Match
+                      |                  v/
+                      |          +-------+-------+
+                      +----------+ Repository of |
+                      |          |  identifiers  |
+                      |          +-------+-------+
+      2. Distribution |                  ^\
+                      |                  | Match
+                      v                  |
+            +---------+-------+          |
+            |      User of    |          |
+            |    identifier   +----------+
+            +-----------------+    3. Use
+
+                       Typical Identifier Processes
+
+                                 Figure 1
+
+4.  Some Level 1 Title
+
+   Here's a numbered list:
+
+   1.  First numbered item.
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 4]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+   2.  Second numbered item.
+
+4.1.  Some Level 2 Title
+
+   Here's a glossary style list of terms.
+
+   Widget:
+     Some description of a widget.
+
+   Foobar:
+     Some definition of a foobar.
+
+4.2.  Another Level 2 Title
+
+   This section needs no anchor since there's no cross-reference to it
+   from elsewhere, unlike Section 4 and Section 4.1.
+
+   Here's a sample packet diagram.
+
+                            1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |     Type      |    Length     |            Value              |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+                         Type Length Value Packet
+
+                                 Figure 2
+
+5.  IANA Considerations
+
+   This document has no actions for IANA.
+
+6.  Security Considerations
+
+   This entire document is about security considerations and
+   mitigations.
+
+   RFC 6775 [RFC6775] section 11 states, "In some future deployments,
+   one might want to use SEcure Neighbor Discovery (SEND) [RFC3971]
+   [RFC3972].  This is possible with the ARO as sent between hosts and
+   routers, since the address that is being registered is the IPv6
+   source address of the NS and SEND verifies the IPv6 source address of
+   the packet."
+
+
+
+
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 5]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC4944]  Montenegro, G., Kushalnagar, N., Hui, J., and D. Culler,
+              "Transmission of IPv6 Packets over IEEE 802.15.4
+              Networks", RFC 4944, September 2007.
+
+   [RFC6282]  Hui, J. and P. Thubert, "Compression Format for IPv6
+              Datagrams over IEEE 802.15.4-Based Networks", RFC 6282,
+              September 2011.
+
+   [RFC6775]  Shelby, Z., Chakrabarti, S., Nordmark, E., and C. Bormann,
+              "Neighbor Discovery Optimization for IPv6 over Low-Power
+              Wireless Personal Area Networks (6LoWPANs)", RFC 6775,
+              November 2012.
+
+7.2.  Informative References
+
+   [RFC3972]  Aura, T., "Cryptographically Generated Addresses (CGA)",
+              RFC 3972, March 2005.
+
+   [RFC4941]  Narten, T., Draves, R., and S. Krishnan, "Privacy
+              Extensions for Stateless Address Autoconfiguration in
+              IPv6", RFC 4941, September 2007.
+
+   [RFC5535]  Bagnulo, M., "Hash-Based Addresses (HBA)", RFC 5535, June
+              2009.
+
+   [RFC6496]  Krishnan, S., Laganier, J., Bonola, M., and A. Garcia-
+              Martinez, "Secure Proxy ND Support for SEcure Neighbor
+              Discovery (SEND)", RFC 6496, February 2012.
+
+   [RFC6724]  Thaler, D., Draves, R., Matsumoto, A., and T. Chown,
+              "Default Address Selection for Internet Protocol Version 6
+              (IPv6)", RFC 6724, September 2012.
+
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973, July
+              2013.
+
+   [RFC7217]  Gont, F., "A Method for Generating Semantically Opaque
+              Interface Identifiers with IPv6 Stateless Address
+              Autoconfiguration (SLAAC)", RFC 7217, April 2014.
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 6]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+   [I-D.ietf-6man-ipv6-address-generation-privacy]
+              Cooper, A., Gont, F., and D. Thaler, "Privacy
+              Considerations for IPv6 Address Generation Mechanisms",
+              draft-ietf-6man-ipv6-address-generation-privacy-03 (work
+              in progress), January 2015.
+
+   [I-D.ietf-6man-default-iids]
+              Gont, F., Cooper, A., Thaler, D., and W. Will,
+              "Recommendation on Stable IPv6 Interface Identifiers",
+              draft-ietf-6man-default-iids-02 (work in progress),
+              January 2015.
+
+   [I-D.ietf-6man-stable-privacy-addresses]
+              Gont, F., "A Method for Generating Semantically Opaque
+              Interface Identifiers with IPv6 Stateless Address
+              Autoconfiguration (SLAAC)", draft-ietf-6man-stable-
+              privacy-addresses-17 (work in progress), January 2014.
+
+Author's Address
+
+   Dave Thaler
+   Microsoft
+   One Microsoft Way
+   Redmond, WA  98052
+   USA
+
+   Email: dthaler@microsoft.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thaler                   Expires August 9, 2015                 [Page 7]
