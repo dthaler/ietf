@@ -4,8 +4,8 @@
 
 Network Working Group                                          D. Thaler
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                        February 5, 2015
-Expires: August 9, 2015
+Intended status: Standards Track                        February 6, 2015
+Expires: August 10, 2015
 
 
          Enabling Privacy Addressing With 6LoWPAN Technologies
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 9, 2015.
+   This Internet-Draft will expire on August 10, 2015.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thaler                   Expires August 9, 2015                 [Page 1]
+Thaler                   Expires August 10, 2015                [Page 1]
 
 Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
@@ -61,17 +61,24 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   3.  Details . . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   4.  Some Level 1 Title  . . . . . . . . . . . . . . . . . . . . .   4
-     4.1.  Some Level 2 Title  . . . . . . . . . . . . . . . . . . .   5
-     4.2.  Another Level 2 Title . . . . . . . . . . . . . . . . . .   5
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   6
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  Compression Details . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Use of IEEE-Identifier-Based Addresses  . . . . . . . . .   4
+     3.2.  Use of 16-Bit Short Addresses . . . . . . . . . . . . . .   5
+     3.3.  Use of Non-IEEE-Identifier-Based Addresses  . . . . . . .   5
+       3.3.1.  Source Address  . . . . . . . . . . . . . . . . . . .   5
+       3.3.2.  Destination Address . . . . . . . . . . . . . . . . .   5
+       3.3.3.  Context Identifier  . . . . . . . . . . . . . . . . .   6
+   4.  Details . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
+   5.  Some Level 1 Title  . . . . . . . . . . . . . . . . . . . . .   7
+     5.1.  Some Level 2 Title  . . . . . . . . . . . . . . . . . . .   7
+     5.2.  Another Level 2 Title . . . . . . . . . . . . . . . . . .   7
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
 
@@ -88,60 +95,80 @@ Table of Contents
 
    Interfaces identifiers formed from IEEE identifiers can have
    insufficient entropy unless the IEEE identifier itself has sufficient
-   entropy, has enough (typically 64 or more) bits of entropy carried
-   over into the IPv6 address to have a sufficiently large "anonymity
-   set" as defined in [RFC6973].  Furthermore, IEEE-identifier-based
-   IIDs are also insufficient to prevent location tracking unless the
-   IEEE identifier itself is different at each network location.  This
-   observation suggests that the privacy threats can be mitigated in
-   either of two ways: either make sure the IEEE identifier contains 64
-   bits of entropy and is changed if a device moves to a different
-   network, or else use an IPv6 address generation mechanism that is not
-   IEEE-identifier-based.
-
-   Furthermore, to mitigate the threat of correlation of activities over
-   time, [RFC4941] specifies the notion of a "temporary" address to be
-   used for sessions that should not be linkable to more permanent
-   identifiers (such as a DNS name or stable hardware address).  Such
-   temporary addresses are appropriate for connections (typically
-   locally-initiated outbound sessions) that do not use a stable
-   identifier at a higher layer, such as a user name or hostname.
+   entropy, and enough (typically on the order of 60 or more) bits of
+   entropy are carried over into the IPv6 address to have a sufficiently
+   large "anonymity set" as defined in [RFC6973].  Furthermore, IEEE-
+   identifier-based IIDs are also insufficient to prevent location
+   tracking unless the IEEE identifier itself is different at each
+   network location.  This observation suggests that the privacy threats
+   can be mitigated in either of two ways: either use an IPv6 address
+   generation mechanism that is not IEEE-identifier-based, or else make
+   sure the IEEE identifier contains around 60 bits of entropy and is
+   changed if a device moves to a different network.
 
 
 
-Thaler                   Expires August 9, 2015                 [Page 2]
+
+Thaler                   Expires August 10, 2015                [Page 2]
 
 Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 
+   Furthermore, to mitigate the threat of correlation of activities over
+   time, [RFC4941] specifies the notion of a "temporary" address to be
+   used for sessions that should not be linkable to more permanent
+   identifiers (such as a DNS name, user name, or stable hardware
+   address).  Such temporary addresses are appropriate for connections
+   (typically locally-initiated outbound sessions) that an attacker
+   cannot link to a stable identifier such as a user name or DNS name.
    Indeed, the default address selection rules [RFC6724] now prefer
-   temporary addresses by default for outgoing connections.  A new
-   temporary address is periodically (default is 1 day in xref
-   target='RFC4941'/>) generated, which limits the threat of correlation
-   of activies over time to that period.  The address itself though may
-   still be usable for existing long-lived connections (but not new
-   connections) for some longer period (default is 1 week); this allows
-   for not breaking application sessions, especially those that might be
-   initiated shortly before a new temporary address is generated.  This
-   fact means that multiple temporary addresses will exist at the same
-   time, one for new connections, and one or more (often up to 6, per
-   the default periods) old ones for long-lived connections.  This is in
-   addition to zero or more "stable" addresses that might be used for
-   connections that are linkable to more permanent identifiers such as
-   DNS names or user names.
+   temporary addresses by default for outgoing connections.  When
+   temporary addresses are used, a new temporary address is periodically
+   (default is 1 day in xref target='RFC4941'/>) generated, which limits
+   the threat of correlation of activies over time to that period.  The
+   address itself though may still be usable for existing long-lived
+   connections (but not new connections) for some longer period (default
+   is 1 week); this allows for not breaking application sessions,
+   especially those that might be initiated shortly before a new
+   temporary address is generated.  This fact means that multiple
+   temporary addresses can exist at the same time, one for new
+   connections, and one or more (often up to 6, per the default periods)
+   old ones for long-lived connections.  This is in addition to zero or
+   more "stable" addresses that might be used for connections that are
+   linkable to more permanent identifiers such as DNS names or user
+   names.  Whereas most threats could be mitigated if the IEEE
+   identifier contains sufficient entropy and is different per-network,
+   mitigating the threat of correlation of activities over time
+   typically cannot be done using an IEEE identifier, since mitigating
+   such a threat typically involves the ability to use multiple IPv6
+   addresses simultaneously whereas typically only one IEEE identifier
+   can be used at a time.
 
    Finally, allowing efficient use of addresses that are not IEEE-
-   identifier based also has additional security benefits not specific
+   identifier-based also has additional security benefits not specific
    to privacy.  For example, addresses such as Cryptographically
    Generated Addresses (CGAs) [RFC3972] and Hash-Based Addresses (HBAs)
    [RFC5535] can be used in security protocols such as Secure Neighbor
-   Discovery (SeND) [RFC6496], IPsec, etc.
+   Discovery (SeND) [RFC6496], IPsec, etc.  Such techniques rely on
+   having around 60 or more bits of entropy in the address to provide
+   sufficient cryptographic protection.
 
    There has been some concern that such approaches would necessarily
    interfere with efficient header compression for IPv6 over IEEE
    802.15.4-based networks [RFC6282], as it is important to keep data
    packets small on such networks.  This document specifies how to use
    such addresses on these networks while avoiding extra overhead.
+
+
+
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 3]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
 
 2.  Terminology
 
@@ -152,35 +179,141 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
 
-3.  Details
+3.  Compression Details
 
-   RFC 6282 [RFC6282] defines a method for deriving IIDs from the source
-   and/or destination addresses in the encapsulation header.  Unicast
-   IPv6 addresses may be compressed to 64, 16, or 0 bits in the encoded
-   IPv6 header.
+   The LOWPAN_IPHC encoding format specified in Section 3.1 of RFC 6282
+   [RFC6282] defines a method for deriving IIDs from the source and/or
+   destination addresses in the encapsulation header.  Unicast IPv6
+   addresses may be compressed to 64, 16, or 0 bits in the encoded IPv6
+   header.
 
-   A stable per-network random ID generation mechanism could be at layer
-   2 and that essentially becomes another variant way to implement
-   [I-D.ietf-6man-stable-privacy-addresses] if it's 64 bits of entropy.
+3.1.  Use of IEEE-Identifier-Based Addresses
+
+   As noted earlier, some privacy threats, could be mitigated using per-
+   network "randomized" IEEE identifiers with 60 or more bits of
+   entropy.  A number of such proposals can be found at
+   <https://mentor.ieee.org/privecsg/documents>.  Using IPv6 addresses
+   derived from such IEEE identifiers would be roughly equivalent to
+   those specified in [RFC7217].
+
+   Such addresses would be encoded as usual using the LOWPAN_IPHC
+   encoding format.  For example, if the source and destination
+   addresses are both on-link and derived from the IEEE identifier in
+   the encapsulating header:
+
+   o  SAC (Source Address Compression) is set to 0 to indicate stateless
+      compression.
+
+   o  SAM (Source Address Mode) is set to 11 to indicate the address is
+      fully elided and can be computed from the encapsulating header.
+
+   o  DAC (Destination Address Compression) is set to 0 to indicate
+      stateless compression.
+
+   o  DAM (Destination Address Mode) is set to 11 to indicate the
+      address is fully elided and can be computed from the encapsulating
+      header.
 
 
 
-Thaler                   Expires August 9, 2015                 [Page 3]
+
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 4]
 
 Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
 
-   An IID generated from a random 16-bit address per Section 3.2.2 of
-   [RFC6973] is not sufficient to mitigate address scanning, and also
-   does not sufficiently increase the size of the "anonymity set"
-   defined in [RFC6973].  The size of the address scan search space
-   depends on the entropy in the IID.  An adversary could also use
-   statisical methods to determine the size of the L2 address space and
-   thereby make some inference regarding the underlying technology on a
-   given link.
+3.2.  Use of 16-Bit Short Addresses
 
-   However, either way it doesn't expand the packet if there's 0 address
-   bits in the packet.
+   An IPv6 address formed (per Secton 6 of [RFC4944]) from an IEEE
+   802.15.4 16-bit short address does not provide sufficient entropy to
+   fully mitigate address scanning, as the size of the address scan
+   search space depends on the entropy in the IID, and only 15 bits are
+   available for unicast addresses.  An adversary could also use
+   statisical methods to determine the size of the L2 address space and
+   thereby make some inference regarding the underlying technology being
+   IEEE 802.15.4 on a given link.  As such, this address generation
+   mechanism SHOULD NOT be used on networks connected to the Internet or
+   any other network where privacy threats may be an issue.
+
+   It might be possible to construct IPv6 addresses from 16-bit short
+   addresses using an alternate mechanism that mitigates address scans,
+   by all nodes on a given L2 network having a shared secret and using a
+   one-way hash of the shared secret together with the short address, to
+   generate the IID, thus causing the IIDs to be spread out among the
+   full range of IIDs.  Specifying the details of such a scheme is left
+   for future work, if there is interest.
+
+3.3.  Use of Non-IEEE-Identifier-Based Addresses
+
+   Unicast addresses that are not IEEE-identifier based SHOULD be
+   compressed to 0 bits as follows, using stateful context-based
+   compression where all IID bits are covered by context information.
+   It is also worth pointing out that, unlike stateless compression,
+   stateful context-based compression can also allow compressing
+   addresses of nodes outside the local network (i.e., where the IEEE
+   identifier in the encapsulating header is that of a router rather
+   than the peer) and hence can provide greater savings in such cases.
+
+3.3.1.  Source Address
+
+   SAC (Source Address Compression) MUST be set to 1 to indicate
+   stateful context-based compression.
+
+   SAM (Source Address Mode) MUST be set to 11 to indicate that the
+   address is fully elided.
+
+3.3.2.  Destination Address
+
+   DAC (Destination Address Compression) MUST be set to 1 to indicate
+   stateful context-based compression.
+
+   DAM (Destination Address Mode) MUST be set to 11 to indicate that the
+   address is fully elided.
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 5]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+3.3.3.  Context Identifier
+
+   LOWPAN_IPHC supports up to 16 source address contexts and 16
+   destination address contexts, allowing for simultaneous use of up to
+   16 source addresses and 16 destination addresses that are not IEEE-
+   identifier based.  Context 0 is the default context if the CID
+   (Context Identifier Extension) octet is absent, and other values
+   require the CID to be present.  As such, it is RECOMMENDED that the
+   address most commonly used (typically either the stable non-temporary
+   address, or the currently preferred temporary address) be assigned to
+   context 0 so that the presence of the CID octet is minimized.
+
+   If this results in the desire to change the assignment over time,
+   this would necessitate the use of a dynamic context negotiation
+   mechanism.  For example, if the set of destinations can vary
+   dynamically over time, such as if the device responds to arbitrary
+   other nodes querying it, the destination-context-to-address mapping
+   may change when a new peer wants to communicate with the device.
+   Similarly, if temporary addresses are used as source or destination
+   addresses, then some context-to-address mapping may change once a
+   day.
+
+   If temporary addresses are not used, and the set of peers with which
+   a device communicates on a given network is fixed and 16 or fewer in
+   number, then a static context-to-address mapping for that network is
+   sufficient.
+
+   If the device is capable of roaming between multiple networks, then
+   any context information MUST be per-network, and not used on other
+   networks.
+
+4.  Details
 
    Second paragraph of introduction... Here's a cross reference
    [I-D.ietf-6man-default-iids] and And here's a bulleted list:
@@ -190,6 +323,20 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    o  Second bullet.
 
    Now here's a sample ASCII art figure.
+
+
+
+
+
+
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 6]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
 
                  +------------+
                  |  Holder of |     1. Generation
@@ -213,22 +360,15 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
                                  Figure 1
 
-4.  Some Level 1 Title
+5.  Some Level 1 Title
 
    Here's a numbered list:
 
    1.  First numbered item.
 
-
-
-Thaler                   Expires August 9, 2015                 [Page 4]
-
-Internet-Draft          6LoWPAN Privacy Addresses          February 2015
-
-
    2.  Second numbered item.
 
-4.1.  Some Level 2 Title
+5.1.  Some Level 2 Title
 
    Here's a glossary style list of terms.
 
@@ -238,12 +378,21 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    Foobar:
      Some definition of a foobar.
 
-4.2.  Another Level 2 Title
+5.2.  Another Level 2 Title
 
    This section needs no anchor since there's no cross-reference to it
-   from elsewhere, unlike Section 4 and Section 4.1.
+   from elsewhere, unlike Section 5 and Section 5.1.
 
    Here's a sample packet diagram.
+
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 7]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
 
                             1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -255,11 +404,11 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
 
                                  Figure 2
 
-5.  IANA Considerations
+6.  IANA Considerations
 
    This document has no actions for IANA.
 
-6.  Security Considerations
+7.  Security Considerations
 
    This entire document is about security considerations and
    mitigations.
@@ -271,20 +420,9 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
    source address of the NS and SEND verifies the IPv6 source address of
    the packet."
 
+8.  References
 
-
-
-
-
-
-Thaler                   Expires August 9, 2015                 [Page 5]
-
-Internet-Draft          6LoWPAN Privacy Addresses          February 2015
-
-
-7.  References
-
-7.1.  Normative References
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -302,7 +440,17 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
               Wireless Personal Area Networks (6LoWPANs)", RFC 6775,
               November 2012.
 
-7.2.  Informative References
+
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 8]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
+
+8.2.  Informative References
 
    [RFC3972]  Aura, T., "Cryptographically Generated Addresses (CGA)",
               RFC 3972, March 2005.
@@ -331,13 +479,6 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
               Interface Identifiers with IPv6 Stateless Address
               Autoconfiguration (SLAAC)", RFC 7217, April 2014.
 
-
-
-Thaler                   Expires August 9, 2015                 [Page 6]
-
-Internet-Draft          6LoWPAN Privacy Addresses          February 2015
-
-
    [I-D.ietf-6man-ipv6-address-generation-privacy]
               Cooper, A., Gont, F., and D. Thaler, "Privacy
               Considerations for IPv6 Address Generation Mechanisms",
@@ -350,13 +491,20 @@ Internet-Draft          6LoWPAN Privacy Addresses          February 2015
               draft-ietf-6man-default-iids-02 (work in progress),
               January 2015.
 
-   [I-D.ietf-6man-stable-privacy-addresses]
-              Gont, F., "A Method for Generating Semantically Opaque
-              Interface Identifiers with IPv6 Stateless Address
-              Autoconfiguration (SLAAC)", draft-ietf-6man-stable-
-              privacy-addresses-17 (work in progress), January 2014.
-
 Author's Address
+
+
+
+
+
+
+
+
+
+Thaler                   Expires August 10, 2015                [Page 9]
+
+Internet-Draft          6LoWPAN Privacy Addresses          February 2015
+
 
    Dave Thaler
    Microsoft
@@ -389,4 +537,24 @@ Author's Address
 
 
 
-Thaler                   Expires August 9, 2015                 [Page 7]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thaler                   Expires August 10, 2015               [Page 10]
