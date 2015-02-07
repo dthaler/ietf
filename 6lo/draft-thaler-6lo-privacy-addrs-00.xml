@@ -66,7 +66,7 @@
   <middle>
     <section title='Introduction'>
       <t> RFC 6973 <xref target='RFC6973'/> discusses privacy considerations for Internet protocols, and Section 5.2
-          in particular covers a number of privacy-specific threats.  In the context of IPv6 address,
+          in particular covers a number of privacy-specific threats.  In the context of IPv6 addresses,
           Section 3 of <xref target='I-D.ietf-6man-ipv6-address-generation-privacy'/> provides further
           elaboration on the applicability of the privacy threats.  When interface identifiers (IIDs) are
           generated without sufficient entropy, devices and users become vulnerable to
@@ -90,13 +90,13 @@
       </t>
       <t> Furthermore, to mitigate the threat of correlation of activities over time, <xref target='RFC4941'/>
           specifies the notion of a "temporary" address to be used for sessions that should not be linkable
-          to more permanent identifiers (such as a DNS name, user name, or stable hardware address).  Such
+          to a more permanent identifier (such as a DNS name, user name, or stable hardware address).  Such
           temporary addresses
           are appropriate for connections (typically locally-initiated outbound sessions) that an attacker
           cannot link to a stable identifier such as a user name or DNS name.  Indeed, the default
           address selection rules <xref target='RFC6724'/> now prefer temporary addresses by default for
           outgoing connections.  When temporary addresses are used, a new temporary address is periodically
-          (default is 1 day in xref target='RFC4941'/>)
+          (default is 1 day in <xref target='RFC4941'/>)
           generated, which limits the threat of correlation of activies over time to that period.  The address itself
           though may still be usable for existing long-lived connections (but not new connections) for
           some longer period (default is 1 week); this allows for not breaking application sessions, especially
@@ -170,7 +170,7 @@
       </section>
 
       <section title='Use of 16-Bit Short Addresses'>
-        <t> An IPv6 address formed (per Secton 6 of <xref target='RFC4944'/>) from an IEEE 802.15.4 16-bit
+        <t> An IPv6 address formed (per Section 6 of <xref target='RFC4944'/>) from an IEEE 802.15.4 16-bit
             short address does not provide sufficient
             entropy to fully mitigate address scanning, as the size of the address scan search space depends
             on the entropy in the IID, and only 15 bits are available for unicast addresses.  An adversary could
@@ -180,12 +180,12 @@
             other network where privacy threats may be an issue.
         </t>
         <t> It might be possible to construct IPv6 addresses from 16-bit short addresses using an alternate
-            mechanism that mitigates address scans, by all nodes on a given L2 network having a shared secret
-            (such as the key needed to get on the layer-2 network), and generating the IID by using a 
-            one-way hash of the shared secret together with the short address. The use of such a hash causes 
+            mechanism that mitigates address scans, if all nodes on a given L2 network have a shared secret
+            (such as the key needed to get on the layer-2 network) and generate the IID by using a 
+            one-way 64-bit hash of the shared secret together with the short address. The use of such a hash causes 
             the IIDs to be spread out among the full range of IIDs.
         </t>
-        <t> "Temporary" addresses could possibly also be generated in the same way by including in the hash
+        <t> "Temporary" addresses could possibly be generated in the same way by also including in the hash
             the Version Number from the Authoritative Border Router Option (ABDO) if any.  This would
             allow changing temporary addresses whenever the Version Number is changed (even if the set of
             prefix or context information is unchanged). Such a scheme would likely require using
@@ -200,15 +200,16 @@
       <section title='Use of Non-IEEE-Identifier-Based Addresses'>
         <t> Unicast addresses that are not IEEE-identifier
             based SHOULD be compressed to 0 bits as follows, using stateful context-based compression where
-            all IID bits are covered by context information.  It is also worth pointing out that, unlike
+            all IID bits are covered by context information.  It is also worth pointing out that
+            this scheme would allow compressing DHCPv6-assigned addresses even in networks where privacy 
+            is not a primary concern.  Furthermore, unlike
             stateless compression, stateful context-based compression can also allow compressing addresses
             of nodes outside the local network (i.e., where the IEEE identifier in the encapsulating
             header is that of a router rather than the peer) and hence can provide greater savings in
-            such cases.  Furthermore, this scheme would allow compressing DHCPv6-assigned addresses even
-            in networks where privacy is not a primary concern.
+            such cases.  
         </t>
 
-        <section title='Source Address'>
+        <section title='Source Address Compression'>
           <t> SAC (Source Address Compression) MUST be set to 1 to indicate stateful
               context-based compression.
           </t>
@@ -216,7 +217,7 @@
           </t>
         </section>
 
-        <section title='Destination Address'>
+        <section title='Destination Address Compression'>
           <t> DAC (Destination Address Compression) MUST be set to 1 to indicate stateful
               context-based compression.
           </t>
@@ -227,6 +228,7 @@
         <section title='Context Identifier' anchor='cid'>
           <t> When non-IEEE-identifier-based addresses are used as specified in
               this document, each address MUST be associated with a separate context.
+              That is, the "prefix" associated with a context MUST be the full 128 bits of the IPv6 address.
           </t>
           <t> LOWPAN_IPHC supports up to 16 source address contexts and 16 destination address contexts,
               allowing for simultaneous use of up to 16 source addresses and 16 destination addresses
@@ -257,8 +259,9 @@
         <section title='Context State'>
           <t> As specified in <xref target='RFC6775'/>, context state is distributed by routers and is
               shared across a LoWPAN.  This means that the use of CIDs described above would only
-              support compression of 16 addresses across the entire LoWPAN.  However, Section 8 of
-              <xref target='RFC6775'/> explicitly allows for context dissemination to be substituted by
+              support compression of 16 source and destination addresses across the entire LoWPAN.  However, 
+              Section 8 of
+              <xref target='RFC6775'/> explicitly allows for such context dissemination to be substituted by
               alternatives defined in other specifications.  We now describe such a substitute that
               would allow header compression with up to 16 source addresses and 16 destination addresses
               *per node*.
@@ -277,7 +280,7 @@
               defined in Section 4.1 of <xref target='RFC6775'/> can be extended to include the CID by
               using 5 of the 24 Reserved bits (one for a flag to denote a CID is present, and 4 for the CID).
               Similarly, the Duplicate Address Request (DAR) and Duplicate Address Confirmation (DAC) messages
-              can similarly be extended to include the CID in currently Reserved bits.
+              can be extended to include the CID in currently Reserved bits.
           </t>
           <!--
               Section 4.2 of <xref target='RFC6775'/> defines the 6LoWPAN Context Option (6CO) for use in
