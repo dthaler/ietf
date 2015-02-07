@@ -5,6 +5,7 @@
            see the references section at the end.  This line tells the
            tool to pull the reference from the database. -->
       <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+      <!ENTITY rfc3315 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3315.xml">
       <!ENTITY rfc3972 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3972.xml">
       <!ENTITY rfc4941 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml">
       <!ENTITY rfc4944 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4944.xml">
@@ -14,7 +15,9 @@
       <!ENTITY rfc6724 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6724.xml">
       <!ENTITY rfc6775 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6775.xml">
       <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
+      <!ENTITY rfc7136 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7136.xml">
       <!ENTITY rfc7217 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7217.xml">
+      <!ENTITY rfc7421 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7421.xml">
       <!-- For each Internet Draft you want to reference, add a line like
            below and then see the references section at the end. -->
       <!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy PUBLIC ''
@@ -52,10 +55,10 @@
     <keyword>IPv6</keyword>
     <keyword>Secure Neighbor Discovery</keyword>
     <abstract>
-      <t> A potentially common misconception is that header 6LowPAN header compression is incompatible (or at least
-          inefficient) with the notion of using addresses with sufficient entropy.  This draft attempts to dispel
-          that notion, and specifies how privacy addressing can be used on 6LoWPAN technologies, without
-          additional overhead in data packets.
+      <t> It is commonly assumed today that 6LowPAN header compression is incompatible (or at least
+          inefficient) with the notion of using addresses with sufficient entropy to mitigate various
+          privacy threats.  This draft explores ways to dispel that notion, and discusses how 
+          privacy addressing could be used on 6LoWPAN technologies without additional overhead in data packets.
       </t>
     </abstract>
   </front>
@@ -71,15 +74,19 @@
           address scanning, and device-specific vulnerability exploitation.
       </t>
       <t> Interfaces identifiers formed from IEEE identifiers can have insufficient entropy unless the
-          IEEE identifier itself has sufficient entropy, and enough (typically on the order of 60 or more)
-          bits of entropy
-          are carried over into the IPv6 address to have a sufficiently large "anonymity set" as defined
-          in <xref target='RFC6973'/>.  Furthermore, IEEE-identifier-based IIDs are also insufficient to
+          IEEE identifier itself has sufficient entropy, and enough bits of entropy
+          are carried over into the IPv6 address to sufficiently mitigate the threats.
+          (Typically "enough" bits of entropy means on the order of 60 or more bits; ideally all 64 bits of
+          the IID would be used, but historically a couple bits have been excluded for reasons discussed 
+          in <xref target='RFC7421'/>.)
+          Furthermore, IEEE-identifier-based IIDs are also insufficient to
           prevent location tracking unless the IEEE identifier itself is different at each network location.
           This observation suggests that the privacy threats can be mitigated in either of two ways:
           either use an IPv6 address generation mechanism that is not IEEE-identifier-based, or else
           make sure the IEEE identifier contains around 60 bits of entropy and is changed if a device moves
-          to a different network.
+          to a different network.  For this reason, <xref target='I-D.ietf-6man-default-iids'/> recommends
+          using the address generation scheme in <xref target='RFC7217'/> by default, rather than 
+          IEEE-identifier-based addresses.
       </t>
       <t> Furthermore, to mitigate the threat of correlation of activities over time, <xref target='RFC4941'/>
           specifies the notion of a "temporary" address to be used for sessions that should not be linkable
@@ -111,11 +118,11 @@
           rely on having around 60 or more bits of entropy in the address to provide sufficient
           cryptographic protection.
       </t>
-      <t> TODO: add mention of <xref target='I-D.ietf-6man-default-iids'/>
-      </t>
-      <t> There has been some concern that such approaches would necessarily interfere with efficient header
+      <t> RFC 6775 <xref target='RFC6775'/> already allows for the use of non-IEEE-identifier-based
+          addresses, such as those provided by DHCPv6 <xref target='RFC3315'/>.
+          There has been some concern, however, that such approaches necessarily interfere with efficient header
           compression for IPv6 over IEEE 802.15.4-based networks <xref target='RFC6282'/>, as it is important
-          to keep data packets small on such networks.  This document specifies how to use such addresses
+          to keep data packets small on such networks.  This document discusses how one might use such addresses
           on these networks while avoiding extra overhead.
       </t>
     </section>
@@ -174,9 +181,19 @@
         </t>
         <t> It might be possible to construct IPv6 addresses from 16-bit short addresses using an alternate
             mechanism that mitigates address scans, by all nodes on a given L2 network having a shared secret
-            and using a one-way hash of the shared secret together with the short address, to generate the IID,
-            thus causing the IIDs to be spread out among the full range of IIDs.  Specifying the details of
-            such a scheme is left for future work, if there is interest.
+            (such as the key needed to get on the layer-2 network), and generating the IID by using a 
+            one-way hash of the shared secret together with the short address. The use of such a hash causes 
+            the IIDs to be spread out among the full range of IIDs.
+        </t>
+        <t> "Temporary" addresses could possibly also be generated in the same way by including in the hash
+            the Version Number from the Authoritative Border Router Option (ABDO) if any.  This would
+            allow changing temporary addresses whenever the Version Number is changed (even if the set of
+            prefix or context information is unchanged). Such a scheme would likely require using
+            the Context Identifier (CID) to distinguish between non-temporary addresses, "current"
+            temporary addresses, and "past" temporary addresses based on a previous Version Number.
+        </t>
+        <t> Specifying further details of such a scheme is left for future versions of this draft,
+            if there is interest.
         </t>
       </section>
 
@@ -187,8 +204,10 @@
             stateless compression, stateful context-based compression can also allow compressing addresses
             of nodes outside the local network (i.e., where the IEEE identifier in the encapsulating
             header is that of a router rather than the peer) and hence can provide greater savings in
-            such cases.
+            such cases.  Furthermore, this scheme would allow compressing DHCPv6-assigned addresses even
+            in networks where privacy is not a primary concern.
         </t>
+
         <section title='Source Address'>
           <t> SAC (Source Address Compression) MUST be set to 1 to indicate stateful
               context-based compression.
@@ -196,6 +215,7 @@
           <t> SAM (Source Address Mode) MUST be set to 11 to indicate that the address is fully elided.
           </t>
         </section>
+
         <section title='Destination Address'>
           <t> DAC (Destination Address Compression) MUST be set to 1 to indicate stateful
               context-based compression.
@@ -203,7 +223,8 @@
           <t> DAM (Destination Address Mode) MUST be set to 11 to indicate that the address is fully elided.
           </t>
         </section>
-        <section title='Context Identifier'>
+
+        <section title='Context Identifier' anchor='cid'>
           <t> When non-IEEE-identifier-based addresses are used as specified in
               this document, each address MUST be associated with a separate context.
           </t>
@@ -211,35 +232,62 @@
               allowing for simultaneous use of up to 16 source addresses and 16 destination addresses
               that are not IEEE-identifier based.  Context 0 is the default context if the CID
               (Context Identifier Extension) octet is absent, and other values require the CID to be present.
-              As such, it is RECOMMENDED that the address most commonly used (typically either the
-              stable non-temporary address, or the currently preferred temporary address) be assigned
+              As such, the address most commonly used (typically either the
+              stable non-temporary address, or the currently preferred temporary address) could be assigned
               to context 0 so that the presence of the CID octet is minimized.
           </t>
-          <t> If this results in the desire to change the assignment over time, this would necessitate
+          <!--
+              If this results in the desire to change the assignment over time, this would necessitate
               the use of a dynamic context negotiation mechanism. 
               For example, if the set of destinations can vary dynamically over time, such as if the
               device responds to arbitrary other nodes querying it, the destination-context-to-address mapping
               may change when a new peer wants to communicate with the device.
               Similarly, if temporary addresses are used as source or destination addresses, then some
               context-to-address mapping may change once a day. 
-          </t>
-          <t> If temporary addresses are not used, and the set of peers with which a device communicates
+
+              If temporary addresses are not used, and the set of peers with which a device communicates
               on a given network is fixed and 16 or fewer in number, then a static context-to-address mapping
               for that network is sufficient.
-          </t>
-          <t> If the device is capable of roaming between multiple networks, then any context information
+
+              If the device is capable of roaming between multiple networks, then any context information
               MUST be per-network, and not used on other networks.
+          -->
+        </section>
+
+        <section title='Context State'>
+          <t> As specified in <xref target='RFC6775'/>, context state is distributed by routers and is
+              shared across a LoWPAN.  This means that the use of CIDs described above would only
+              support compression of 16 addresses across the entire LoWPAN.  However, Section 8 of
+              <xref target='RFC6775'/> explicitly allows for context dissemination to be substituted by
+              alternatives defined in other specifications.  We now describe such a substitute that
+              would allow header compression with up to 16 source addresses and 16 destination addresses
+              *per node*.
+          </t>
+          <t> First, a context entry is defined to be indexed by a { link-layer address, CID } tuple,
+              rather than just a CID.  Second, each node is responsible for generating and disseminating
+              the CIDs for its own IPv6 addresses.
+          </t>
+          <t> Thus, each Neighbor Cache Entry (NCE) conceptually contains the CID of the neighbor's address,
+              used when compressing packets sent to it.
           </t>
         </section>
 
         <section title='Context Distribution'>
-          <t> TODO: read and reference RFC 6775 (and determine whether that is sufficient or needs an
-              extension), especially Section 8.1, regarding context negotiation.
+          <t> To disseminate CID information from a host to a router, the Address Registration Option (ARO)
+              defined in Section 4.1 of <xref target='RFC6775'/> can be extended to include the CID by
+              using 5 of the 24 Reserved bits (one for a flag to denote a CID is present, and 4 for the CID).
+              Similarly, the Duplicate Address Request (DAR) and Duplicate Address Confirmation (DAC) messages
+              can similarly be extended to include the CID in currently Reserved bits.
           </t>
-          <t> Section 4.2 of <xref target='RFC6775'/> defines the 6LoWPAN Context Option (6CO) for use in
+          <!--
+              Section 4.2 of <xref target='RFC6775'/> defines the 6LoWPAN Context Option (6CO) for use in
               Neighbor Discovery.  Since each non-IEEE-identifier-based address requires its own context,
               the Context Length field MUST be set to 128 in the 6CO containing such context informaiton.
+          -->
+          <t> Specifying further details of such a scheme is left for future versions of this draft,
+              if there is interest.
           </t>
+          <!-- TODO: check impact on RPL -->
         </section>
       </section>
     </section>
@@ -250,15 +298,16 @@
     </section>
 
     <section title='Security Considerations'>
-      <t> This entire document is about security considerations and mitigations.
+      <t> This entire document is about security considerations and possible mitigations.
       </t>
-      <t> RFC 6775 <xref target='RFC6775'/> section 11 states,
-          "In some future deployments, one might want to use SEcure Neighbor
-           Discovery (SEND) [RFC3971] [RFC3972].  This is possible with the ARO
-           as sent between hosts and routers, since the address that is being
-           registered is the IPv6 source address of the NS and SEND verifies the
-           IPv6 source address of the packet."
-      </t>
+      <!--
+          RFC 6775 <xref target='RFC6775'/> section 11 states:
+              In some future deployments, one might want to use SEcure Neighbor
+              Discovery (SEND) [RFC3971] [RFC3972].  This is possible with the ARO
+              as sent between hosts and routers, since the address that is being
+              registered is the IPv6 source address of the NS and SEND verifies the
+              IPv6 source address of the packet.
+      -->
     </section>
   </middle>
 
@@ -272,13 +321,16 @@
     </references>
    
     <references title='Informative References'>
+      &rfc3315;
       &rfc3972;
       &rfc4941;
       &rfc5535;
       &rfc6496;
       &rfc6724;
       &rfc6973;
+      &rfc7136;
       &rfc7217;
+      &rfc7421;
       &I-D.ietf-6man-ipv6-address-generation-privacy;
       &I-D.ietf-6man-default-iids;
     </references>
