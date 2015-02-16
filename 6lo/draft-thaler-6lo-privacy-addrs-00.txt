@@ -8,7 +8,7 @@ Intended status: Standards Track                       February 16, 2015
 Expires: August 20, 2015
 
 
-     Enabling Security/Privacy Addressing With 6LoWPAN Technologies
+     Enabling Security/Privacy Addressing On 6LoWPAN Technologies
                    draft-thaler-6lo-privacy-addrs-00
 
 Abstract

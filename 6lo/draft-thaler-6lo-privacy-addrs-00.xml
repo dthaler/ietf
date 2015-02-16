@@ -37,7 +37,7 @@
 
 <rfc docName="draft-thaler-6lo-privacy-addrs-00" ipr="trust200902" category="std">
   <front>
-    <title abbrev='6LoWPAN Privacy Addresses'>Enabling Security/Privacy Addressing With 6LoWPAN Technologies</title>
+    <title abbrev='6LoWPAN Privacy Addresses'>Enabling Security/Privacy Addressing On 6LoWPAN Technologies</title>
     <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
       <organization>Microsoft</organization>
       <address>
