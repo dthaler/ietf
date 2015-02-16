@@ -80,16 +80,16 @@
       <t> Interfaces identifiers formed from IEEE identifiers can have insufficient entropy unless the
           IEEE identifier itself has sufficient entropy, and enough bits of entropy
           are carried over into the IPv6 address to sufficiently mitigate the threats.
-          Typically "enough" bits of entropy means at least 46 or more bits (see Appendix for why);
+          Typically "enough" bits of entropy means at least 46 bits (see Appendix for why);
           ideally all 64 bits of
-          the IID should be used, but historically a couple bits have been excluded for reasons discussed 
+          the IID should be used, although historically some bits have been excluded for reasons discussed 
           in <xref target='RFC7421'/>.
       </t>
       <t> Furthermore, IEEE-identifier-based IIDs are also insufficient to
           prevent location tracking unless the IEEE identifier itself is different at each network location.
           This observation suggests that the privacy threats can be mitigated in either of two ways:
           either use an IPv6 address generation mechanism that is not IEEE-identifier-based, or else
-          make sure the IEEE identifier contains around 60 bits of entropy and is changed if a device moves
+          make sure the IEEE identifier contains at least 46 bits of entropy and is changed if a device moves
           to a different network.  For this reason, <xref target='I-D.ietf-6man-default-iids'/> recommends
           using the address generation scheme in <xref target='RFC7217'/> by default, rather than 
           IEEE-identifier-based addresses.
@@ -112,7 +112,8 @@
           any "stable" addresses that might be used for connections that are linkable to more permanent
           identifiers such as DNS names or user names.  Whereas most threats could be mitigated if the
           IEEE identifier contains sufficient entropy and is different per-network, mitigating the threat of
-          correlation of activities over time typically cannot be done using an IEEE identifier, since mitigating
+          correlation of activities over time typically cannot be done using an IEEE-identifier-based-IID,
+          since mitigating
           such a threat typically involves the ability to use multiple IPv6 addresses simultaneously whereas
           typically only one IEEE identifier can be used at a time.
       </t>
@@ -121,7 +122,7 @@
           Cryptographically Generated Addresses (CGAs) <xref target='RFC3972'/> and
           Hash-Based Addresses (HBAs) <xref target='RFC5535'/> can be used in security protocols
           such as Secure Neighbor Discovery (SeND) <xref target='RFC6496'/>, IPsec, etc.  Such techniques
-          rely on having around 60 or more bits of entropy in the address to provide sufficient
+          rely on having around 59 or more bits of entropy in the address to provide sufficient
           cryptographic protection.
       </t>
       <t> RFC 6775 <xref target='RFC6775'/> already allows for the use of non-IEEE-identifier-based
@@ -131,16 +132,15 @@
           to keep data packets small on 6LoWPAN networks.
       </t> 
       <t> Another potential concern is that of efficiency, such as avoiding DAD all together when IPv6 addresses
-          are IEEE-identifier based.  Appendix A of <xref target='RFC4429'/> provides an analysis of address
+          are IEEE-identifier-based.  Appendix A of <xref target='RFC4429'/> provides an analysis of address
           collision probability based on the number of bits of entropy.  A simple web search on
           "duplicate MAC addresses" will show that collisions do happen with MAC addresses, and thus
           based on the analysis in <xref target='RFC4429'/>, using sufficient bits of entropy in 
           non-IEEE-identifier-based addresses can provide greater protection against collision than using
           MAC addresses.
       </t>
-      <t>
-          The remainder of this document explores how one might use such addresses on these networks while 
-          avoiding extra overhead.
+      <t> The remainder of this document explores how one might use addresses with sufficient entropy
+          on 6LoWPAN networks while avoiding extra overhead.
       </t>
     </section>
 
@@ -156,15 +156,16 @@
 
     <section title='Compression Details'>
       <t> The LOWPAN_IPHC encoding format specified in Section 3.1 of RFC 6282 <xref target='RFC6282'/>
-          defines a method for deriving IIDs from the source and/or destination addresses in the
+          defines a method for deriving IIDs from the link-layer source and/or destination addresses in the
           encapsulation header.  Unicast IPv6 addresses may be compressed
           to 64, 16, or 0 bits in the encoded IPv6 header. 
       </t>
 
       <section title='Use of IEEE-Identifier-Based Addresses'>
         <t> As noted earlier, some threats could be mitigated using per-network "randomized"
-            IEEE identifiers with around 60 or more bits of entropy.  A number of such proposals can be found at
-            &lt;https://mentor.ieee.org/privecsg/documents&gt;.  Using IPv6 addresses derived from
+            IEEE identifiers with 46 or more bits of entropy.  A number of such proposals can be found at
+            &lt;https://mentor.ieee.org/privecsg/documents&gt;, and Section 10.8 of <xref target='BTCorev4.1'/>
+            specifies one for Bluetooth.  Using IPv6 addresses derived from
             such IEEE identifiers would be roughly equivalent to those specified in <xref target='RFC7217'/>.
         </t>
         <t> Such addresses would be encoded as usual using the LOWPAN_IPHC encoding format.  For example,
@@ -199,8 +200,8 @@
         <t> It might be possible to construct IPv6 addresses from 16-bit short addresses using an alternate
             mechanism that mitigates address scans, if all nodes on a given L2 network have a shared secret
             (such as the key needed to get on the layer-2 network) and generate the IID by using a 
-            one-way 64-bit hash of the shared secret together with the short address. The use of such a hash causes 
-            the IIDs to be spread out among the full range of IIDs.
+            one-way 64-bit hash of the shared secret together with the short address. The use of such a hash 
+            would result in the IIDs being spread out among the full range of IID address space.
         </t>
         <t> "Temporary" addresses could possibly be generated in the same way by also including in the hash
             the Version Number from the Authoritative Border Router Option (ABDO) if any.  This would
@@ -216,14 +217,16 @@
 
       <section title='Use of Non-IEEE-Identifier-Based Addresses' anchor='randomid'>
         <t> Unicast addresses that are not IEEE-identifier
-            based SHOULD be compressed to 0 bits as follows, using stateful context-based compression where
-            all IID bits are covered by context information.  It is also worth pointing out that
-            this scheme would allow compressing DHCPv6-assigned addresses even in networks where privacy 
-            is not a primary concern.  Furthermore, unlike
-            stateless compression, stateful context-based compression can also allow compressing addresses
+            based could be compressed to 0 bits as follows, using stateful context-based compression where
+            the entire IPv6 address including the IID (as opposed to only the IPv6 prefix) are covered by 
+            context information.  It is also worth pointing out that
+            this same scheme would also allow compressing DHCPv6-assigned addresses even in networks where privacy 
+            is not a primary concern, thus potentially providing efficiency benefits in addition to 
+            privacy and security ones.  Furthermore, unlike
+            stateless compression, stateful context-based compression could also allow compressing addresses
             of nodes outside the local network (i.e., where the IEEE identifier in the encapsulating
-            header is that of a router rather than the peer) and hence can provide greater savings in
-            such cases.  
+            header is that of a router rather than the peer, and the peer's address does not have a prefix
+            in the local network) and hence can provide greater savings in such cases.  
         </t>
 
         <section title='Source Address Compression'>
@@ -243,13 +246,13 @@
         </section>
 
         <section title='Context Identifier' anchor='cid'>
-          <t> When non-IEEE-identifier-based addresses are used as specified in
+          <t> When non-IEEE-identifier-based addresses are used as described in
               this document, each address MUST be associated with a separate context.
               That is, the "prefix" associated with a context MUST be the full 128 bits of the IPv6 address.
           </t>
           <t> LOWPAN_IPHC supports up to 16 source address contexts and 16 destination address contexts,
               allowing for simultaneous use of up to 16 source addresses and 16 destination addresses
-              that are not IEEE-identifier based.  Context 0 is the default context if the CID
+              that are not IEEE-identifier-based.  Context 0 is the default context if the CID
               (Context Identifier Extension) octet is absent, and other values require the CID to be present.
               As such, the address most commonly used (typically either the
               stable non-temporary address, or the currently preferred temporary address) could be assigned
@@ -287,8 +290,8 @@
               rather than just a CID.  Second, each node is responsible for generating and disseminating
               the CIDs for its own IPv6 addresses.
           </t>
-          <t> Thus, each Neighbor Cache Entry (NCE) conceptually contains the CID of the neighbor's address,
-              used when compressing packets sent to it.
+          <t> Thus, each Neighbor Cache Entry (NCE) in a router conceptually contains the CID of the
+              neighbor's address, used when compressing packets sent to it.
           </t>
         </section>
 
@@ -296,8 +299,9 @@
           <t> To disseminate CID information from a host to a router, the Address Registration Option (ARO)
               defined in Section 4.1 of <xref target='RFC6775'/> can be extended to include the CID by
               using 5 of the 24 Reserved bits (one for a flag to denote a CID is present, and 4 for the CID).
-              Similarly, the Duplicate Address Request (DAR) and Duplicate Address Confirmation (DAC) messages
-              can be extended to include the CID in currently Reserved bits.
+              For distribution in a multihop network, the Duplicate Address Request (DAR) and Duplicate 
+              Address Confirmation (DAC) messages can be similarly extended to include the CID in currently
+              Reserved bits.
           </t>
           <t> To disseminate CID information from a router to a host, 
               Section 4.2 of <xref target='RFC6775'/> defines the 6LoWPAN Context Option (6CO) for use in
@@ -306,11 +310,16 @@
               address as the context prefix, to allow compression of subsequent packets.
               Since each non-IEEE-identifier-based address requires its own context,
               the Context Length field MUST be set to 128 in the 6CO containing such context information.
+              Note that the CID in a 6CO for another address within the 6LoWPAN is still generated by the
+              router (since it is specific to the router's link-layer address as used by the host to which
+              the 6CO is sent); it is not the same value as the CID generated by the destination node itself,
+              which CID is used by its router when forwarding a packet to it. Thus a router is responsible
+              for updating CIDs in packets it forwards, just as it updates the link-layer source and destination
+              addresses in the encapsulating header.
           </t>
           <t> Specifying further details of such a scheme is left for future versions of this draft,
               if there is interest.
           </t>
-          <!-- TODO: check impact on RPL -->
         </section>
 
         <section title='Negotiation'>
@@ -322,13 +331,13 @@
         </section>
 
         <section title='Discussion of Tradeoffs'>
-          <t> This proposal decentralizes the task of context distribution away from routers to simple nodes. 
+          <t> This proposal decentralizes a portion of context generation and distribution to include simple nodes. 
               In many 6LoWPAN scenarios, as much as possible is offloaded to router nodes precisely because 
               end nodes are so limited.  Until context info is learned for a given destination address,
-              a nodes is not able to compress it. Compression would kick in after the context info is known.
+              a node is not able to compress it. Compression would kick in after the context info is known.
               After context info is learned, the 4-bit CID must be stored for the destination address.
               As such, using this scheme requires a slight amount of overhead in the initial packet(s)
-              but no additional overhead afterwards, and requires no additional memory overhead initially,
+              but no additional overhead afterwards, and it requires no additional memory overhead initially,
               but a slight amount of additional memory overhead after context is learned.
           </t>
           <t> In the rare case that a simple node needs to simultaneously communicate with more than 16 
@@ -359,8 +368,8 @@
     </section>
 
     <section title='Acknowledgements'>
-      <t> Thanks to Fernando Gont, Christian Huitema, and Gabriel Montenegro for feedback on the ideas
-          that led to this draft.
+      <t> Thanks to Fernando Gont, Christian Huitema, and Gabriel Montenegro for discussion on the ideas
+          described in this draft.
       </t>
     </section>
   </middle>
@@ -390,6 +399,16 @@
       &rfc7421;
       &I-D.ietf-6man-ipv6-address-generation-privacy;
       &I-D.ietf-6man-default-iids;
+
+      <reference anchor='BTCorev4.1' target='https://www.bluetooth.org/DocMan/handlers/DownloadDoc.ashx?doc_id=282159'>
+        <front>
+          <title>Bluetooth Core Specification Version 4.1</title>
+          <author>
+            <organization abbrev="Bluetooth SIG">Bluetooth Special Interest Group</organization>
+          </author>
+          <date year="2013" month="December"/>
+        </front>
+      </reference>
     </references>
 
     <section title="Amount of Entropy Needed">
@@ -398,8 +417,9 @@
           To mitigate address scans, one needs enough entropy to make the probability of a successful address
           probe be negligible. Typically this is measured in the length of time it would take to have a 50%
           probability of getting at least one hit. Address scans often rely on sending a packet such as a
-          TCP SYN or ICMP Echo Request, and determining whether the reply is an ICMP unreachable errors (if no host)
-          or TCP response or ICMP Echo Reply (if host exists), or neither in which case nothing is known for certain.
+          TCP SYN or ICMP Echo Request, and determining whether the reply is an ICMP unreachable errors 
+          (if no host exists) or TCP response or ICMP Echo Reply (if a host exists), or neither in which case 
+          nothing is known for certain.
       </t>
       <t> Many privacy-sensitive devices support a "stealth mode" as discussed in Section 5 of 
           <xref target='RFC7288'/> whereby they will not send a TCP RST or ICMP Echo Reply.  In such cases,
@@ -407,12 +427,12 @@
           of an address scan is limited by the ability to get ICMP unreachable errors, since the attacker
           can only infer the presence of a host based on the absense of an ICMP unreachable error.
       </t>
-      <t> Generation of ICMP unreachable errors is typically rate limited to 2/second (the
+      <t> Generation of ICMP unreachable errors is typically rate limited to 2 per second (the
           default in routers such as Cisco routers running IOS 12.0 or later). Such a rate results in taking
           about a year to completely scan 26 bits of space.  For a network with at most 2^16 devices on the
           same subnet, and the average lifetime of a device being 16 (2^4) years or less, this results
           in a need for at least 46 bits of entropy (16+26+4) so that a address scan would need to be
-          sustained for longer than the lifetime of devices.
+          sustained for longer than the lifetime of devices to have a 50% chance of getting a hit.
       </t>
       <t>
           The actual math is as follows. Let 2^N be the number of devices on the subnet.  Let 2^M be the
