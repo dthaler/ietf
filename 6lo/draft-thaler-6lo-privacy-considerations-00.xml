@@ -231,14 +231,14 @@
       </section>
 
       <section title='Short Addresses'>
-        <t> An IPv6 address formed (per Section 6 of <xref target='RFC4944'/>) from an 16-bit identifier such
-            as an IEEE 802.15.4 16-bit short address does not provide sufficient
-            entropy to fully mitigate address scanning, as the size of the address scan search space depends
-            on the entropy in the IID, and only 15 bits are available for unicast addresses.  An adversary could
+        <t> An IPv6 interface identifier formed from a "Short Address" and a set of
+            well-known constant bits (such as padding with 0's) lacks sufficient entropy to
+            mitigate address scanning unless the link lifetime is extremely short.
+        </t>
+        <t>
+            Furthermore, an adversary could
             also use statisical methods to determine the size of the L2 address space and thereby make some
-            inference regarding the underlying technology being IEEE 802.15.4 on a given link.  As such,
-            this address generation mechanism SHOULD NOT be used on networks where privacy threats may be an issue,
-            such as any networks that have Internet connectivity.
+            inference regarding the underlying technology on a given link.
         </t>
         <t> It might be possible to construct IPv6 addresses from 16-bit short addresses using an alternate
             mechanism that mitigates address scans, if all nodes on a given L2 network have a shared secret
@@ -254,6 +254,36 @@
             temporary addresses, and "past" temporary addresses based on a previous Version Number.
         </t>
       </section>
+    </section>
+
+    <section title='Recommendations'>
+        <t> Security (privacy) sections should say how address scans are mitigated.
+            An address scan might be mitigated by having a link always be short-lived,
+            or might be mitigated by having a large number of bits of entropy,
+            or some combination.  Thus, a specification should explain what the maximum
+            lifetime of a link is in practice, and show how the number of bits of entropy
+            is sufficient given that lifetime.
+        </t>
+        <t> Technologies must define a way to include sufficient bits of entropy in
+            the IPv6 interface identifier, based on the maximum link lifetime.
+            Specifying that a random EUI-48 or EUI-64 can be used is one easy way
+            to do so, for technologies that support such identifiers.
+        </t>
+        <t> Specifications should not simply construct an IPv6 interface identifier
+            by padding a short address with a set of other well-known constant bits,
+            unless the link lifetime is guaranteed to be extremely short.
+        </t>
+        <t> Specifications should make sure that an IPv6 address can change over 
+            long periods of time.  For example, the interface identifier might change
+            each time a device connects to the network (if connections are short), or
+            might change each day (if connections can be long).  This is necessary
+            to mitigate correction over time.
+        </t>
+        <t> If a device can roam between networks, and more than a few bits of entropy
+            exist in the IPv6 interface identifier, then make sure that the interface
+            identifier can vary per network as the device roams.  This is necessary
+            to mitigate location tracking.
+        </t>
     </section>
 
     <section title='IANA Considerations'>
