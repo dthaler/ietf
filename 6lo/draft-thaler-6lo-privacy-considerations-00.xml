@@ -1,0 +1,312 @@
+<?xml version="1.0"?>
+<!-- This line is a comment that won't appear in the generated document. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd"[
+      <!-- For each RFC you want to reference, add a line like below and then
+           see the references section at the end.  This line tells the
+           tool to pull the reference from the database. -->
+      <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+      <!ENTITY rfc3315 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3315.xml">
+      <!ENTITY rfc3972 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3972.xml">
+      <!ENTITY rfc4429 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4429.xml">
+      <!ENTITY rfc4941 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml">
+      <!ENTITY rfc4944 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4944.xml">
+      <!ENTITY rfc5535 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5535.xml">
+      <!ENTITY rfc6496 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6496.xml">
+      <!ENTITY rfc6724 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6724.xml">
+      <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
+      <!ENTITY rfc7217 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7217.xml">
+      <!ENTITY rfc7288 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7288.xml">
+      <!ENTITY rfc7421 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7421.xml">
+      <!ENTITY rfc7428 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7428.xml">
+      <!-- For each Internet Draft you want to reference, add a line like
+           below and then see the references section at the end. -->
+      <!ENTITY I-D.ietf-6man-ipv6-address-generation-privacy PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-ipv6-address-generation-privacy.xml'>
+      <!ENTITY I-D.ietf-6man-default-iids PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6man-default-iids.xml'>
+      <!ENTITY I-D.ietf-6lo-6lobac PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6lo-6lobac.xml'>
+      <!ENTITY I-D.ietf-6lo-btle PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6lo-btle.xml'>
+      <!ENTITY I-D.ietf-6lo-dect-ule PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6lo-dect-ule.xml'>
+      <!ENTITY I-D.ietf-6lo-nfc PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-6lo-nfc.xml'>
+      <!ENTITY I-D.huitema-6man-random-addresses PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.huitema-6man-random-addresses.xml'>
+      ]>
+<?rfc toc='yes' ?>
+<?rfc symrefs='yes' ?>
+<?rfc sortrefs='no'?>
+<?rfc compact='yes'?>
+<!-- <?rfc-ext parse-xml-in-artwork='yes' ?> -->
+<!-- <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?> -->
+
+<!-- TODO: Update to be consistent with
+     https://www.ietf.org/proceedings/93/slides/slides-93-6lo-8.pdf
+  -->
+
+<rfc docName="draft-thaler-6lo-privacy-considerations-00" ipr="trust200902" category="info">
+  <front>
+    <title abbrev='6LoWPAN Privacy Considerations'>6LoWPAN Privacy Considerations</title>
+    <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
+      <organization>Microsoft</organization>
+      <address>
+        <postal>
+          <street>One Microsoft Way</street>
+          <city>Redmond</city>
+          <region>WA</region>
+          <code>98052</code>
+          <country>USA</country>
+        </postal>
+        <email>dthaler@microsoft.com</email>
+      </address>
+    </author>
+    <date year='2015' />
+    <area>Internet</area>
+    <keyword>unlinkability</keyword>
+    <keyword>anonymity</keyword>
+    <keyword>IPv6</keyword>
+    <keyword>Secure Neighbor Discovery</keyword>
+    <abstract>
+      <t> This draft discusses how a number of privacy threats apply to 6LoWPAN technologies,
+          and provides advice to protocol designers on how to address such threats in
+          IPv6-over-foo adaptation layer specifcations.
+      </t>
+    </abstract>
+  </front>
+ 
+  <middle>
+    <section title='Introduction'>
+      <t> RFC 6973 <xref target='RFC6973'/> discusses privacy considerations for Internet protocols, and Section 5.2
+          in particular covers a number of privacy-specific threats.  In the context of IPv6 addresses,
+          Section 3 of <xref target='I-D.ietf-6man-ipv6-address-generation-privacy'/> provides further
+          elaboration on the applicability of the privacy threats.  When interface identifiers (IIDs) are
+          generated without sufficient entropy compared to the link lifetime, devices and users can become
+          vulnerable to
+          the various threats discussed there, including correlation of activities over time, location tracking,
+          address scanning, and device-specific vulnerability exploitation.
+      </t>
+
+      <t> Interfaces identifiers formed from IEEE identifiers can have insufficient entropy unless the
+          IEEE identifier itself has sufficient entropy, and enough bits of entropy
+          are carried over into the IPv6 address to sufficiently mitigate the threats.
+          Typically "enough" bits of entropy means at least 46 bits (see Appendix for why);
+          ideally all 64 bits of
+          the IID should be used, although historically some bits have been excluded for reasons discussed 
+          in <xref target='RFC7421'/>.
+      </t>
+      <t> Furthermore, IEEE-identifier-based IIDs are also insufficient to
+          prevent location tracking unless the IEEE identifier itself is different at each network location.
+          This observation suggests that the privacy threats can be mitigated in either of two ways:
+          either use an IPv6 address generation mechanism that is not IEEE-identifier-based, or else
+          make sure the IEEE identifier contains at least 46 bits of entropy and is changed if a device moves
+          to a different network.  For this reason, <xref target='I-D.ietf-6man-default-iids'/> recommends
+          using the address generation scheme in <xref target='RFC7217'/> by default, rather than 
+          IEEE-identifier-based addresses.
+      </t>
+      <t> Furthermore, to mitigate the threat of correlation of activities over time, <xref target='RFC4941'/>
+          specifies the notion of a "temporary" address to be used for sessions that should not be linkable
+          to a more permanent identifier (such as a DNS name, user name, or stable hardware address).  Such
+          temporary addresses
+          are appropriate for connections (typically locally-initiated outbound sessions) that an attacker
+          cannot link to a stable identifier such as a user name or DNS name.  Indeed, the default
+          address selection rules <xref target='RFC6724'/> now prefer temporary addresses by default for
+          outgoing connections.  When temporary addresses are used, a new temporary address is periodically
+          (default is 1 day in <xref target='RFC4941'/>)
+          generated, which limits the threat of correlation of activies over time to that period.  The address itself
+          though may still be usable for existing long-lived connections (but not new connections) for
+          some longer period (default is 1 week); this allows for not breaking application sessions, especially
+          those that might be initiated shortly before a new temporary address is generated.  This fact means
+          that multiple temporary addresses can exist at the same time, one for new connections, and one or more
+          (often up to 6, per the default periods) old ones for long-lived connections.  This is in addition to
+          any "stable" addresses that might be used for connections that are linkable to more permanent
+          identifiers such as DNS names or user names.  Whereas most threats could be mitigated if the
+          IEEE identifier contains sufficient entropy and is different per-network, mitigating the threat of
+          correlation of activities over time typically cannot be done using an IEEE-identifier-based-IID,
+          since mitigating
+          such a threat typically involves the ability to use multiple IPv6 addresses simultaneously whereas
+          typically only one IEEE identifier can be used at a time.
+      </t>
+      <t> Finally, allowing efficient use of addresses that are not IEEE-identifier-based also has additional
+          security benefits not specific to privacy.  For example, addresses such as
+          Cryptographically Generated Addresses (CGAs) <xref target='RFC3972'/> and
+          Hash-Based Addresses (HBAs) <xref target='RFC5535'/> can be used in security protocols
+          such as Secure Neighbor Discovery (SeND) <xref target='RFC6496'/>, IPsec, etc.  Such techniques
+          rely on having around 59 or more bits of entropy in the address to provide sufficient
+          cryptographic protection.
+      </t>
+      <t> Another potential concern is that of efficiency, such as avoiding DAD all together when IPv6 addresses
+          are IEEE-identifier-based.  Appendix A of <xref target='RFC4429'/> provides an analysis of address
+          collision probability based on the number of bits of entropy.  A simple web search on
+          "duplicate MAC addresses" will show that collisions do happen with MAC addresses, and thus
+          based on the analysis in <xref target='RFC4429'/>, using sufficient bits of entropy in 
+          non-IEEE-identifier-based addresses can provide greater protection against collision than using
+          MAC addresses.
+      </t>
+    </section>
+
+    <section title='Terminology'>
+      <t> This document uses the terminology defined in Section 3 of <xref target='RFC6973'/>, including
+          terms such as "(un)linkability" and "anonymity set".
+      </t>
+      <t>  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+           "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+           document are to be interpreted as described in <xref target='RFC2119'/>.
+      </t>
+    </section>
+
+    <section title="Amount of Entropy Needed">
+      <t> In terms of privacy threats discussed in <xref target='I-D.ietf-6man-ipv6-address-generation-privacy'/>,
+          the one with the need for the most entropy is address scans.  
+          To mitigate address scans, one needs enough entropy to make the probability of a successful address
+          probe be negligible. Typically this is measured in the length of time it would take to have a 50%
+          probability of getting at least one hit. Address scans often rely on sending a packet such as a
+          TCP SYN or ICMP Echo Request, and determining whether the reply is an ICMP unreachable errors 
+          (if no host exists) or TCP response or ICMP Echo Reply (if a host exists), or neither in which case 
+          nothing is known for certain.
+      </t>
+      <t> Many privacy-sensitive devices support a "stealth mode" as discussed in Section 5 of 
+          <xref target='RFC7288'/> whereby they will not send a TCP RST or ICMP Echo Reply.  In such cases,
+          and when the device does not listen on a well-known TCP port known to the scanner, the effectiveness
+          of an address scan is limited by the ability to get ICMP unreachable errors, since the attacker
+          can only infer the presence of a host based on the absense of an ICMP unreachable error.
+      </t>
+      <t> Generation of ICMP unreachable errors is typically rate limited to 2 per second (the
+          default in routers such as Cisco routers running IOS 12.0 or later). Such a rate results in taking
+          about a year to completely scan 26 bits of space.  For a network with at most 2^16 devices on the
+          same subnet, and the average lifetime of a device being 16 (2^4) years or less, this results
+          in a need for at least 46 bits of entropy (16+26+4) so that a address scan would need to be
+          sustained for longer than the lifetime of devices to have a 50% chance of getting a hit.
+      </t>
+      <t>
+          The actual math is as follows. Let 2^N be the number of devices on the subnet.  Let 2^M be the
+          size of the space to scan (i.e., M bits of entropy).  Let S be the number of scan attempts.
+          The formula is: P(at least one success) = 1 - (1 - 2^N/2^M)^S = 1/2.
+          Assuming 2^M >> S, this simplifies to: S * 2^N/2^M = 1/2, giving S = 2^(M-N) / 2, or
+          M = N + log_2(2S).
+      </t>
+      <t> Although 46 bits of entropy may be enough to provide privacy in such cases, 59 or more bits of entropy 
+          are needed if addresses
+          are used to provide security against attacks such as spoofing, as CGAs <xref target='RFC3972'/> and 
+          HBAs <xref target='RFC5535'/> do, since attacks are not limited by ICMP rate limiting but by the 
+          processing power of the attacker. See those RFCs for more discussion.
+      </t>
+      <t> If, on the other hand, the devices being scanned for do not implement a "stealth mode", but respond 
+          with TCP RST or ICMP Echo Reply packets, then the address scan is not limited by the ICMP unreachable 
+          rate limit in routers, since the attacker can determine the presence of a host without them.
+          In such cases, more bits of entropy would be needed to provide the same level of protection.
+      </t>
+    </section>
+
+    <section title='Current Adaptation Layer Technologies'>
+      <t> The table below shows the number of bits of entropy currently available in various 6LoWPAN
+          technologies:
+      </t>
+      <figure>
+        <artwork>
+  +---------------+--------------------------+--------------------+
+  | Technology    | Reference                | Bits of Entropy    |
+  +---------------+--------------------------+--------------------+
+  | 802.15.4      | [RFC4944]                | 16+ or any EUI-64  |
+  | Bluetooth LE  | [I-D.ietf-6lo-btle]      | 48                 |
+  | DECT ULE      | [I-D.ietf-6lo-dect-ule]  | 40 or any EUI-48   |
+  | MS/TP         | [I-D.ietf-6lo-6lobac]    | 8 or 64            |
+  | ITU-T G.9959  | [RFC7428]                | 8                  |
+  | NFC           | [I-D.ietf-6lo-nfc]       | 6 or ???           |
+  +---------------+--------------------------+--------------------+
+        </artwork>
+      </figure>
+    </section>
+
+    <section title='Potential Approaches'>
+
+      <section title='Random IEEE-Identifier-Based Addresses'>
+        <t> As noted earlier, some threats could be mitigated using per-network "randomized"
+            IEEE identifiers with 46 or more bits of entropy.  A number of such proposals can be found at
+            &lt;https://mentor.ieee.org/privecsg/documents&gt;, and Section 10.8 of <xref target='BTCorev4.1'/>
+            specifies one for Bluetooth.  Using IPv6 addresses derived from
+            such IEEE identifiers would be roughly equivalent to those specified in <xref target='RFC7217'/>.
+        </t>
+      </section>
+
+      <section title='Short Addresses'>
+        <t> An IPv6 address formed (per Section 6 of <xref target='RFC4944'/>) from an 16-bit identifier such
+            as an IEEE 802.15.4 16-bit short address does not provide sufficient
+            entropy to fully mitigate address scanning, as the size of the address scan search space depends
+            on the entropy in the IID, and only 15 bits are available for unicast addresses.  An adversary could
+            also use statisical methods to determine the size of the L2 address space and thereby make some
+            inference regarding the underlying technology being IEEE 802.15.4 on a given link.  As such,
+            this address generation mechanism SHOULD NOT be used on networks where privacy threats may be an issue,
+            such as any networks that have Internet connectivity.
+        </t>
+        <t> It might be possible to construct IPv6 addresses from 16-bit short addresses using an alternate
+            mechanism that mitigates address scans, if all nodes on a given L2 network have a shared secret
+            (such as the key needed to get on the layer-2 network) and generate the IID by using a 
+            one-way 64-bit hash of the shared secret together with the short address. The use of such a hash 
+            would result in the IIDs being spread out among the full range of IID address space.
+        </t>
+        <t> "Temporary" addresses could possibly be generated in the same way by also including in the hash
+            the Version Number from the Authoritative Border Router Option (ABDO) if any.  This would
+            allow changing temporary addresses whenever the Version Number is changed (even if the set of
+            prefix or context information is unchanged). Such a scheme would likely require using
+            the Context Identifier (CID) to distinguish between non-temporary addresses, "current"
+            temporary addresses, and "past" temporary addresses based on a previous Version Number.
+        </t>
+      </section>
+    </section>
+
+    <section title='IANA Considerations'>
+      <t> This document has no actions for IANA.
+      </t>
+    </section>
+
+    <section title='Security Considerations'>
+      <t> This entire document is about security considerations and how to specify
+          possible mitigations.
+      </t>
+    </section>
+
+  </middle>
+
+  <back>
+
+    <references title='Normative References'>
+      &rfc2119;
+    </references>
+   
+    <references title='Informative References'>
+      &rfc3315;
+      &rfc3972;
+      &rfc4429;
+      &rfc4941;
+      &rfc4944;
+      &rfc5535;
+      &rfc6496;
+      &rfc6724;
+      &rfc6973;
+      &rfc7217;
+      &rfc7288;
+      &rfc7421;
+      &rfc7428;
+      &I-D.ietf-6man-ipv6-address-generation-privacy;
+      &I-D.ietf-6man-default-iids;
+      &I-D.ietf-6lo-6lobac;
+      &I-D.ietf-6lo-btle;
+      &I-D.ietf-6lo-dect-ule;
+      &I-D.ietf-6lo-nfc;
+      &I-D.huitema-6man-random-addresses;
+
+      <reference anchor='BTCorev4.1' target='https://www.bluetooth.org/DocMan/handlers/DownloadDoc.ashx?doc_id=282159'>
+        <front>
+          <title>Bluetooth Core Specification Version 4.1</title>
+          <author>
+            <organization abbrev="Bluetooth SIG">Bluetooth Special Interest Group</organization>
+          </author>
+          <date year="2013" month="December"/>
+        </front>
+      </reference>
+    </references>
+
+  </back>
+</rfc>
