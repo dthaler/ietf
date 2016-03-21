@@ -2,6 +2,7 @@
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC3168 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3168.xml">
 <!ENTITY RFC3424 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3424.xml">
 <!ENTITY RFC4690 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4690.xml">
 <!ENTITY RFC5218 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5218.xml">
@@ -37,7 +38,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-iab-protocol-transitions-00.txt"
+<rfc category="info" docName="draft-iab-protocol-transitions-01.txt"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -54,7 +55,7 @@
 
     <!--add 'role="editor"' below for the editors if appropriate -->
 
-    <author initials="D." surname="Thaler" fullname="Dave Thaler">
+    <author initials="D." surname="Thaler" fullname="Dave Thaler" role="editor">
           <organization>Microsoft</organization>
           <address>
             <postal>
@@ -300,6 +301,7 @@ Suzanne Woolf
 
   <back>
     <references title="Informative References">
+      &RFC3168;
       &RFC3424;
       &RFC4690;
       &RFC5218;
@@ -331,6 +333,76 @@ Suzanne Woolf
         </front>
       </reference>
 
+      <reference anchor="TSV2007"
+                 target="http://www.ietf.org/proceedings/68/slides/tsvarea-3/sld1.htm">
+        <front>
+          <title>Implementation Report on Experiences with Various TCP RFCs</title>
+          <author initials='M.' surname='Sridharan' fullname='Murari Sridharan'/>
+          <author initials='D.' surname='Bansal' fullname='Deepak Bansal'/>
+          <author initials='D.' surname='Thaler' fullname='Dave Thaler'/>
+          <date year="2007" month="March"/>
+          <!-- XXX Proceedings of IETF 68 -->
+        </front>
+      </reference>
+
+      <reference anchor="PAM2015"
+                 target="target: http://ecn.ethz.ch/ecn-pam15.pdf">
+        <front>
+          <title>Enabling Internet-Wide Deployment of Explicit Congestion Notification</title>
+          <author initials='B.' surname='Trammell' fullname='Brian Trammell'/>
+          <author initials='M.' surname='Kuehlewind' fullname='Mirja Kuehlewind'/>
+          <author initials='D.' surname='Boppart' fullname='Damiano Boppart'/>
+          <author initials='I.' surname='Learmonth' fullname='Iain Learmonth'/>
+          <author initials='G.' surname='Fairhurst' fullname='Gorry Fairhurst'/>
+          <author initials='R.' surname='Scheffenegger' fullname='Richard Scheffenegger'/>
+          <date year="2015"/>
+          <!-- XXX Proceedings of PAM 2015 -->
+        </front>
+      </reference>
     </references>
+
+    <section title="Case Studies">
+        <section title="Explicit Congestion Notification">
+            <t> Explicit Congestion Notification (ECN) is a mechanism to replace
+                loss as the only signal for the detection of congestion with an 
+                explicit signal sent from a router to the recipient of a packet, 
+                then reflected back to the sender. It was standardized in 2000 
+                in <xref target="RFC3168"/>, and the mechanism consists of two 
+                parts: congestion detection in the IP layer, reusing two bits of 
+                the old IP Type of Service (TOS) field, and congestion feedback 
+                in the transport layer. Feedback in TCP uses two TCP flags, ECN 
+                Echo and Congestion Window Reduced. Together with a suitably 
+                configured active queue management (AQM), ECN can improve TCP 
+                performance on congested links.
+            </t>
+            <t> The deployment of ECN is a case study in failed transition followed 
+                by possible redemption. Initial deployment of ECN in the early and
+                mid 2000s led to severe problems with some network equipment, including 
+                home router crashes and reboots when packets with ECN IP or TCP 
+                flags was received <xref target="TSV2007"/>. 
+                This led to firewalls stripping ECN IP and TCP flags, or even 
+                dropping packets with these flags set. This stalled deployment. 
+                The need for both endpoints (to negotiate and support ECN) and 
+                on-path devices (to mark traffic when congestion occurs) to 
+                cooperate in order to see any benefits from ECN deployment was a 
+                further issue. The deployment of ECN had failed.
+            </t>
+            <t> In the late 2000s, Linux and Windows servers defaulted to "passive ECN 
+                support", meaning they would negotiate ECN if asked by the 
+                client, but would not ask to negotiate ECN by default. This 
+                decision was regarded as without risk: only if a client were 
+                explicitly configured to negotiate ECN would any possible 
+                connectivity problems surface. Gradually, this has increased 
+                server support in the Internet from near zero in 2008, to 11% 
+                of the top million Alexa webservers in 2011, to 30% in 2012, 
+                to 65% in late 2014. In the meantime, the risk to connectivity 
+                of ECN negotiation has reduced dramatically <xref target="PAM2015"/>,
+                leading to ongoing work to make Windows, Apple iOS, OSX, and Linux clients 
+                negotiate ECN by default. It is hoped that a critical mass of 
+                clients and servers negotiating ECN will provide an incentive to 
+                mark congestion on ECN-enabled traffic, thus breaking the logjam.
+            </t>
+        </section>
+    </section>
   </back>
 </rfc>
