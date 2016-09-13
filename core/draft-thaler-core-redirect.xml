@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<!-- This line is a comment that won't appear in the generated document. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd"[
+      <!-- For each RFC you want to reference, add a line like below and then
+           see the references section at the end.  This line tells the
+           tool to pull the reference from the database. -->
+      <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+      <!ENTITY rfc3986 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3986.xml">
+      <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
+      <!ENTITY rfc7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
+      <!ENTITY rfc7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml">
+      <!ENTITY rfc7721 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7721.xml">
+      <!-- For each Internet Draft you want to reference, add a line like
+           below and then see the references section at the end. -->
+      <!ENTITY I-D.ietf-core-coap-tcp-tls PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-core-coap-tcp-tls.xml'>
+      <!ENTITY I-D.winfaa-intarea-broadcast-consider PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.winfaa-intarea-broadcast-consider.xml'>
+      ]>
+<?rfc toc='yes' ?>
+<?rfc symrefs='yes' ?>
+<?rfc sortrefs='no'?>
+<?rfc compact='yes'?>
+<!-- <?rfc-ext parse-xml-in-artwork='yes' ?> -->
+<!-- <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?> -->
+
+<rfc docName="draft-thaler-core-redirect-00" ipr="trust200902" category="info">
+  <front>
+    <title abbrev='COAP Redirects'>COAP Redirects</title>
+    <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
+      <organization>Microsoft</organization>
+      <address>
+        <postal>
+          <street>One Microsoft Way</street>
+          <city>Redmond</city>
+          <region>WA</region>
+          <code>98052</code>
+          <country>USA</country>
+        </postal>
+        <email>dthaler@microsoft.com</email>
+      </address>
+    </author>
+    <date year='2016' />
+    <area>ART</area>
+    <!-- <keyword>unlinkability</keyword>
+         <keyword>anonymity</keyword>
+         <keyword>IPv6</keyword>
+         <keyword>Secure Neighbor Discovery</keyword>
+      -->
+    <abstract>
+      <t> This document allows a Constrained Application Protocol (CoAP) server to redirect
+          a client to a new URI.  The primary use case is to allow a client using multicast
+          CoAP discovery to learn a COAPS endpoint of the server, without the server revealing
+          privacy-sensitive information.  This improves security and privacy in environments
+          with untrusted clients.
+      </t>
+    </abstract>
+  </front>
+ 
+  <middle>
+    <section title='Introduction'>
+        <t> The Constrained Application Protocol (CoAP) <xref target="RFC7252"/> is a specialized
+            web transfer protocol for use with constrained nodes and constrained networks.
+            When COAP nodes can appear on a network that allows untrusted clients, security and
+            privacy issues can arise, as discussed in Section 11 of <xref target="RFC7252"/>.
+        </t>
+        <t> This document focuses on a solution for a specific use case: preventing
+            privacy-sensitive information from being passed to untrusted clients, especially
+            as part of resource discovery.  The resource discovery phase is important because
+            DTLS is not used with multicast COAP.
+        </t>
+        <t> The specific relevant threats are:
+            <list style="symbols">
+            <t> Correlation across location: If a COAP server can move between multiple networks
+                in which an attacker has a presence, the attacker can potentially correlate
+                responses from the COAP server across the two locations and determine that the
+                same entity is moving between those two locations.  This can even be used to
+                identify individuals, such as when the COAP server is in a wearable device.
+            </t>
+            <t> Correlation across time: If a COAP server is available periodically in the same location
+                over a long time, an attacker in that location can potentially
+                correlate reponses over time and determine that it is the same entity,
+                even though the IP address and layer-2 address may be different.  This can even
+                be used to identify individuals, such as when the COAP server is in a wearable device.
+            </t>
+            <t> Fingerprinting: Device-specific vulnerability exploitation can be most easily
+                accomplished if an attacker can easily narrow down what software the server
+                runs.  Information returned via multicast service discovery can facilitate
+                such fingerprinting.
+            </t>
+            </list>
+        </t>
+        <t> For more discussion of these threats, see Section 5.2 of <xref target="RFC6973"/>,
+            Section 3 of <xref target="RFC7721"/>, and 
+            <xref target="I-D.winfaa-intarea-broadcast-consider"/>.
+        </t>
+        <t> To mitigate these threats, this document defines the ability for a server to redirect
+            a client to another URI.  Specifically, the expected use is that in response to an
+            unsecured COAP request, a privacy-sensitive server could be configured to simply respond
+            by redirecting the client to a COAPS endpoint, thus allowing the client to discover
+            a unicast endpoint, but not to discover any privacy-sensitive information without
+            establishing a secured unicast connection.
+        </t>
+        <t> By comparison, HTTP (Section 6.4.2 of <xref target="RFC7231"/>) redirects with 301 (Moved Permanently)
+            and a Location header containing the new URI.  COAP, on the other hand, defines Location-Path and 
+            Location-Query COAP options <xref target="RFC7252"/> for those components of the URI, but did not
+            define options for the other URI components. <xref target="ListDiscussion"/> explains:
+
+            <list style="empty"> 
+                <t> While early drafts of CoAP did have some forms of redirection, 
+                    we found that the use cases most people had in mind did not call for redirects.  
+                    The main reason is that in a CoRE world, URIs are usually found through a discovery 
+                    process, and these URIs can be made to point to the right place right away.
+                </t>
+            </list>
+        </t>
+        <t> The use case motivating this document, however, is specifically for redirects as part of the
+            discovery process itself.
+        </t>
+    </section>
+
+    <section title='Alternatives Considered'>
+        <t> This section discusses why existing alternatives are not sufficient.
+        </t>
+
+        <section title='Just use normal multicast discovery'>
+            <t> Normal multicast discovery is susceptible to the threats discussed earlier.
+                Another approach would be for multicast discovery to return only generic information
+                that is the same for every device, and hence does not reveal any privacy related information or
+                allow fingerprinting.  This is undesirable since the resource handler would have to return
+                different information based on whether the client is authenticated vs. unauthenticated,
+                and thus is complex and error prone to implement and maintain.
+            </t>
+        </section>
+
+        <section title='Just use a resource directory'>
+            <t> A resource directory could be used and only provide data to authenticated clients.
+                However, the same problem still remains as to how to discover the resource directory itself.
+                One could potentially use an alternate discovery protocol such as DNS-SD, but this introduces
+                additional complexity when clients otherwise just use COAP for both discovery and communication.
+                In addition, requiring a resource directory to be implemented, deployed, and maintained
+                in a constrained environment presents an extra deployment burden that is desirable to avoid.
+            </t>
+        </section>
+
+        <section title='Use Alternative-Address'>
+            <t> Section 4.5 of <xref target="I-D.ietf-core-coap-tcp-tls"/> provides an Alternative-Address
+                option, which can be used to redirect the client to another transport address.  However,
+                it states:
+                <list style="empty"> 
+                    <t> The Alternative-Address elective option requests the peer to instead
+                        open a connection of the same kind as the present connection to the
+                        alternative transport address given.  Its value is in the form
+                        "authority" as defined in Section 3.2 of [RFC3986].
+                    </t>
+                </list>
+            </t>
+            <t> Thus, Alternative-Address can indicate another authority component,
+                but it explicitly requires the same URI scheme to be used, so it cannot be used
+                to redirect from coap to coaps.
+            </t>
+        </section>
+    </section>
+
+    <section title='Redirects'>
+        <section title="Option Definitions">
+            <t> The following additional options are defined.
+            </t>
+            <figure>
+                <artwork>
++--------+--------------------+--------+--------+------------+
+| Number | Name               | Format | Length | Base Value |
++--------+--------------------+--------+--------+------------+
+| TBD    | Location-Scheme    | string | 0-255  | (none)     |
+| TBD    | Location-Authority | string | 0-255  | (none)     |
++--------+--------------------+--------+--------+------------+
+                </artwork>
+            </figure>
+
+            <section title="Location-Scheme and Location-Authority">
+                <t> Section 5.10.7 of <xref target="RFC7252"/> states:
+                    <list style="empty">
+                    <t> The options that are used to compute the relative URI-reference are
+                        collectively called Location-* options.  Beyond Location-Path and
+                        Location-Query, more Location-* options may be defined in the future
+                        and have been reserved option numbers 128, 132, 136, and 140.
+                    </t>
+                    </list>
+                </t>
+                <t> The Location-Scheme and Location-Authority options are subject 
+                    to all rules for Location-* options discussed in <xref target="RFC7252"/>.
+                </t>
+                <t> Together with Location-Path and Location-Query, the
+                    Location-Scheme and Location-Authority Options indicate
+                    a relative URI that contains either of an absolute path,
+                    a query string, or both.  A combination of these options
+                    is included in a 3.01 (Moved Permanently) response to indicate
+                    the new location of the requested resource relative to
+                    the request URI.
+                </t>
+                <t> If a response with Location-Scheme and/or Location-Authority
+                    Options passes through a cache that interprets these options and the
+                    implied URI identifies one or more currently stored responses, those
+                    entries MUST be marked as not fresh.
+                </t>
+                <t> The Location-Scheme and Location-Authority Option
+                    can contain any character sequence conforming to the
+                    scheme and authority components defined in <xref target="RFC3986"/>.
+                </t>
+            </section>
+        </section>
+
+        <section title="Response Codes">
+            <t> This specification adds the following response code.
+            </t>
+        
+            <section title="3.01 Moved Permanently">
+                <t> This Response Code indicates that the target
+                    resource has been assigned a new permanent URI and any future
+                    references to this resource ought to use the indicated effective URI.
+                </t>
+                <t> The server MUST include in the response any of the following options
+                    whose values differ between the requested URI and the new effective URI:
+                    Location-Scheme, Location-Authority, Location-Path, and Location-Query. The 
+                    client SHOULD use the Location field value for automatic
+                    redirection.
+                </t>
+                <t> A 3.01 response is cacheable.  Caches can use the Max-Age
+                    Option to determine freshness.  A 3.01 response cannot be validated.
+                </t>
+            </section>
+        </section>
+    </section>
+
+    <section title='IANA Considerations'>
+        <t> This document adds the following option numbers to the "CoAP Option Numbers"
+            registry defined by <xref target="RFC7252"/>:
+        </t>
+        <figure>
+            <artwork>
++--------+---------------------------+--------------------------+
+| Number | Name                      | Reference                |
++--------+---------------------------+--------------------------+
+|  TBD   | Location-Scheme           | I-D.thaler-core-redirect |
+|        |                           |                          |
+|  TBD   | Location-Authority        | I-D.thaler-core-redirect |
++--------+---------------------------+--------------------------+
+            </artwork>
+        </figure>
+        <t> NOTE: Section 5.10.7 of <xref target="RFC7252"/> reserves option    
+            numbers 128, 132, 136, and 140 for new Location-* options. Thus,
+            the option numbers should be assigned from that set.
+        </t>
+
+        <t> This document adds the following response codes to the "CoAP Response Codes"
+            registry defined by <xref target="RFC7252"/>:
+        </t>
+        <figure>
+            <artwork>
++------+---------------------------+--------------------------+
+| Code | Description               | Reference                |
++------+---------------------------+--------------------------+
+| 3.01 | Moved Permanently         | I-D.thaler-core-redirect |
++------+---------------------------+--------------------------+
+            </artwork>
+        </figure>
+    </section>
+
+    <section title='Security Considerations'>
+      <t> The use case for this document is specifically to mitigate privacy
+          concerns by allowing a request to an unsecured URI to be redirected
+          to a secured URI.
+      </t>
+    </section>
+
+  </middle>
+
+  <back>
+
+    <references title='Normative References'>
+      &rfc2119;
+      &rfc3986;
+      &rfc7252;
+    </references>
+   
+    <references title='Informative References'>
+      &rfc6973;
+      &rfc7231;
+      &rfc7721;
+      &I-D.ietf-core-coap-tcp-tls;
+      &I-D.winfaa-intarea-broadcast-consider;
+
+      <reference anchor='ListDiscussion' target='https://www.ietf.org/mail-archive/web/core/current/msg04867.html'>
+        <front>
+          <title>Question about Location and redirection</title>
+          <author initials='C.' surname='Bormann' fullname='Carsten Bormann'/>
+          <date year="2013" month="October" day="3"/>
+        </front>
+      </reference>
+    </references>
+
+  </back>
+</rfc>
