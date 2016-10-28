@@ -24,7 +24,7 @@
 <!-- <?rfc-ext parse-xml-in-artwork='yes' ?> -->
 <!-- <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?> -->
 
-<rfc docName="draft-thaler-core-redirect-00" ipr="trust200902" category="info">
+<rfc docName="draft-thaler-core-redirect-01" ipr="trust200902" category="info">
   <front>
     <title abbrev='COAP Redirects'>COAP Redirects</title>
     <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
@@ -58,7 +58,7 @@
   </front>
  
   <middle>
-    <section title='Introduction'>
+    <section title='Introduction' anchor='intro'>
         <t> The Constrained Application Protocol (CoAP) <xref target="RFC7252"/> is a specialized
             web transfer protocol for use with constrained nodes and constrained networks.
             When COAP nodes can appear on a network that allows untrusted clients, security and
@@ -271,6 +271,17 @@
           concerns by allowing a request to an unsecured URI to be redirected
           to a secured URI.
       </t>
+      <t> Preventing privacy-sensitive information from being observed by untrusted
+          clients doing multicast discovery is necessary but not sufficient to mitigate
+          the security issues discussed in <xref target="intro"/>. That is, one
+          must also use a security authentication scheme for subsequent unicast messages
+          that does not reveal a stable identifier to untrusted clients.  Zero-knowledge
+          based algorithms do exist that provide identity hiding of both client
+          and server while still providing mutual authentication (i.e., if authentication
+          completes, both endpoints do know the identity of the other and can use it
+          in authorization decisions), but they may not yet be available in current
+          standards and popular code bases. 
+      </t>
     </section>
 
   </middle>
@@ -297,7 +308,41 @@
           <date year="2013" month="October" day="3"/>
         </front>
       </reference>
+
+      <reference anchor='OIC1.1Core' target='https://openconnectivity.org/wp-content/uploads/2016/10/OIC_1.1-Specification.zip'>
+        <front>
+          <title>OIC Core Specification V1.1.0</title>
+          <author>
+              <organization>Open Connectivity Foundation</organization>
+          </author>
+          <date year="2016"/>
+        </front>
+      </reference>
     </references>
 
+    <section title='Example'>
+    <t> 
+        Existing clients conforming to the OIC 1.1 Core spec <xref target="OIC1.1Core"/>
+        sections 10 and 11.3.5 do discovery by sending a multicast CoAP GET for "/oic/res".
+        Existing servers will respond with links to a set of resources, but that information
+        might be privacy-sensitive in some cases.  For example, it might contain sufficient
+        a unique identifier of the server, or information sufficient for an attacker
+        to determine what version of what software it runs.  (A sample response can be
+        found in section 10.2 of <xref target="OIC1.1Core"/>.)   Hence a privacy-sensitive
+        server needs a way to be discovered by trusted clients without revealing privacy-sensitive
+        information to untrusted observers.
+        A redirect allows a client to send the same request (thus not increasing the
+        amount of multicast traffic on the network).
+    </t>
+    <t> For example, consider a network with a privacy-sensitive server, and a legacy server.
+        A client wants to efficiently discover both servers.  The client can send a single
+        multicast GET for "/oic/res", and the legacy server would send a unicast response
+        with the requested data, whereas the privacy-sensitive server would respond with
+        a unicast redirect to "coaps://<ipaddr>:<port>/oic/res".  The client can then
+        generate a unicast GET over coaps to get the actual data, if permitted, from the
+        privacy-sensitive server.  This mechanism keeps the latency and number of messages
+        to a minimum.
+    </t>
+    </section>
   </back>
 </rfc>
