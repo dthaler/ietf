@@ -43,7 +43,7 @@
 
 <rfc docName="draft-ietf-6lo-privacy-considerations-04" ipr="trust200902" category="info">
   <front>
-    <title abbrev='6lo Privacy Considerations'>Privacy Considerations for IPv6 over Networks of Resource-Constrained Nodes</title>
+    <title abbrev='IPv6-over-foo Privacy Considerations'>Privacy Considerations for IPv6 Adaptation Layer Mechanisms</title>
     <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
       <organization>Microsoft</organization>
       <address>
@@ -65,7 +65,7 @@
     <keyword>Secure Neighbor Discovery</keyword>
     <abstract>
       <t> This document discusses how a number of privacy threats apply to technologies
-          designed for IPv6 over networks of resource-constrained nodes,
+          designed for IPv6 over various link layer protocols,
           and provides advice to protocol designers on how to address such threats in
           adaptation layer specifications for IPv6 over such links.
       </t>
