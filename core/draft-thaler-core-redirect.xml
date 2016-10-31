@@ -117,6 +117,31 @@
         <t> The use case motivating this document, however, is specifically for redirects as part of the
             discovery process itself.
         </t>
+
+        <section title='Example'>
+        <t> 
+            Existing clients conforming to the OIC 1.1 Core spec <xref target="OIC1.1Core"/>
+            sections 10 and 11.3.5 do discovery by sending a multicast CoAP GET for "/oic/res".
+            Existing servers will respond with links to a set of resources, but that information
+            might be privacy-sensitive in some cases.  For example, it might contain sufficient
+            a unique identifier of the server, or information sufficient for an attacker
+            to determine what version of what software it runs.  (A sample response can be
+            found in section 10.2 of <xref target="OIC1.1Core"/>.)   Hence a privacy-sensitive
+            server needs a way to be discovered by trusted clients without revealing privacy-sensitive
+            information to untrusted observers.
+            A redirect allows a client to send the same request (thus not increasing the
+            amount of multicast traffic on the network).
+        </t>
+        <t> For example, consider a network with a privacy-sensitive server, and a legacy server.
+            A client wants to efficiently discover both servers.  The client can send a single
+            multicast GET for "/oic/res", and the legacy server would send a unicast response
+            with the requested data, whereas the privacy-sensitive server would respond with
+            a unicast redirect to "coaps://&lt;ipaddr&gt;:&lt;port&gt;/oic/res".  The client can then
+            generate a unicast GET over coaps to get the actual data, if permitted, from the
+            privacy-sensitive server.  This mechanism keeps the latency and number of messages
+            to a minimum.
+            </t>
+        </section>
     </section>
 
     <section title='Alternatives Considered'>
@@ -271,16 +296,14 @@
           concerns by allowing a request to an unsecured URI to be redirected
           to a secured URI.
       </t>
-      <t> Preventing privacy-sensitive information from being observed by untrusted
+      <t> Preventing identifying information from being observed by untrusted
           clients doing multicast discovery is necessary but not sufficient to mitigate
-          the security issues discussed in <xref target="intro"/>. That is, one
-          must also use a security authentication scheme for subsequent unicast messages
-          that does not reveal a stable identifier to untrusted clients.  Zero-knowledge
-          based algorithms do exist that provide identity hiding of both client
-          and server while still providing mutual authentication (i.e., if authentication
-          completes, both endpoints do know the identity of the other and can use it
-          in authorization decisions), but they may not yet be available in current
-          standards and popular code bases. 
+          the privacy issues discussed in <xref target="intro"/>. That is, one
+          must also use an authentication scheme for subsequent unicast messages
+          that does not reveal a stable identifier to clients before authentication is
+          complete.  Mutual authentication schemes exist (e.g., <xref target="Balfanz"/>)
+          that only reveal the identity of both endpoints if authentication succeeds,
+          but they may not yet be available in current standards and popular code bases.
       </t>
     </section>
 
@@ -301,12 +324,26 @@
       &I-D.ietf-core-coap-tcp-tls;
       &I-D.winfaa-intarea-broadcast-consider;
 
+      <reference anchor='Balfanz' target='http://ieeexplore.ieee.org/document/1199336'>
+        <front>
+          <title>Secret Handshakes From Pairing-based Key Agreements</title>
+          <author initials='D.' surname='Balfanz' fullname='D. Balfanz'/>
+          <author initials='G.' surname='Durfee' fullname='G. Durfee'/>
+          <author initials='N.' surname='Shankar' fullname='N. Shankar'/>
+          <author initials='D.' surname='Smetters' fullname='D. Smetters'/>
+          <author initials='J.' surname='Staddon' fullname='J. Staddon'/>
+          <author initials='H-C.' surname='Wong' fullname='Hao-Chi Wong'/>
+          <date year="2003" month="May"/>
+        </front>
+      </reference>
+
       <reference anchor='ListDiscussion' target='https://www.ietf.org/mail-archive/web/core/current/msg04867.html'>
         <front>
           <title>Question about Location and redirection</title>
           <author initials='C.' surname='Bormann' fullname='Carsten Bormann'/>
           <date year="2013" month="October" day="3"/>
         </front>
+        <seriesInfo name="Symposium on Security and Privacy" value="2003"/>
       </reference>
 
       <reference anchor='OIC1.1Core' target='https://openconnectivity.org/wp-content/uploads/2016/10/OIC_1.1-Specification.zip'>
@@ -320,29 +357,5 @@
       </reference>
     </references>
 
-    <section title='Example'>
-    <t> 
-        Existing clients conforming to the OIC 1.1 Core spec <xref target="OIC1.1Core"/>
-        sections 10 and 11.3.5 do discovery by sending a multicast CoAP GET for "/oic/res".
-        Existing servers will respond with links to a set of resources, but that information
-        might be privacy-sensitive in some cases.  For example, it might contain sufficient
-        a unique identifier of the server, or information sufficient for an attacker
-        to determine what version of what software it runs.  (A sample response can be
-        found in section 10.2 of <xref target="OIC1.1Core"/>.)   Hence a privacy-sensitive
-        server needs a way to be discovered by trusted clients without revealing privacy-sensitive
-        information to untrusted observers.
-        A redirect allows a client to send the same request (thus not increasing the
-        amount of multicast traffic on the network).
-    </t>
-    <t> For example, consider a network with a privacy-sensitive server, and a legacy server.
-        A client wants to efficiently discover both servers.  The client can send a single
-        multicast GET for "/oic/res", and the legacy server would send a unicast response
-        with the requested data, whereas the privacy-sensitive server would respond with
-        a unicast redirect to "coaps://<ipaddr>:<port>/oic/res".  The client can then
-        generate a unicast GET over coaps to get the actual data, if permitted, from the
-        privacy-sensitive server.  This mechanism keeps the latency and number of messages
-        to a minimum.
-    </t>
-    </section>
   </back>
 </rfc>
