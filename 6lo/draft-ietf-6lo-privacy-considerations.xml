@@ -223,7 +223,7 @@
   | DECT ULE      | [I-D.ietf-6lo-dect-ule]  | 40 or any EUI-48   |
   | MS/TP         | [I-D.ietf-6lo-6lobac]    | 7 or 64            |
   | ITU-T G.9959  | [RFC7428]                | 8                  |
-  | NFC           | [I-D.ietf-6lo-nfc]       | 6 or ???           |
+  | NFC           | [I-D.ietf-6lo-nfc]       | 5                  |
   +---------------+--------------------------+--------------------+
         </artwork>
       </figure>
