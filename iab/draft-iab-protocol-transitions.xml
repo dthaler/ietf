@@ -187,7 +187,8 @@
               personnel training, business model (accounting/billing) dependencies,
               and legal (regulation, patents, etc.) costs all add up.
           </t>
-          <t> Extensibility: Design for extensibility so that things can be fixed up later.
+          <t> Extensibility: Design for extensibility <xref target="RFC6709"/> so that
+              things can be fixed up later.
           </t>
       </list></t>
       <t> IAB RFC 7305 <xref target="RFC7305"/> reported on a IAB workshop
