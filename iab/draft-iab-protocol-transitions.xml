@@ -262,7 +262,10 @@
             a good transition plan includes at least the following components:
         </t>
         <t><list style="numbers">
-            <t> An explanation of incentives for each entity involved
+            <t> An explanation of incentives for each entity involved.  When
+                enumerating affected entities, also consider operational tools
+                and processes, personnel training, accounting/billing dependencies,
+                and legal (regulation, patents, etc.) entities where appropriate.
             </t>
             <t> A description of transition phases.  For example, there might
                 be pilot, co-existence, deprecation, and removal phases for
