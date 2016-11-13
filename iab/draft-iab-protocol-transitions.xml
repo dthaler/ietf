@@ -14,7 +14,9 @@
 <!ENTITY RFC4690 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4690.xml">
 <!ENTITY RFC5218 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5218.xml">
 <!ENTITY RFC5891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5891.xml">
+<!ENTITY RFC5894 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5894.xml">
 <!ENTITY RFC5895 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5895.xml">
+<!ENTITY RFC6055 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6055.xml">
 <!ENTITY RFC6146 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6146.xml">
 <!ENTITY RFC6269 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6269.xml">
 <!ENTITY RFC6455 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6455.xml">
@@ -53,7 +55,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-iab-protocol-transitions-03.txt"
+<rfc category="info" docName="draft-iab-protocol-transitions-04.txt"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -185,7 +187,8 @@
               personnel training, business model (accounting/billing) dependencies,
               and legal (regulation, patents, etc.) costs all add up.
           </t>
-          <t> Extensibility: Design for extensibility so that things can be fixed up later.
+          <t> Extensibility: Design for extensibility <xref target="RFC6709"/> so that
+              things can be fixed up later.
           </t>
       </list></t>
       <t> IAB RFC 7305 <xref target="RFC7305"/> reported on a IAB workshop
@@ -340,7 +343,9 @@ Suzanne Woolf
       &RFC4690;
       &RFC5218;
       &RFC5891;
+      &RFC5894;
       &RFC5895;
+      &RFC6055;
       &RFC6146;
       &RFC6269;
       &RFC6455;
@@ -488,12 +493,73 @@ Suzanne Woolf
             </t>
         </section>
 
+        <!--
         <section title="Classless Inter-Domain Routing (CIDR)">
             <t>TODO To be filled in... <xref target="RFC4632"/></t>
         </section>
+        -->
 
         <section title="Internationalized Domain Names">
-            <t>TODO To be filled in...</t>
+            <t>The deployment of Internationalized Domain Names (IDN) has a long
+               and complicated history.  This should not be surprising, since
+               internationalization deals with language and cultural issues regarding
+               differing expectations of users around the world, thus making it
+               inherently difficult to agree on common rules.
+            </t>
+            <t>There have been multiple technical transitions related to IDNs, including
+               the introduction of non-ASCII in DNS, the transition to each new version
+               of Unicode, and the transition from IDNA 2003 to IDNA 2008.
+               A brief history of the introduction of non-ASCII in DNS and the various
+               complications that arose therein, can be found in section 3 of
+               <xref target="RFC6055"/>.  IDNA 2003 however was limited to Unicode
+               version 3.2 only, and so IDNA 2008 was designed to decouple its rules
+               from any particular version of Unicode (see <xref target="RFC5894"/>,
+               especially section 1.4, for more discussion).  However, the transition
+               from IDNA 2003 to IDNA 2008 itself presented a problem since
+               IDNA 2008 did not preserve backwards compatibility with IDNA 2003,
+               thus leading to the need for registries to host multiple name variants
+               that resolve to the same result (a practice known as "bundling"), and/or
+               for applications and client-side frameworks to map one string into another
+               (namely, a string that would give the same result as when IDNA 2003 was
+               used) before invoking DNS.
+            </t>
+            <t>Browser vendors in particular were concerned about the differences between
+               IDNA 2003 and IDNA 2008, and the fact that if a browser stopped being
+               able to get to some site, or unknowingly sent a user to a different
+               (e.g., phishing) site instead, the browser would be blamed.  As such,
+               any user-perceivable change from IDNA 2003 behavior would be painful
+               to the vendor to deal with, and hence they could not depend on bundling
+               or other solutions that would need action by other entities.
+            </t>
+            <t>Based on work done by the collective browser vendors, the Unicode Consortium
+               published <xref target="TR46"/> to provide such mapping.  Meanwhile,
+               the IETF did not publish any mapping mechanism, but <xref target="RFC5895"/>
+               was published on the Independent Submission stream.  In discussions around
+               mapping, one of the key topics was about how long the transition should last.
+               At one end of the duration spectrum is a flag day where some entities would
+               be broken initially but the change would happen before IDN usage became even
+               more ubiquitous.  At the other end of the spectrum is the need to maintain
+               mappings indefinitely.  Local incentives at each entity who needed to change,
+               however, meant that a short timeframe was impractical.
+            </t>
+            <t>There are many affected types of entities with very different
+               incentives.  For example, the incentives affecting browser vendors,
+               registries, domain name applicants, app developers, and protocol
+               designers are each quite different, and the various solutions
+               require changes by multiple types of entities, where the benefits
+               do not always align with the costs.
+            </t>
+            <t>Finally, it is worth pointing out that there are multiple naming contexts,
+               and the protocol behavior within each naming context can be different.
+               Hence applications and frameworks often encounter a variety of behaviors
+               and may or may not be designed to deal with them.  See sections 2 and 3 of
+               <xref target="RFC6055"/> for more discussion.
+            </t>
+            <t>In summary, all this diversity can cause problems for each affected entity,
+               especially if a competitor does not have such a problem, e.g., for browser
+               vendors if competing browsers do not have the same problems, or for a web
+               site administrator if competing web sites do not have the same problems.
+            </t>
         </section>
 
         <section title="IPv6">

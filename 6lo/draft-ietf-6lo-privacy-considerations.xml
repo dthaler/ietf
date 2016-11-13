@@ -41,9 +41,9 @@
 <!-- <?rfc-ext parse-xml-in-artwork='yes' ?> -->
 <!-- <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?> -->
 
-<rfc docName="draft-ietf-6lo-privacy-considerations-03" ipr="trust200902" category="info">
+<rfc docName="draft-ietf-6lo-privacy-considerations-04" ipr="trust200902" category="info">
   <front>
-    <title abbrev='6lo Privacy Considerations'>Privacy Considerations for IPv6 over Networks of Resource-Constrained Nodes</title>
+    <title abbrev='IPv6-over-foo Privacy Considerations'>Privacy Considerations for IPv6 Adaptation Layer Mechanisms</title>
     <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
       <organization>Microsoft</organization>
       <address>
@@ -65,7 +65,7 @@
     <keyword>Secure Neighbor Discovery</keyword>
     <abstract>
       <t> This document discusses how a number of privacy threats apply to technologies
-          designed for IPv6 over networks of resource-constrained nodes,
+          designed for IPv6 over various link layer protocols,
           and provides advice to protocol designers on how to address such threats in
           adaptation layer specifications for IPv6 over such links.
       </t>
@@ -74,8 +74,8 @@
  
   <middle>
     <section title='Introduction'>
-      <t> RFC 6973 <xref target='RFC6973'/> discusses privacy considerations for Internet protocols, and Section 5.2
-          in particular covers a number of privacy-specific threats.  In the context of IPv6 addresses,
+      <t> RFC 6973 <xref target='RFC6973'/> discusses privacy considerations for Internet protocols, and Section 5.2 of that document
+          covers a number of privacy-specific threats.  In the context of IPv6 addresses,
           Section 3 of <xref target='RFC7721'/> provides further
           elaboration on the applicability of the privacy threats.
       </t>
@@ -223,7 +223,7 @@
   | DECT ULE      | [I-D.ietf-6lo-dect-ule]  | 40 or any EUI-48   |
   | MS/TP         | [I-D.ietf-6lo-6lobac]    | 7 or 64            |
   | ITU-T G.9959  | [RFC7428]                | 8                  |
-  | NFC           | [I-D.ietf-6lo-nfc]       | 6 or ???           |
+  | NFC           | [I-D.ietf-6lo-nfc]       | 5                  |
   +---------------+--------------------------+--------------------+
         </artwork>
       </figure>
@@ -270,7 +270,7 @@
             and a set of well-known constant bits (such as padding with 0's) lacks sufficient entropy to
             mitigate address scanning unless the link lifetime is extremely short.
             Furthermore, an adversary could
-            also use statisical methods to determine the size of the L2 address space and thereby make some
+            also use statistical methods to determine the size of the L2 address space and thereby make some
             inference regarding the underlying technology on a given link, and target further attacks accordingly.
         </t>
         <t> When Short Addresses are desired on links that are not guaranteed to have a short enough
