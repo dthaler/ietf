@@ -516,8 +516,9 @@ Suzanne Woolf
                from any particular version of Unicode (see <xref target="RFC5894"/>,
                especially section 1.4, for more discussion).  However, the transition
                from IDNA 2003 to IDNA 2008 itself presented a problem since
-               IDNA 2008 did not preserve backwards compatibility with IDNA 2003,
-               thus leading to the need for registries to host multiple name variants
+               IDNA 2008 did not preserve backwards compatibility with IDNA 2003 for
+               a couple of codepoints,
+               thus leading to the need for registries to host multiple names
                that resolve to the same result (a practice known as "bundling"), and/or
                for applications and client-side frameworks to map one string into another
                (namely, a string that would give the same result as when IDNA 2003 was
@@ -531,7 +532,7 @@ Suzanne Woolf
                to the vendor to deal with, and hence they could not depend on bundling
                or other solutions that would need action by other entities.
             </t>
-            <t>Based on work done by the collective browser vendors, the Unicode Consortium
+            <t>The Unicode Consortium then
                published <xref target="TR46"/> to provide such mapping.  Meanwhile,
                the IETF did not publish any mapping mechanism, but <xref target="RFC5895"/>
                was published on the Independent Submission stream.  In discussions around
