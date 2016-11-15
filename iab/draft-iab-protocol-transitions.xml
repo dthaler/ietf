@@ -517,24 +517,31 @@ Suzanne Woolf
                especially section 1.4, for more discussion).  However, the transition
                from IDNA 2003 to IDNA 2008 itself presented a problem since
                IDNA 2008 did not preserve backwards compatibility with IDNA 2003 for
-               a couple of codepoints,
-               thus leading to the need for registries to host multiple names
-               that resolve to the same result (a practice known as "bundling"), and/or
-               for applications and client-side frameworks to map one string into another
-               (namely, a string that would give the same result as when IDNA 2003 was
-               used) before invoking DNS.
+               a couple of codepoints.
+               Investigations and discussions with affected parties led to the IETF
+               ultimately choosing IDNA 2008 because the overall gain by becoming independent
+               of Unicode Version was seen to be much greater than the problems due to
+               incompatibilities at the time of the change, as not many IDNs were in use.
             </t>
-            <t>Browser vendors in particular were concerned about the differences between
+            <t>Some browser vendors in particular were concerned about the differences between
                IDNA 2003 and IDNA 2008, and the fact that if a browser stopped being
                able to get to some site, or unknowingly sent a user to a different
                (e.g., phishing) site instead, the browser would be blamed.  As such,
                any user-perceivable change from IDNA 2003 behavior would be painful
-               to the vendor to deal with, and hence they could not depend on bundling
-               or other solutions that would need action by other entities.
+               to the vendor to deal with, and hence they could not depend on 
+               solutions that would need action by other entities.
             </t>
-            <t>The Unicode Consortium then
-               published <xref target="TR46"/> to provide such mapping.  Meanwhile,
-               the IETF did not publish any mapping mechanism, but <xref target="RFC5895"/>
+            <t>Thus, to deal with such incompatibilities, applications and client-side
+               frameworks needed to map one string into another (namely, a string that
+               would give the same result as when IDNA 2003 was used) before invoking DNS.
+            </t>
+            <t>To provide such mapping, initiatives in the Unicode Consortium led to
+               creation of <xref target="TR46"/>
+               that continued down the path of IDNA 2003 with a code point by code point
+               selection mechanism. This was implemented by some,
+               but never adopted by the IETF.
+            </t>
+            <t>Meanwhile, the IETF did not publish any mapping mechanism, but <xref target="RFC5895"/>
                was published on the Independent Submission stream.  In discussions around
                mapping, one of the key topics was about how long the transition should last.
                At one end of the duration spectrum is a flag day where some entities would
