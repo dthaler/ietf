@@ -504,7 +504,10 @@ Suzanne Woolf
                and complicated history.  This should not be surprising, since
                internationalization deals with language and cultural issues regarding
                differing expectations of users around the world, thus making it
-               inherently difficult to agree on common rules.
+               inherently difficult to agree on common rules. Furthermore,
+               because human languages evolve and change over time, even if
+               common rules can be established, there is likely to be a need to
+               review and update them regularly.
             </t>
             <t>There have been multiple technical transitions related to IDNs, including
                the introduction of non-ASCII in DNS, the transition to each new version
@@ -512,18 +515,24 @@ Suzanne Woolf
                A brief history of the introduction of non-ASCII in DNS and the various
                complications that arose therein, can be found in section 3 of
                <xref target="RFC6055"/>.  IDNA 2003 however was limited to Unicode
-               version 3.2 only, and so IDNA 2008 was designed to decouple its rules
+               version 3.2 only, but as part of the design of IDNA 2008, one of the
+               changes was designed to decouple its rules
                from any particular version of Unicode (see <xref target="RFC5894"/>,
-               especially section 1.4, for more discussion).  However, the transition
+               especially section 1.4, for more discussion of this point, and
+               see <xref target="RFC4690"/> for a list of other issues with IDNA 2003).
+               However, the transition
                from IDNA 2003 to IDNA 2008 itself presented a problem since
                IDNA 2008 did not preserve backwards compatibility with IDNA 2003 for
                a couple of codepoints.
                Investigations and discussions with affected parties led to the IETF
-               ultimately choosing IDNA 2008 because the overall gain by becoming independent
-               of Unicode Version was seen to be much greater than the problems due to
-               incompatibilities at the time of the change, as not many IDNs were in use.
+               ultimately choosing IDNA 2008 because the overall gain by moving to
+               IDNA 2008 to fix the problems with IDNA 2003
+               <!-- becoming independent of Unicode Version -->
+               was seen to be much greater than the problems due to the few
+               incompatibilities at the time of the change, as not many IDNs were in use,
+               and even fewer that might see incompatibilities.
             </t>
-            <t>Some browser vendors in particular were concerned about the differences between
+            <t>A couple browser vendors in particular were concerned about the differences between
                IDNA 2003 and IDNA 2008, and the fact that if a browser stopped being
                able to get to some site, or unknowingly sent a user to a different
                (e.g., phishing) site instead, the browser would be blamed.  As such,
@@ -531,12 +540,12 @@ Suzanne Woolf
                to the vendor to deal with, and hence they could not depend on 
                solutions that would need action by other entities.
             </t>
-            <t>Thus, to deal with such incompatibilities, applications and client-side
-               frameworks needed to map one string into another (namely, a string that
+            <t>Thus, to deal with issues like such incompatibilities, applications and client-side
+               frameworks often want to map one string into another (namely, a string that
                would give the same result as when IDNA 2003 was used) before invoking DNS.
             </t>
-            <t>To provide such mapping, initiatives in the Unicode Consortium led to
-               creation of <xref target="TR46"/>
+            <t>To provide such mapping, the Unicode Consortium led published
+               <xref target="TR46"/>
                that continued down the path of IDNA 2003 with a code point by code point
                selection mechanism. This was implemented by some,
                but never adopted by the IETF.
@@ -552,10 +561,13 @@ Suzanne Woolf
             </t>
             <t>There are many affected types of entities with very different
                incentives.  For example, the incentives affecting browser vendors,
-               registries, domain name applicants, app developers, and protocol
+               registries, domain name marketers and applicants, app developers, and protocol
                designers are each quite different, and the various solutions
                require changes by multiple types of entities, where the benefits
                do not always align with the costs.
+               If there is some group (or even an individual) that is opposed to a
+               change/transition and able to put significant resources behind their 
+               opposition, transitions get a lot harder.
             </t>
             <t>Finally, it is worth pointing out that there are multiple naming contexts,
                and the protocol behavior within each naming context can be different.
@@ -565,8 +577,9 @@ Suzanne Woolf
             </t>
             <t>In summary, all this diversity can cause problems for each affected entity,
                especially if a competitor does not have such a problem, e.g., for browser
-               vendors if competing browsers do not have the same problems, or for a web
-               site administrator if competing web sites do not have the same problems.
+               vendors if competing browsers do not have the same problems, or for a VoIP
+               or gaming service administrator if competing services do not have the same
+               problems.
             </t>
         </section>
 
