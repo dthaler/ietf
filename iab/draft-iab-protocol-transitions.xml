@@ -289,6 +289,11 @@
         <t> We recommend that such criteria be considered when evaluating proposals
             to transition to new or updated protocols.
         </t>
+        <t> A protocol that plans for its own eventual replacement durings its
+            design makes later transitions easier.  Developing and testing a
+            design for the technical mechanisms needed to signal or negotiate a
+            replacement is most important.
+        </t>
     </section>
 
     <section title="Security Considerations" anchor="security">
