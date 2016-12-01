@@ -13,7 +13,9 @@
 <!ENTITY RFC4632 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
 <!ENTITY RFC4690 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4690.xml">
 <!ENTITY RFC5218 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5218.xml">
+<!--
 <!ENTITY RFC5891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5891.xml">
+-->
 <!ENTITY RFC5894 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5894.xml">
 <!ENTITY RFC5895 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5895.xml">
 <!ENTITY RFC6055 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6055.xml">
@@ -234,11 +236,15 @@
             get further deployment and thus increase the overall pain of transition.
         </t>
         <t> Often the decision between a "flag day" and a sustained co-existence period
-            may be difficult, such as in the case of IDNA2008 
-            <xref target="RFC5891"/>
-            <xref target="RFC5895"/>
-            and Unicode TR46
-            <xref target="TR46"/>.
+            may be complicated when differing incentives are involved (e.g., see the
+            case studies in the Appendix).
+            <!--
+                , such as in the case of IDNA2008 
+                <xref target="RFC5891"/>
+                <xref target="RFC5895"/>
+                and Unicode TR46
+                <xref target="TR46"/>.
+              -->
         </t>
     </section>
 
@@ -342,7 +348,9 @@ Suzanne Woolf
       &RFC4632;
       &RFC4690;
       &RFC5218;
+<!--
       &RFC5891;
+-->
       &RFC5894;
       &RFC5895;
       &RFC6055;
@@ -514,13 +522,12 @@ Suzanne Woolf
                of Unicode, and the transition from IDNA 2003 to IDNA 2008.
                A brief history of the introduction of non-ASCII in DNS and the various
                complications that arose therein, can be found in section 3 of
-               <xref target="RFC6055"/>.  IDNA 2003 however was limited to Unicode
-               version 3.2 only, but as part of the design of IDNA 2008, one of the
-               changes was designed to decouple its rules
+               <xref target="RFC6055"/>.  While IDNA 2003 was limited to Unicode
+               version 3.2 only, one of the IDNA 2008 changes was to decouple its rules
                from any particular version of Unicode (see <xref target="RFC5894"/>,
                especially section 1.4, for more discussion of this point, and
-               see <xref target="RFC4690"/> for a list of other issues with IDNA 2003).
-               However, the transition
+               see <xref target="RFC4690"/> for a list of other issues with IDNA 2003
+               that motivated IDNA 2008).  However, the transition
                from IDNA 2003 to IDNA 2008 itself presented a problem since
                IDNA 2008 did not preserve backwards compatibility with IDNA 2003 for
                a couple of codepoints.
@@ -544,8 +551,8 @@ Suzanne Woolf
                frameworks often want to map one string into another (namely, a string that
                would give the same result as when IDNA 2003 was used) before invoking DNS.
             </t>
-            <t>To provide such mapping, the Unicode Consortium led published
-               <xref target="TR46"/>
+            <t>To provide such mapping (and some other functioanlity), the Unicode
+               Consortium published <xref target="TR46"/>
                that continued down the path of IDNA 2003 with a code point by code point
                selection mechanism. This was implemented by some,
                but never adopted by the IETF.
@@ -577,8 +584,8 @@ Suzanne Woolf
             </t>
             <t>In summary, all this diversity can cause problems for each affected entity,
                especially if a competitor does not have such a problem, e.g., for browser
-               vendors if competing browsers do not have the same problems, or for a VoIP
-               or gaming service administrator if competing services do not have the same
+               vendors if competing browsers do not have the same problems, or for an
+               email server provider if competing server providers do not have the same
                problems.
             </t>
         </section>
