@@ -261,6 +261,16 @@
             endpoint can be a resource issue in some cases, such as if the endpoint
             could be a constrained node <xref target="RFC7228"/>.
         </t>
+        <t> In addition, when a translator is within an endpoint, it can can attempt
+            to hide the difference between an older protocol and a newer protocol,
+            either by exposing one of the two sets of behavior to applications and
+            internally mapping it to the other set of behavior, or by exposing a
+            higher level of abstraction which is then alternatively mapped to either
+            one depending on detecting which is needed.  In contrast, when a
+            translator is in the middle of the path, typically only the first
+            approach can be done since the middle of the path is typically unable
+            to provide a higher level of abstraction.
+        </t>
         <t> Any transition strategy for a non-backward-compatible mechanism should 
             include a discussion of where it is placed and a rationale. The transition 
             plan should also consider the transition away from the use of translation 
@@ -271,7 +281,8 @@
     <section title="Transition Plans">
         <t> A review of the case studies described in Appendix A suggests 
             that a good transition plan includes at least the following 
-            components: an explanation of incentives for each entity involved, 
+            components: an understanding of what is already deployed and in use,
+            an explanation of incentives for each entity involved, 
             a description of the phases of the transition along with a 
             proposed timeline, a method for measuring the transition's success, 
             a contingency plan for failure of the transition, and an effective 
@@ -282,6 +293,20 @@
             the subsections below.
         </t>
 
+        <section title="Understanding of Existing Deployment">
+            <t> Often an existing mechanism has variations in implementations
+                and operational deployments.  For example, a specification might
+                include optional behaviors that may or may not be implemented
+                or deployed.  In addition, there may also be implementations or
+                deployments that deviate from, or include vendor-specific
+                extensions to, various aspects of a specification.  It is
+                important when considering a transition, to understand what
+                variations one is intending to transition from or co-exist with,
+                since the technical and non-technical issues may vary greatly as
+                a result.
+            </t>
+        </section>
+
         <section title="Explanation of Incentives">
             <t> A transition plan should explain the incentives to each
                 involved entity to support the transition. Note here that 
@@ -291,6 +316,13 @@
                 these incentives, also consider network operations tools, 
                 practices, and processes, personnel training, accounting and
                 billing dependencies, and legal and regulatory incentives.
+            </t>
+            <t> If there is opposition to a particular new protocol (e.g.,
+                from another standards organization, or a government, or
+                some other affected entity), various non-technical issues
+                arise that should be part of what is planned and dealt with.
+                Similarly, if there are significant costs or other disincentives,
+                the plan needs to consider how to overcome them.
             </t>
         </section>
 
