@@ -256,7 +256,9 @@
             could be a constrained node <xref target="RFC7228"/>.
         </t>
         <t> Any transition strategy for a non-backward-compatible mechanism should 
-            include a discussion of where it is placed and a rationale.
+            include a discussion of where it is placed and a rationale. The transition 
+            plan should also consider the transition away from the use of translation 
+            and adaptation technologies.
         </t>
     </section>
 
