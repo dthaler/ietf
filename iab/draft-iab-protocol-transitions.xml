@@ -262,39 +262,77 @@
             could be a constrained node <xref target="RFC7228"/>.
         </t>
         <t> Any transition strategy for a non-backward-compatible mechanism should 
-            include a discussion of where it is placed and a rationale.
+            include a discussion of where it is placed and a rationale. The transition 
+            plan should also consider the transition away from the use of translation 
+            and adaptation technologies.
         </t>
     </section>
 
-    <section title="Translation Plans">
-        <t> The case studies described in Appendix A suggest that
-            a good transition plan includes at least the following components:
+    <section title="Transition Plans">
+        <t> A review of the case studies described in Appendix A suggests 
+            that a good transition plan includes at least the following 
+            components: an explanation of incentives for each entity involved, 
+            a description of the phases of the transition along with a 
+            proposed timeline, a method for measuring the transition's success, 
+            a contingency plan for failure of the transition, and an effective 
+            method for communicating the plan to the entities involved and 
+            incorporating their feedback thereon. We recommend that such 
+            criteria be considered when evaluating proposals to transition to 
+            new or updated protocols. Each of these components is discussed in 
+            the subsections below.
         </t>
-        <t><list style="numbers">
-            <t> An explanation of incentives for each entity involved.  When
-                enumerating affected entities, also consider operational tools
-                and processes, personnel training, accounting/billing dependencies,
-                and legal (regulation, patents, etc.) entities where appropriate.
+
+        <section title="Explanation of Incentives">
+            <t> A transition plan should explain the incentives to each
+                involved entity to support the transition. Note here that 
+                many entities other than the endpoint applications and 
+                their users may be effected, and the barriers to transition 
+                may be nontechnical as well as technical. When considering
+                these incentives, also consider network operations tools, 
+                practices, and processes, personnel training, accounting and
+                billing dependencies, and legal and regulatory incentives.
             </t>
-            <t> A description of transition phases.  For example, there might
-                be pilot, co-existence, deprecation, and removal phases for
-                a transition from one technology to another incompatible one.
+        </section>
+
+        <section title="Description of Phases and Proposed Timeline">
+            <t> Transition phases might include pilot/experimental deployment, 
+                coexistence, deprecation, and removal phases for a transition
+                from one technology to another incompatible one. 
             </t>
-            <t> A proposed timeline
+
+            <t> Timelines are notoriously difficult to predict and impossible
+                to impose on uncoordinated transitions at the scale of the
+                Internet, but rough estimates can help all involved entities
+                to understand the intended duration of each phase.
             </t>
-            <t> A way to measure whether the transition is succeeding
+        </section>
+
+        <section title="Measurement of Success">
+            <t> The degree of deployment of a given protocol or feature at a 
+                given phase in its transition can be measured differently,
+                depending on its design. For example, server-side protocols 
+                and options which identify themselves through a versioning or 
+                negotiation mechanism can be discovered through active
+                Internet measurement studies. 
             </t>
-            <t> A contingency plan, in case something goes wrong as a result of
-                the transition
+        </section>
+
+        <section title="Contingency Planning">
+            <t> A contingency plan can be as simple as providing for indefinite
+                coexistence between an old and new protocol.
             </t>
-            <t> A way to effectively communicate the proposed plan to the
-                entities affected, and incorporate their feedback
+        </section>
+
+        <section title="Communicating the Plan">
+            <t> Many of the entities involved in a protocol transition may not
+                be aware of the IETF or the RFC series, so dissemination 
+                through other channels is key for sufficiently broad 
+                communication of the transition plan. While flag days are 
+                impractical at Internet scale, coordinated "events" such as 
+                World IPv6 Launch may improve general awareness of an ongoing 
+                transition.
             </t>
-            </list>
-        </t>
-        <t> We recommend that such criteria be considered when evaluating proposals
-            to transition to new or updated protocols.
-        </t>
+        </section>
     </section>
 
     <section title="Security Considerations" anchor="security">
