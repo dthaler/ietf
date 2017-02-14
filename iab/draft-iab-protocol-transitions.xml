@@ -57,7 +57,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-iab-protocol-transitions-04.txt"
+<rfc category="info" docName="draft-iab-protocol-transitions-06.txt"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -124,11 +124,11 @@
   <middle>
 
     <section title="Introduction" anchor="intro">
-      <t> A "transition" is "the process or period of changing from one state
-          or condition to another".  There are several types of such transitions,
+      <t> A "transition" is the process or period of changing from one state
+          or condition to another.  There are several types of such transitions,
           including both technical transitions (e.g., changing protocols or
           deploying an extension) and organizational transitions (e.g., changing
-          what organization manages the IETF web site, or the RFC production center).
+          what organization manages a web site).
           This document focuses solely on technical transitions, although some
           principles might apply to other types as well.
       </t>
@@ -184,10 +184,10 @@
               number of other entities also transition.  Unfortunately, in such cases,
               the natural incentive is often to delay transitioning.
           </t>
-          <t> Total Cost: Don't underestimate the cost of things other than the
-              hardware/software itself.  For example, operational tools and processes,
+          <t> Total Cost: It is import to consider costs that go beyond the core hardware and
+              software, such as operational tools and processes,
               personnel training, business model (accounting/billing) dependencies,
-              and legal (regulation, patents, etc.) costs all add up.
+              and legal (regulation, patents, etc.) costs.
           </t>
           <t> Extensibility: Design for extensibility <xref target="RFC6709"/> so that
               things can be fixed up later.
@@ -251,7 +251,15 @@
     <section title="Translation/Adaptation Location">
         <t> A translation or adaptation mechanism is often required if the old and new
             mechanisms are not interoperable.  Care must be taken when determining
-            where such a translator is best placed. 
+            whether one will work and where such a translator is best placed.
+        </t>
+        <t>
+            A translation mechanism may not work for every use case.  For
+            example, if a translation from one protocol (or protocol version)
+            to another produces indeterminate results, translation will not
+            work reliably.  In addition, if translation always produces a
+	    downgraded protocol result, the incentive considerations in
+	    <xref target="incentives"/> will be relevant.
         </t>
         <t> Requiring a translator in the middle of the path can hamper end-to-end
             security and reliability.  For example, see the discussion of 
@@ -300,18 +308,18 @@
                 or deployed.  In addition, there may also be implementations or
                 deployments that deviate from, or include vendor-specific
                 extensions to, various aspects of a specification.  It is
-                important when considering a transition, to understand what
+                important when considering a transition to understand what
                 variations one is intending to transition from or co-exist with,
                 since the technical and non-technical issues may vary greatly as
                 a result.
             </t>
         </section>
 
-        <section title="Explanation of Incentives">
+        <section title="Explanation of Incentives" anchor="incentives">
             <t> A transition plan should explain the incentives to each
                 involved entity to support the transition. Note here that 
                 many entities other than the endpoint applications and 
-                their users may be effected, and the barriers to transition 
+                their users may be affected, and the barriers to transition 
                 may be nontechnical as well as technical. When considering
                 these incentives, also consider network operations tools, 
                 practices, and processes, personnel training, accounting and
@@ -609,7 +617,7 @@ Suzanne Woolf
                incompatibilities at the time of the change, as not many IDNs were in use,
                and even fewer that might see incompatibilities.
             </t>
-            <t>A couple browser vendors in particular were concerned about the differences between
+            <t>A couple of browser vendors in particular were concerned about the differences between
                IDNA 2003 and IDNA 2008, and the fact that if a browser stopped being
                able to get to some site, or unknowingly sent a user to a different
                (e.g., phishing) site instead, the browser would be blamed.  As such,
@@ -617,8 +625,8 @@ Suzanne Woolf
                to the vendor to deal with, and hence they could not depend on 
                solutions that would need action by other entities.
             </t>
-            <t>Thus, to deal with issues like such incompatibilities, applications and client-side
-               frameworks often want to map one string into another (namely, a string that
+            <t>Thus, to deal with issues like such incompatibilities, some applications and client-side
+               frameworks wanted to map one string into another (namely, a string that
                would give the same result as when IDNA 2003 was used) before invoking DNS.
             </t>
             <t>To provide such mapping (and some other functioanlity), the Unicode
@@ -777,7 +785,7 @@ Suzanne Woolf
                 small improvements over the previous version without making major changes.
             </t>
             <t> The changes in HTTP/2 are largely aimed at improving performance.  The primary 
-                improvement is request multiplexing, which is supported by request prioritization
+                improvement is for request multiplexing, which is supported by request prioritization
                 and flow control.  HTTP/2 includes efficiency improvements with header
                 compression <xref target="RFC7541"/> and binary framing.
             </t>
@@ -788,7 +796,7 @@ Suzanne Woolf
                     a protocol at the same time.
                 </t>
                 <t> The HTTP working group decided that a new version of the protocol represented
-                    an opportunity to improve security posture.  HTTP/2 is much stricter about its
+                    an opportunity to improve security.  HTTP/2 is much stricter about its
                     use of TLS.  In particular, a long list of TLS cipher suites are prohibited,
                     constraints are placed on the key exchange method, and renegotiation is prohibited.
                     These changes did cause deployment problems.  Though most were minor and transitory,
