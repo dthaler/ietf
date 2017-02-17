@@ -9,9 +9,11 @@
 <!ENTITY RFC2893 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2893.xml">
 <!ENTITY RFC3168 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3168.xml">
 <!ENTITY RFC3424 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3424.xml">
+<!ENTITY RFC3692 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3692.xml">
 <!ENTITY RFC4380 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4380.xml">
 <!ENTITY RFC4632 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
 <!ENTITY RFC4690 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4690.xml">
+<!ENTITY RFC5211 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5211.xml">
 <!ENTITY RFC5218 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5218.xml">
 <!--
 <!ENTITY RFC5891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5891.xml">
@@ -132,6 +134,21 @@
           This document focuses solely on technical transitions, although some
           principles might apply to other types as well.
       </t>
+      <!-- DT 2/17/17 added to address Eliot Lear feedback about decommissioning,
+           and Dave Crocker feedback about adoption vs transition.
+        -->
+      <t> In this document we use the term transition generically to apply to any of:
+         <list style="symbols">
+         <t> adoption of a new protocol where none existed before,
+         </t>
+         <t> deployment of a new protocol that obsoletes a previous protocol,
+         </t>
+         <t> deployment of a updated version of an existing protocol, or
+         </t>
+         <t> decommissioning of an obsolete protocol.
+         </t>
+         </list>
+      </t>
       <t> There have been many IETF and IAB RFCs and IAB statements discussing
           transitions of various sorts.  Most are protocol-specific documents
           about specific transitions.  For example, some relevant ones in which
@@ -216,6 +233,32 @@
       </t>
     </section>
 
+    <!-- DT 2/17/17 added to address comments from Joe Touch, Tom Herbert, and Dave Crocker -->
+    <section title="Extensibility">
+      <t> Many protocols are designed to be extensible, using mechanisms such as
+          options, version negotiation, etc., to ease the transition to new features.
+          However, implementations often succumb to commercial pressures to ignore this
+          flexibility in favor of performance or economy, and as a result such extension
+          mechanisms (e.g., IPv6 Hop-by-Hop Options) often experience problems in practice
+          once they begin to be used.  In other cases, a mechanism might be put into a protocol
+          for future use without having an adequate sense of how it will be used, which
+          causes problems later (e.g., SNMP's original 'security' field, or the IPv6 Flow Label).
+          Thus, designers need to consider whether it
+          would be easier to transition to a new protocol than it would be to ensure that
+          an extension point is correctly specified and implemented such that it would be
+          available when needed.  
+      </t>
+      <t> When there is interest in translation between a new mechanism and an old one,
+          complexity of such translation must also be considered.  The major challenge
+          in translation is for semantic differences.  Often, syntactic differences can be
+          translated seamlessly; semantic ones almost never.  Hence when designing for translatability,
+          syntactic and semantic differences should be clearly documented.
+      </t>
+      <t> See RFC 3692 <xref target="RFC3692"/> and RFC 6709 <xref target="RFC6709"/>
+          for more discussion of design considerations for protocol extensions.
+      </t>
+    </section>
+
     <section title="Transition vs. Co-existence" anchor="coexist">
         <t> There is an important distinction between a strict "flag-day" style transition
             where an old mechanism
@@ -225,11 +268,10 @@
             mechanism is removed at a later stage.
         </t>
         <t> When a new mechanism is backwards compatible with an existing mechanism, transition is
-            easiest, and the difference between the two types of transition is not 
-            particularly significant.
-            However, when no backwards compatibility exists (such as in the IPv4 to IPv6 transition),
+            easiest because different parties can transition at different times.
+            However, when no backwards compatibility exists such as in the IPv4 to IPv6 transition,
             a transition plan must choose either a "flag day" or a period of co-existence.
-            When a large number of entities are involved, a flag day becomes impractical.
+            When a large number of entities are involved, a flag day becomes impractical or even impossible.
             Coexistence, on the other hand, involves additional costs of maintaining two
             separate mechanisms during the overlap period which could be quite long.
             Furthermore, the longer the overlap period, the more the old mechanism might
@@ -292,7 +334,7 @@
             components: an understanding of what is already deployed and in use,
             an explanation of incentives for each entity involved, 
             a description of the phases of the transition along with a 
-            proposed timeline, a method for measuring the transition's success, 
+            proposed criteria for each phase, a method for measuring the transition's success, 
             a contingency plan for failure of the transition, and an effective 
             method for communicating the plan to the entities involved and 
             incorporating their feedback thereon. We recommend that such 
@@ -334,7 +376,7 @@
             </t>
         </section>
 
-        <section title="Description of Phases and Proposed Timeline">
+        <section title="Description of Phases and Proposed Criteria">
             <t> Transition phases might include pilot/experimental deployment, 
                 coexistence, deprecation, and removal phases for a transition
                 from one technology to another incompatible one. 
@@ -342,8 +384,22 @@
 
             <t> Timelines are notoriously difficult to predict and impossible
                 to impose on uncoordinated transitions at the scale of the
-                Internet, but rough estimates can help all involved entities
-                to understand the intended duration of each phase.
+                Internet, but rough estimates can sometimes help all involved entities
+                to understand the intended duration of each phase.  More often,
+                it is useful to provide criteria for what must be met in order 
+                to move to the next phrase.  For example, is removal scheduled
+                for a particular date (e.g., FCC regulation to discontinue analog
+                TV broadcasts in the U.S. by June 12, 2009)?  Or is removal
+                to be based on the use of the old mechanism falling below a
+                specified level?  Or some other criteria?
+            </t>
+
+            <!-- DT added 2/17/17 per Dave Crocker comment, Lee please check -->
+            <t> As one example, RFC 5211 <xref target="RFC5211"/> proposed
+                a transition plan for IPv6 that included a proposed timeline,
+                and criteria specific to each phase.  While the timeline was
+                not accurately followed, the phases and timeline did serve as
+                inputs to the World IPv6 Day and World IPv6 Launch events.
             </t>
         </section>
 
@@ -357,9 +413,20 @@
             </t>
         </section>
 
+        <!-- DT updated 2/17/17 to address Eliot Lear and Dave Crocker comments -->
         <section title="Contingency Planning">
             <t> A contingency plan can be as simple as providing for indefinite
-                coexistence between an old and new protocol.
+                coexistence between an old and new protocol, or for reverting to
+                the old protocol until an updated version of the new protocol is
+                available.  Such a plan is useful in the event that unforeseen
+                problems are discovered during deployment, so that such problems
+                can be quickly mitigated.  For example, World IPv6 Day was designed
+                to help discover such problems and fall back to the original state at
+                the end of the day regardless of whether any problems were found,
+                though some participants chose to leave the new state in place when
+                they did not encounter problems and so for such participants the
+                contingency plan was to fall back at the end of the day like other
+                participants did.
             </t>
         </section>
 
@@ -371,6 +438,12 @@
                 impractical at Internet scale, coordinated "events" such as 
                 World IPv6 Launch may improve general awareness of an ongoing 
                 transition.
+            </t>
+            <!-- DT added 2/17/17 per Dave Croker comment -->
+            <t> Also, there is often a need for an entity facilitating the transition
+                through advocacy and focus (e.g., as ISOC did for World IPv6 Launch).
+                Such an entity, independent of the IETF, can be key in communicating
+                the plan and its progress.
             </t>
         </section>
     </section>
@@ -387,6 +460,22 @@
 
     <section title="IANA Considerations">
         <t> This document requires no actions by the IANA.
+        </t>
+    </section>
+
+    <!-- DT 2/17/17 added to help address comment from Dave Crocker and Eliot Lear about wanting
+         more guidance on "how" to apply these principles.
+      -->
+    <section title="Conclusion">
+        <t> This document summarized the set of issues that should be considered by protocol
+            designers and deployers to facilitate such transition and provides pointers to
+            previous work (e.g., <xref target="RFC3692"/>, <xref target="RFC6709"/>) that
+            provided detailed design guidelines.  This document also covered what makes for
+            a good transition plan, and includes several case studies that provide examples.  
+            As more experience is gained over time on how to successfully apply these principles
+            and design effective transition plans, we encourage the community to share such
+            learnings with the IETF community and on the architecture-discuss@ietf.org mailing
+            list so that any future document on this topic can leverage such experience.
         </t>
     </section>
 
@@ -422,9 +511,11 @@ Suzanne Woolf
       &RFC2893;
       &RFC3168;
       &RFC3424;
+      &RFC3692;
       &RFC4380;
       &RFC4632;
       &RFC4690;
+      &RFC5211;
       &RFC5218;
 <!--
       &RFC5891;
@@ -654,8 +745,8 @@ Suzanne Woolf
                change/transition and able to put significant resources behind their 
                opposition, transitions get a lot harder.
             </t>
-            <t>Finally, it is worth pointing out that there are multiple naming contexts,
-               and the protocol behavior within each naming context can be different.
+            <t>Finally, there are multiple naming contexts, and the protocol behavior (including
+               how internationalized domain names are handled) within each naming context can be different.
                Hence applications and frameworks often encounter a variety of behaviors
                and may or may not be designed to deal with them.  See sections 2 and 3 of
                <xref target="RFC6055"/> for more discussion.
