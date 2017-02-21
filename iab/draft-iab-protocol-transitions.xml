@@ -441,9 +441,16 @@
             </t>
             <!-- DT added 2/17/17 per Dave Croker comment -->
             <t> Also, there is often a need for an entity facilitating the transition
-                through advocacy and focus (e.g., as ISOC did for World IPv6 Launch).
-                Such an entity, independent of the IETF, can be key in communicating
-                the plan and its progress.
+                through advocacy and focus. Such an entity, independent of the IETF,
+                can be key in communicating the plan and its progress.
+            </t>
+            <t> Some transitions have a risk of breaking backwards compatibility
+                for some fraction of users.  In such a case, when a transition
+                affects competing entities facing the risk of losing customers to
+                each other, there is an economic disincentive to transition.  Thus,
+                one role for a facilitating entity is to get competitors to transition
+                during the same timeframe, so as to mitigate this fear.  For example,
+                the success of World IPv6 Launch was largely due to ISOC playing this role.
             </t>
         </section>
     </section>
@@ -481,8 +488,8 @@
 
     <section title="Acknowledgements">
         <t> This document is a product of the IAB Stack Evolution Program, with input from
-            many others.  In particular, Dave Crocker, Eliot Lear, Joe Touch, the IETF Applications
-            Area WG, and others provided helpful input on this document.
+            many others.  In particular, Dave Crocker, Eliot Lear, Joe Touch, Cameron Byrne,
+            the IETF Applications Area WG, and others provided helpful input on this document.
         </t>
     </section>
 
