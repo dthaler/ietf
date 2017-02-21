@@ -463,6 +463,11 @@
             For further discussion of some of these issues, see Section 5 of
             <xref target="RFC7754"/>.
         </t>
+        <!-- DT 2/21/17 added to address Brian Carpenter's feedback in ticket 380 -->
+        <t> In addition, coexistence of two protocols in general increases risk in the
+            sense that it doubles the attack surface and allows attacks that exploit
+            the weaker of the two protocols by claiming not to understand the stronger one.
+        </t>
     </section>
 
     <section title="IANA Considerations">
