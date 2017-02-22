@@ -293,6 +293,20 @@
                 <xref target="TR46"/>.
               -->
         </t>
+        <t>
+            Some new protocols or protocol versions are developed with the intent of never
+            retiring the protocol they intend to replace.  Such a protocol might only aim to
+            address a subset of the use cases for which an original is used.  For these
+            protocols, coexistence is the end state.  For instance, this would not apply to
+            IPv6, which aims to completely replace IPv4.
+        </t>
+        <t>
+            Indefinite coexistence as an approach could be viable if removal of the existing
+            protocol is not an urgent goal. It might also be necessary for "wildly successful"
+            protocols that have more disparate uses than can reasonably be considered during the
+            design of a replacement. For example, HTTP/2 does not aspire to lead to the eventual
+            decommissioning of HTTP/1.1 for these reasons.
+        </t>
     </section>
 
     <section title="Translation/Adaptation Location">
