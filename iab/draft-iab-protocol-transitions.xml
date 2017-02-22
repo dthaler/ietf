@@ -9,11 +9,15 @@
 <!ENTITY RFC2893 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2893.xml">
 <!ENTITY RFC3168 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3168.xml">
 <!ENTITY RFC3424 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3424.xml">
+<!ENTITY RFC3692 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3692.xml">
 <!ENTITY RFC4380 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4380.xml">
 <!ENTITY RFC4632 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
 <!ENTITY RFC4690 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4690.xml">
+<!ENTITY RFC5211 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5211.xml">
 <!ENTITY RFC5218 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5218.xml">
+<!--
 <!ENTITY RFC5891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5891.xml">
+-->
 <!ENTITY RFC5894 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5894.xml">
 <!ENTITY RFC5895 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5895.xml">
 <!ENTITY RFC6055 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6055.xml">
@@ -55,7 +59,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-iab-protocol-transitions-04.txt"
+<rfc category="info" docName="draft-iab-protocol-transitions-06.txt"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -122,13 +126,28 @@
   <middle>
 
     <section title="Introduction" anchor="intro">
-      <t> A "transition" is "the process or period of changing from one state
-          or condition to another".  There are several types of such transitions,
+      <t> A "transition" is the process or period of changing from one state
+          or condition to another.  There are several types of such transitions,
           including both technical transitions (e.g., changing protocols or
           deploying an extension) and organizational transitions (e.g., changing
-          what organization manages the IETF web site, or the RFC production center).
+          what organization manages a web site).
           This document focuses solely on technical transitions, although some
           principles might apply to other types as well.
+      </t>
+      <!-- DT 2/17/17 added to address Eliot Lear feedback about decommissioning,
+           and Dave Crocker feedback about adoption vs transition.
+        -->
+      <t> In this document we use the term transition generically to apply to any of:
+         <list style="symbols">
+         <t> adoption of a new protocol where none existed before,
+         </t>
+         <t> deployment of a new protocol that obsoletes a previous protocol,
+         </t>
+         <t> deployment of a updated version of an existing protocol, or
+         </t>
+         <t> decommissioning of an obsolete protocol.
+         </t>
+         </list>
       </t>
       <t> There have been many IETF and IAB RFCs and IAB statements discussing
           transitions of various sorts.  Most are protocol-specific documents
@@ -182,10 +201,10 @@
               number of other entities also transition.  Unfortunately, in such cases,
               the natural incentive is often to delay transitioning.
           </t>
-          <t> Total Cost: Don't underestimate the cost of things other than the
-              hardware/software itself.  For example, operational tools and processes,
+          <t> Total Cost: It is import to consider costs that go beyond the core hardware and
+              software, such as operational tools and processes,
               personnel training, business model (accounting/billing) dependencies,
-              and legal (regulation, patents, etc.) costs all add up.
+              and legal (regulation, patents, etc.) costs.
           </t>
           <t> Extensibility: Design for extensibility <xref target="RFC6709"/> so that
               things can be fixed up later.
@@ -214,6 +233,32 @@
       </t>
     </section>
 
+    <!-- DT 2/17/17 added to address comments from Joe Touch, Tom Herbert, and Dave Crocker -->
+    <section title="Extensibility">
+      <t> Many protocols are designed to be extensible, using mechanisms such as
+          options, version negotiation, etc., to ease the transition to new features.
+          However, implementations often succumb to commercial pressures to ignore this
+          flexibility in favor of performance or economy, and as a result such extension
+          mechanisms (e.g., IPv6 Hop-by-Hop Options) often experience problems in practice
+          once they begin to be used.  In other cases, a mechanism might be put into a protocol
+          for future use without having an adequate sense of how it will be used, which
+          causes problems later (e.g., SNMP's original 'security' field, or the IPv6 Flow Label).
+          Thus, designers need to consider whether it
+          would be easier to transition to a new protocol than it would be to ensure that
+          an extension point is correctly specified and implemented such that it would be
+          available when needed.  
+      </t>
+      <t> When there is interest in translation between a new mechanism and an old one,
+          complexity of such translation must also be considered.  The major challenge
+          in translation is for semantic differences.  Often, syntactic differences can be
+          translated seamlessly; semantic ones almost never.  Hence when designing for translatability,
+          syntactic and semantic differences should be clearly documented.
+      </t>
+      <t> See RFC 3692 <xref target="RFC3692"/> and RFC 6709 <xref target="RFC6709"/>
+          for more discussion of design considerations for protocol extensions.
+      </t>
+    </section>
+
     <section title="Transition vs. Co-existence" anchor="coexist">
         <t> There is an important distinction between a strict "flag-day" style transition
             where an old mechanism
@@ -223,29 +268,40 @@
             mechanism is removed at a later stage.
         </t>
         <t> When a new mechanism is backwards compatible with an existing mechanism, transition is
-            easiest, and the difference between the two types of transition is not 
-            particularly significant.
-            However, when no backwards compatibility exists (such as in the IPv4 to IPv6 transition),
+            easiest because different parties can transition at different times.
+            However, when no backwards compatibility exists such as in the IPv4 to IPv6 transition,
             a transition plan must choose either a "flag day" or a period of co-existence.
-            When a large number of entities are involved, a flag day becomes impractical.
+            When a large number of entities are involved, a flag day becomes impractical or even impossible.
             Coexistence, on the other hand, involves additional costs of maintaining two
             separate mechanisms during the overlap period which could be quite long.
             Furthermore, the longer the overlap period, the more the old mechanism might
             get further deployment and thus increase the overall pain of transition.
         </t>
         <t> Often the decision between a "flag day" and a sustained co-existence period
-            may be difficult, such as in the case of IDNA2008 
-            <xref target="RFC5891"/>
-            <xref target="RFC5895"/>
-            and Unicode TR46
-            <xref target="TR46"/>.
+            may be complicated when differing incentives are involved (e.g., see the
+            case studies in the Appendix).
+            <!--
+                , such as in the case of IDNA2008 
+                <xref target="RFC5891"/>
+                <xref target="RFC5895"/>
+                and Unicode TR46
+                <xref target="TR46"/>.
+              -->
         </t>
     </section>
 
     <section title="Translation/Adaptation Location">
         <t> A translation or adaptation mechanism is often required if the old and new
             mechanisms are not interoperable.  Care must be taken when determining
-            where such a translator is best placed. 
+            whether one will work and where such a translator is best placed.
+        </t>
+        <t>
+            A translation mechanism may not work for every use case.  For
+            example, if a translation from one protocol (or protocol version)
+            to another produces indeterminate results, translation will not
+            work reliably.  In addition, if translation always produces a
+	    downgraded protocol result, the incentive considerations in
+	    <xref target="incentives"/> will be relevant.
         </t>
         <t> Requiring a translator in the middle of the path can hamper end-to-end
             security and reliability.  For example, see the discussion of 
@@ -255,45 +311,160 @@
             endpoint can be a resource issue in some cases, such as if the endpoint
             could be a constrained node <xref target="RFC7228"/>.
         </t>
+        <t> In addition, when a translator is within an endpoint, it can can attempt
+            to hide the difference between an older protocol and a newer protocol,
+            either by exposing one of the two sets of behavior to applications and
+            internally mapping it to the other set of behavior, or by exposing a
+            higher level of abstraction which is then alternatively mapped to either
+            one depending on detecting which is needed.  In contrast, when a
+            translator is in the middle of the path, typically only the first
+            approach can be done since the middle of the path is typically unable
+            to provide a higher level of abstraction.
+        </t>
         <t> Any transition strategy for a non-backward-compatible mechanism should 
-            include a discussion of where it is placed and a rationale.
+            include a discussion of where it is placed and a rationale. The transition 
+            plan should also consider the transition away from the use of translation 
+            and adaptation technologies.
         </t>
     </section>
 
-    <section title="Translation Plans">
-        <t> The case studies described in Appendix A suggest that
-            a good transition plan includes at least the following components:
-        </t>
-        <t><list style="numbers">
-            <t> An explanation of incentives for each entity involved.  When
-                enumerating affected entities, also consider operational tools
-                and processes, personnel training, accounting/billing dependencies,
-                and legal (regulation, patents, etc.) entities where appropriate.
-            </t>
-            <t> A description of transition phases.  For example, there might
-                be pilot, co-existence, deprecation, and removal phases for
-                a transition from one technology to another incompatible one.
-            </t>
-            <t> A proposed timeline
-            </t>
-            <t> A way to measure whether the transition is succeeding
-            </t>
-            <t> A contingency plan, in case something goes wrong as a result of
-                the transition
-            </t>
-            <t> A way to effectively communicate the proposed plan to the
-                entities affected, and incorporate their feedback
-            </t>
-            </list>
-        </t>
-        <t> We recommend that such criteria be considered when evaluating proposals
-            to transition to new or updated protocols.
+    <section title="Transition Plans">
+        <t> A review of the case studies described in Appendix A suggests 
+            that a good transition plan includes at least the following 
+            components: an understanding of what is already deployed and in use,
+            an explanation of incentives for each entity involved, 
+            a description of the phases of the transition along with a 
+            proposed criteria for each phase, a method for measuring the transition's success, 
+            a contingency plan for failure of the transition, and an effective 
+            method for communicating the plan to the entities involved and 
+            incorporating their feedback thereon. We recommend that such 
+            criteria be considered when evaluating proposals to transition to 
+            new or updated protocols. Each of these components is discussed in 
+            the subsections below.
         </t>
         <t> A protocol that plans for its own eventual replacement durings its
             design makes later transitions easier.  Developing and testing a
             design for the technical mechanisms needed to signal or negotiate a
             replacement is most important.
         </t>
+
+        <section title="Understanding of Existing Deployment">
+            <t> Often an existing mechanism has variations in implementations
+                and operational deployments.  For example, a specification might
+                include optional behaviors that may or may not be implemented
+                or deployed.  In addition, there may also be implementations or
+                deployments that deviate from, or include vendor-specific
+                extensions to, various aspects of a specification.  It is
+                important when considering a transition to understand what
+                variations one is intending to transition from or co-exist with,
+                since the technical and non-technical issues may vary greatly as
+                a result.
+            </t>
+        </section>
+
+        <section title="Explanation of Incentives" anchor="incentives">
+            <t> A transition plan should explain the incentives to each
+                involved entity to support the transition. Note here that 
+                many entities other than the endpoint applications and 
+                their users may be affected, and the barriers to transition 
+                may be nontechnical as well as technical. When considering
+                these incentives, also consider network operations tools, 
+                practices, and processes, personnel training, accounting and
+                billing dependencies, and legal and regulatory incentives.
+            </t>
+            <t> If there is opposition to a particular new protocol (e.g.,
+                from another standards organization, or a government, or
+                some other affected entity), various non-technical issues
+                arise that should be part of what is planned and dealt with.
+                Similarly, if there are significant costs or other disincentives,
+                the plan needs to consider how to overcome them.
+            </t>
+            <t> It's worth noting that an analysis of incentives can be
+                difficult and at times led astray by wishful thinking,
+                as opposed to adequately considering economic realities.
+                Thus, honestly considering any barriers to adoption, and
+                justifying one's conclusions about others' incentives,
+                are key to a successful analysis.
+            </t>
+        </section>
+
+        <section title="Description of Phases and Proposed Criteria">
+            <t> Transition phases might include pilot/experimental deployment, 
+                coexistence, deprecation, and removal phases for a transition
+                from one technology to another incompatible one. 
+            </t>
+
+            <t> Timelines are notoriously difficult to predict and impossible
+                to impose on uncoordinated transitions at the scale of the
+                Internet, but rough estimates can sometimes help all involved entities
+                to understand the intended duration of each phase.  More often,
+                it is useful to provide criteria that must be met in order 
+                to move to the next phase.  For example, is removal scheduled
+                for a particular date (e.g., FCC regulation to discontinue analog
+                TV broadcasts in the U.S. by June 12, 2009)?  Or is removal
+                to be based on the use of the old mechanism falling below a
+                specified level?  Or some other criteria?
+            </t>
+
+            <!-- DT added 2/17/17 per Dave Crocker comment, Lee please check -->
+            <t> As one example, RFC 5211 <xref target="RFC5211"/> proposed
+                a transition plan for IPv6 that included a proposed timeline,
+                and criteria specific to each phase.  While the timeline was
+                not accurately followed, the phases and timeline did serve as
+                inputs to the World IPv6 Day and World IPv6 Launch events.
+            </t>
+        </section>
+
+        <section title="Measurement of Success">
+            <t> The degree of deployment of a given protocol or feature at a 
+                given phase in its transition can be measured differently,
+                depending on its design. For example, server-side protocols 
+                and options which identify themselves through a versioning or 
+                negotiation mechanism can be discovered through active
+                Internet measurement studies. 
+            </t>
+        </section>
+
+        <!-- DT updated 2/17/17 to address Eliot Lear and Dave Crocker comments -->
+        <section title="Contingency Planning">
+            <t> A contingency plan can be as simple as providing for indefinite
+                coexistence between an old and new protocol, or for reverting to
+                the old protocol until an updated version of the new protocol is
+                available.  Such a plan is useful in the event that unforeseen
+                problems are discovered during deployment, so that such problems
+                can be quickly mitigated.  For example, World IPv6 Day was designed
+                to help discover such problems and fall back to the original state at
+                the end of the day regardless of whether any problems were found,
+                though some participants chose to leave the new state in place when
+                they did not encounter problems and so for such participants the
+                contingency plan was to fall back at the end of the day like other
+                participants did.
+            </t>
+        </section>
+
+        <section title="Communicating the Plan">
+            <t> Many of the entities involved in a protocol transition may not
+                be aware of the IETF or the RFC series, so dissemination 
+                through other channels is key for sufficiently broad 
+                communication of the transition plan. While flag days are 
+                impractical at Internet scale, coordinated "events" such as 
+                World IPv6 Launch may improve general awareness of an ongoing 
+                transition.
+            </t>
+            <!-- DT added 2/17/17 per Dave Croker comment -->
+            <t> Also, there is often a need for an entity facilitating the transition
+                through advocacy and focus. Such an entity, independent of the IETF,
+                can be key in communicating the plan and its progress.
+            </t>
+            <t> Some transitions have a risk of breaking backwards compatibility
+                for some fraction of users.  In such a case, when a transition
+                affects competing entities facing the risk of losing customers to
+                each other, there is an economic disincentive to transition.  Thus,
+                one role for a facilitating entity is to get competitors to transition
+                during the same timeframe, so as to mitigate this fear.  For example,
+                the success of World IPv6 Launch was largely due to ISOC playing this role.
+            </t>
+        </section>
     </section>
 
     <section title="Security Considerations" anchor="security">
@@ -304,10 +475,38 @@
             For further discussion of some of these issues, see Section 5 of
             <xref target="RFC7754"/>.
         </t>
+        <!-- DT 2/21/17 added to address Brian Carpenter's feedback in ticket 380 -->
+        <t> In addition, coexistence of two protocols in general increases risk in the
+            sense that it doubles the attack surface and allows attacks that exploit
+            the weaker of the two protocols by claiming not to understand the stronger one.
+        </t>
     </section>
 
     <section title="IANA Considerations">
         <t> This document requires no actions by the IANA.
+        </t>
+    </section>
+
+    <!-- DT 2/17/17 added to help address comment from Dave Crocker and Eliot Lear about wanting
+         more guidance on "how" to apply these principles.
+      -->
+    <section title="Conclusion">
+        <t> This document summarized the set of issues that should be considered by protocol
+            designers and deployers to facilitate such transition and provides pointers to
+            previous work (e.g., <xref target="RFC3692"/>, <xref target="RFC6709"/>) that
+            provided detailed design guidelines.  This document also covered what makes for
+            a good transition plan, and includes several case studies that provide examples.  
+            As more experience is gained over time on how to successfully apply these principles
+            and design effective transition plans, we encourage the community to share such
+            learnings with the IETF community and on the architecture-discuss@ietf.org mailing
+            list so that any future document on this topic can leverage such experience.
+        </t>
+    </section>
+
+    <section title="Acknowledgements">
+        <t> This document is a product of the IAB Stack Evolution Program, with input from
+            many others.  In particular, Dave Crocker, Eliot Lear, Joe Touch, Cameron Byrne,
+            the IETF Applications Area WG, and others provided helpful input on this document.
         </t>
     </section>
 
@@ -343,11 +542,15 @@ Suzanne Woolf
       &RFC2893;
       &RFC3168;
       &RFC3424;
+      &RFC3692;
       &RFC4380;
       &RFC4632;
       &RFC4690;
+      &RFC5211;
       &RFC5218;
+<!--
       &RFC5891;
+-->
       &RFC5894;
       &RFC5895;
       &RFC6055;
@@ -519,13 +722,12 @@ Suzanne Woolf
                of Unicode, and the transition from IDNA 2003 to IDNA 2008.
                A brief history of the introduction of non-ASCII in DNS and the various
                complications that arose therein, can be found in section 3 of
-               <xref target="RFC6055"/>.  IDNA 2003 however was limited to Unicode
-               version 3.2 only, but as part of the design of IDNA 2008, one of the
-               changes was designed to decouple its rules
+               <xref target="RFC6055"/>.  While IDNA 2003 was limited to Unicode
+               version 3.2 only, one of the IDNA 2008 changes was to decouple its rules
                from any particular version of Unicode (see <xref target="RFC5894"/>,
                especially section 1.4, for more discussion of this point, and
-               see <xref target="RFC4690"/> for a list of other issues with IDNA 2003).
-               However, the transition
+               see <xref target="RFC4690"/> for a list of other issues with IDNA 2003
+               that motivated IDNA 2008).  However, the transition
                from IDNA 2003 to IDNA 2008 itself presented a problem since
                IDNA 2008 did not preserve backwards compatibility with IDNA 2003 for
                a couple of codepoints.
@@ -537,7 +739,7 @@ Suzanne Woolf
                incompatibilities at the time of the change, as not many IDNs were in use,
                and even fewer that might see incompatibilities.
             </t>
-            <t>A couple browser vendors in particular were concerned about the differences between
+            <t>A couple of browser vendors in particular were concerned about the differences between
                IDNA 2003 and IDNA 2008, and the fact that if a browser stopped being
                able to get to some site, or unknowingly sent a user to a different
                (e.g., phishing) site instead, the browser would be blamed.  As such,
@@ -545,12 +747,12 @@ Suzanne Woolf
                to the vendor to deal with, and hence they could not depend on 
                solutions that would need action by other entities.
             </t>
-            <t>Thus, to deal with issues like such incompatibilities, applications and client-side
-               frameworks often want to map one string into another (namely, a string that
+            <t>Thus, to deal with issues like such incompatibilities, some applications and client-side
+               frameworks wanted to map one string into another (namely, a string that
                would give the same result as when IDNA 2003 was used) before invoking DNS.
             </t>
-            <t>To provide such mapping, the Unicode Consortium led published
-               <xref target="TR46"/>
+            <t>To provide such mapping (and some other functioanlity), the Unicode
+               Consortium published <xref target="TR46"/>
                that continued down the path of IDNA 2003 with a code point by code point
                selection mechanism. This was implemented by some,
                but never adopted by the IETF.
@@ -574,16 +776,16 @@ Suzanne Woolf
                change/transition and able to put significant resources behind their 
                opposition, transitions get a lot harder.
             </t>
-            <t>Finally, it is worth pointing out that there are multiple naming contexts,
-               and the protocol behavior within each naming context can be different.
+            <t>Finally, there are multiple naming contexts, and the protocol behavior (including
+               how internationalized domain names are handled) within each naming context can be different.
                Hence applications and frameworks often encounter a variety of behaviors
                and may or may not be designed to deal with them.  See sections 2 and 3 of
                <xref target="RFC6055"/> for more discussion.
             </t>
             <t>In summary, all this diversity can cause problems for each affected entity,
                especially if a competitor does not have such a problem, e.g., for browser
-               vendors if competing browsers do not have the same problems, or for a VoIP
-               or gaming service administrator if competing services do not have the same
+               vendors if competing browsers do not have the same problems, or for an
+               email server provider if competing server providers do not have the same
                problems.
             </t>
         </section>
@@ -705,7 +907,7 @@ Suzanne Woolf
                 small improvements over the previous version without making major changes.
             </t>
             <t> The changes in HTTP/2 are largely aimed at improving performance.  The primary 
-                improvement is request multiplexing, which is supported by request prioritization
+                improvement is for request multiplexing, which is supported by request prioritization
                 and flow control.  HTTP/2 includes efficiency improvements with header
                 compression <xref target="RFC7541"/> and binary framing.
             </t>
@@ -716,7 +918,7 @@ Suzanne Woolf
                     a protocol at the same time.
                 </t>
                 <t> The HTTP working group decided that a new version of the protocol represented
-                    an opportunity to improve security posture.  HTTP/2 is much stricter about its
+                    an opportunity to improve security.  HTTP/2 is much stricter about its
                     use of TLS.  In particular, a long list of TLS cipher suites are prohibited,
                     constraints are placed on the key exchange method, and renegotiation is prohibited.
                     These changes did cause deployment problems.  Though most were minor and transitory,
