@@ -304,7 +304,7 @@
             Indefinite coexistence as an approach could be viable if removal of the existing
             protocol is not an urgent goal. It might also be necessary for "wildly successful"
             protocols that have more disparate uses than can reasonably be considered during the
-            design of a replacement. For example, HTTP/2 does not aspire to lead to the eventual
+            design of a replacement. For example, HTTP/2 does not aspire to cause the eventual
             decommissioning of HTTP/1.1 for these reasons.
         </t>
     </section>
