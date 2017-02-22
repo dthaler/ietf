@@ -248,6 +248,11 @@
           an extension point is correctly specified and implemented such that it would be
           available when needed.
       </t>
+      <t> A protocol that plans for its own eventual replacement during its
+          design makes later transitions easier.  Developing and testing a
+          design for the technical mechanisms needed to signal or negotiate a
+          replacement is essential in such a plan.
+      </t>
       <t> When there is interest in translation between a new mechanism and an old one,
           complexity of such translation must also be considered.  The major challenge
           in translation is for semantic differences.  Often, syntactic differences can be
@@ -341,11 +346,6 @@
             criteria be considered when evaluating proposals to transition to
             new or updated protocols. Each of these components is discussed in
             the subsections below.
-        </t>
-        <t> A protocol that plans for its own eventual replacement durings its
-            design makes later transitions easier.  Developing and testing a
-            design for the technical mechanisms needed to signal or negotiate a
-            replacement is most important.
         </t>
 
         <section title="Understanding of Existing Deployment">
