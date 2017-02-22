@@ -181,7 +181,7 @@
           discussed two types of transitions: "initial success" (the transition
           to the technology) and extensibility (the transition to updated
           versions of it).  The principles and recommendations in that document
-          are generally applicable to all technical transitions. Some important principles 
+          are generally applicable to all technical transitions. Some important principles
           included:
       </t>
       <t><list style="numbers">
@@ -190,7 +190,7 @@
               Some successful cases did this by providing incentives (e.g., tax breaks),
               or by reducing costs (e.g., freely available source), or by imposing
               costs of not transitioning (e.g., regulation), or even by narrowing
-              the scenarios of applicability to just the cases where benefits do    
+              the scenarios of applicability to just the cases where benefits do
               outweigh costs at all relevant entities.
           </t>
           <t> Incremental Deployability: Backwards compatibility makes transition easier.
@@ -217,7 +217,7 @@
       </t>
       <t><list style="numbers">
           <t> Early-Adopter Incentives: Part of Bitcoin's strategy was extra incentives
-              for early adopters compared to late adopters.  That is, providing a long-term 
+              for early adopters compared to late adopters.  That is, providing a long-term
               advantage to early
               adopters can help stimulate transition even when the initial costs outweigh
               the initial benefit.
@@ -246,7 +246,7 @@
           Thus, designers need to consider whether it
           would be easier to transition to a new protocol than it would be to ensure that
           an extension point is correctly specified and implemented such that it would be
-          available when needed.  
+          available when needed.
       </t>
       <t> When there is interest in translation between a new mechanism and an old one,
           complexity of such translation must also be considered.  The major challenge
@@ -281,7 +281,7 @@
             may be complicated when differing incentives are involved (e.g., see the
             case studies in the Appendix).
             <!--
-                , such as in the case of IDNA2008 
+                , such as in the case of IDNA2008
                 <xref target="RFC5891"/>
                 <xref target="RFC5895"/>
                 and Unicode TR46
@@ -300,11 +300,11 @@
             example, if a translation from one protocol (or protocol version)
             to another produces indeterminate results, translation will not
             work reliably.  In addition, if translation always produces a
-	    downgraded protocol result, the incentive considerations in
-	    <xref target="incentives"/> will be relevant.
+            downgraded protocol result, the incentive considerations in
+            <xref target="incentives"/> will be relevant.
         </t>
         <t> Requiring a translator in the middle of the path can hamper end-to-end
-            security and reliability.  For example, see the discussion of 
+            security and reliability.  For example, see the discussion of
             network-based filtering in <xref target="RFC7754"/>.
         </t>
         <t> On the other hand, requiring a translation layer within an
@@ -321,25 +321,25 @@
             approach can be done since the middle of the path is typically unable
             to provide a higher level of abstraction.
         </t>
-        <t> Any transition strategy for a non-backward-compatible mechanism should 
-            include a discussion of where it is placed and a rationale. The transition 
-            plan should also consider the transition away from the use of translation 
+        <t> Any transition strategy for a non-backward-compatible mechanism should
+            include a discussion of where it is placed and a rationale. The transition
+            plan should also consider the transition away from the use of translation
             and adaptation technologies.
         </t>
     </section>
 
     <section title="Transition Plans">
-        <t> A review of the case studies described in Appendix A suggests 
-            that a good transition plan includes at least the following 
+        <t> A review of the case studies described in Appendix A suggests
+            that a good transition plan includes at least the following
             components: an understanding of what is already deployed and in use,
-            an explanation of incentives for each entity involved, 
-            a description of the phases of the transition along with a 
-            proposed criteria for each phase, a method for measuring the transition's success, 
-            a contingency plan for failure of the transition, and an effective 
-            method for communicating the plan to the entities involved and 
-            incorporating their feedback thereon. We recommend that such 
-            criteria be considered when evaluating proposals to transition to 
-            new or updated protocols. Each of these components is discussed in 
+            an explanation of incentives for each entity involved,
+            a description of the phases of the transition along with a
+            proposed criteria for each phase, a method for measuring the transition's success,
+            a contingency plan for failure of the transition, and an effective
+            method for communicating the plan to the entities involved and
+            incorporating their feedback thereon. We recommend that such
+            criteria be considered when evaluating proposals to transition to
+            new or updated protocols. Each of these components is discussed in
             the subsections below.
         </t>
 
@@ -359,11 +359,11 @@
 
         <section title="Explanation of Incentives" anchor="incentives">
             <t> A transition plan should explain the incentives to each
-                involved entity to support the transition. Note here that 
-                many entities other than the endpoint applications and 
-                their users may be affected, and the barriers to transition 
+                involved entity to support the transition. Note here that
+                many entities other than the endpoint applications and
+                their users may be affected, and the barriers to transition
                 may be nontechnical as well as technical. When considering
-                these incentives, also consider network operations tools, 
+                these incentives, also consider network operations tools,
                 practices, and processes, personnel training, accounting and
                 billing dependencies, and legal and regulatory incentives.
             </t>
@@ -384,16 +384,16 @@
         </section>
 
         <section title="Description of Phases and Proposed Criteria">
-            <t> Transition phases might include pilot/experimental deployment, 
+            <t> Transition phases might include pilot/experimental deployment,
                 coexistence, deprecation, and removal phases for a transition
-                from one technology to another incompatible one. 
+                from one technology to another incompatible one.
             </t>
 
             <t> Timelines are notoriously difficult to predict and impossible
                 to impose on uncoordinated transitions at the scale of the
                 Internet, but rough estimates can sometimes help all involved entities
                 to understand the intended duration of each phase.  More often,
-                it is useful to provide criteria that must be met in order 
+                it is useful to provide criteria that must be met in order
                 to move to the next phase.  For example, is removal scheduled
                 for a particular date (e.g., FCC regulation to discontinue analog
                 TV broadcasts in the U.S. by June 12, 2009)?  Or is removal
@@ -411,12 +411,12 @@
         </section>
 
         <section title="Measurement of Success">
-            <t> The degree of deployment of a given protocol or feature at a 
+            <t> The degree of deployment of a given protocol or feature at a
                 given phase in its transition can be measured differently,
-                depending on its design. For example, server-side protocols 
-                and options which identify themselves through a versioning or 
+                depending on its design. For example, server-side protocols
+                and options which identify themselves through a versioning or
                 negotiation mechanism can be discovered through active
-                Internet measurement studies. 
+                Internet measurement studies.
             </t>
         </section>
 
@@ -427,23 +427,22 @@
                 the old protocol until an updated version of the new protocol is
                 available.  Such a plan is useful in the event that unforeseen
                 problems are discovered during deployment, so that such problems
-                can be quickly mitigated.  For example, World IPv6 Day was designed
-                to help discover such problems and fall back to the original state at
-                the end of the day regardless of whether any problems were found,
-                though some participants chose to leave the new state in place when
-                they did not encounter problems and so for such participants the
-                contingency plan was to fall back at the end of the day like other
-                participants did.
+                can be quickly mitigated.
+            </t>
+            <t> For example, World IPv6 Day included a contingency plan which
+                was to revert to the original state at the end of the day.  After
+                discovering no issues, some participants found that this contingency
+                plan unnecessary and kept the new state.
             </t>
         </section>
 
         <section title="Communicating the Plan">
             <t> Many of the entities involved in a protocol transition may not
-                be aware of the IETF or the RFC series, so dissemination 
-                through other channels is key for sufficiently broad 
-                communication of the transition plan. While flag days are 
-                impractical at Internet scale, coordinated "events" such as 
-                World IPv6 Launch may improve general awareness of an ongoing 
+                be aware of the IETF or the RFC series, so dissemination
+                through other channels is key for sufficiently broad
+                communication of the transition plan. While flag days are
+                impractical at Internet scale, coordinated "events" such as
+                World IPv6 Launch may improve general awareness of an ongoing
                 transition.
             </t>
             <!-- DT added 2/17/17 per Dave Croker comment -->
@@ -490,7 +489,7 @@
             designers and deployers to facilitate such transition and provides pointers to
             previous work (e.g., <xref target="RFC3692"/>, <xref target="RFC6709"/>) that
             provided detailed design guidelines.  This document also covered what makes for
-            a good transition plan, and includes several case studies that provide examples.  
+            a good transition plan, and includes several case studies that provide examples.
             As more experience is gained over time on how to successfully apply these principles
             and design effective transition plans, we encourage the community to share such
             learnings with the IETF community and on the architecture-discuss@ietf.org mailing
@@ -658,40 +657,40 @@ Suzanne Woolf
             <t> Explicit Congestion Notification (ECN) is a mechanism to replace
                 loss as the only signal for the detection of congestion, with an
                 explicit signal sent from a router to the recipient of a packet,
-                then reflected back to the sender. It was standardized in 2000 
-                in <xref target="RFC3168"/>, and the mechanism consists of two 
-                parts: congestion detection in the IP layer, reusing two bits of 
-                the old IP Type of Service (TOS) field, and congestion feedback 
-                in the transport layer. Feedback in TCP uses two TCP flags, ECN 
-                Echo and Congestion Window Reduced. Together with a suitably 
-                configured active queue management (AQM), ECN can improve TCP 
+                then reflected back to the sender. It was standardized in 2000
+                in <xref target="RFC3168"/>, and the mechanism consists of two
+                parts: congestion detection in the IP layer, reusing two bits of
+                the old IP Type of Service (TOS) field, and congestion feedback
+                in the transport layer. Feedback in TCP uses two TCP flags, ECN
+                Echo and Congestion Window Reduced. Together with a suitably
+                configured active queue management (AQM), ECN can improve TCP
                 performance on congested links.
             </t>
-            <t> The deployment of ECN is a case study in failed transition followed 
+            <t> The deployment of ECN is a case study in failed transition followed
                 by possible redemption. Initial deployment of ECN in the early and
-                mid 2000s led to severe problems with some network equipment, including 
-                home router crashes and reboots when packets with ECN IP or TCP 
-                flags was received <xref target="TSV2007"/>. 
-                This led to firewalls stripping ECN IP and TCP flags, or even 
-                dropping packets with these flags set. This stalled deployment. 
-                The need for both endpoints (to negotiate and support ECN) and 
-                on-path devices (to mark traffic when congestion occurs) to 
-                cooperate in order to see any benefits from ECN deployment was a 
+                mid 2000s led to severe problems with some network equipment, including
+                home router crashes and reboots when packets with ECN IP or TCP
+                flags was received <xref target="TSV2007"/>.
+                This led to firewalls stripping ECN IP and TCP flags, or even
+                dropping packets with these flags set. This stalled deployment.
+                The need for both endpoints (to negotiate and support ECN) and
+                on-path devices (to mark traffic when congestion occurs) to
+                cooperate in order to see any benefits from ECN deployment was a
                 further issue. The deployment of ECN across the Interent had failed.
             </t>
-            <t> In the late 2000s, Linux and Windows servers began defaulting to "passive ECN 
-                support", meaning they would negotiate ECN if asked by the 
-                client, but would not ask to negotiate ECN by default. This 
-                decision was regarded as without risk: only if a client were 
-                explicitly configured to negotiate ECN would any possible 
-                connectivity problems surface. Gradually, this has increased 
-                server support in the Internet from near zero in 2008, to 11% 
-                of the top million Alexa webservers in 2011, to 30% in 2012, 
-                to 65% in late 2014. In the meantime, the risk to connectivity 
+            <t> In the late 2000s, Linux and Windows servers began defaulting to "passive ECN
+                support", meaning they would negotiate ECN if asked by the
+                client, but would not ask to negotiate ECN by default. This
+                decision was regarded as without risk: only if a client were
+                explicitly configured to negotiate ECN would any possible
+                connectivity problems surface. Gradually, this has increased
+                server support in the Internet from near zero in 2008, to 11%
+                of the top million Alexa webservers in 2011, to 30% in 2012,
+                to 65% in late 2014. In the meantime, the risk to connectivity
                 of ECN negotiation has reduced dramatically <xref target="PAM2015"/>,
-                leading to ongoing work to make Windows, Apple iOS, OSX, and Linux clients 
-                negotiate ECN by default. It is hoped that a critical mass of 
-                clients and servers negotiating ECN will provide an incentive to 
+                leading to ongoing work to make Windows, Apple iOS, OSX, and Linux clients
+                negotiate ECN by default. It is hoped that a critical mass of
+                clients and servers negotiating ECN will provide an incentive to
                 mark congestion on ECN-enabled traffic, thus breaking the logjam.
             </t>
         </section>
@@ -739,7 +738,7 @@ Suzanne Woolf
                able to get to some site, or unknowingly sent a user to a different
                (e.g., phishing) site instead, the browser would be blamed.  As such,
                any user-perceivable change from IDNA 2003 behavior would be painful
-               to the vendor to deal with, and hence they could not depend on 
+               to the vendor to deal with, and hence they could not depend on
                solutions that would need action by other entities.
             </t>
             <t>Thus, to deal with issues like such incompatibilities, some applications and client-side
@@ -768,7 +767,7 @@ Suzanne Woolf
                require changes by multiple types of entities, where the benefits
                do not always align with the costs.
                If there is some group (or even an individual) that is opposed to a
-               change/transition and able to put significant resources behind their 
+               change/transition and able to put significant resources behind their
                opposition, transitions get a lot harder.
             </t>
             <t>Finally, there are multiple naming contexts, and the protocol behavior (including
@@ -788,9 +787,9 @@ Suzanne Woolf
         <section title="IPv6">
             <t>Twenty-one years after publication of <xref target="RFC1883"/>, the transition
                to IPv6 is still in progress. The first document to describe a
-               transition plan (<xref target="RFC1933"/>, later obsoleted by <xref target="RFC2893"/>) 
-               was published less than a year after the protocol itself. It recommended co-existence (dual-stack 
-               or tunneling technology) with the expectation that over time, all hosts would have IPv6, and 
+               transition plan (<xref target="RFC1933"/>, later obsoleted by <xref target="RFC2893"/>)
+               was published less than a year after the protocol itself. It recommended co-existence (dual-stack
+               or tunneling technology) with the expectation that over time, all hosts would have IPv6, and
                IPv4 could be quietly retired.
             </t>
             <t> In the early stages, deployment was limited to peer-to-peer uses, tunneled
@@ -808,65 +807,65 @@ Suzanne Woolf
                 had IPv6 support and some special-purpose apps existed.
             </t>
             <!-- For most of that time, few organizations made significant progress in
-                 deployment on the Internet.  
+                 deployment on the Internet.
             -->
             <t>
                For content providers and ISPs, on the other hand, there was little incentive for
-               deployment: there was no incremental benefit to deploying locally. 
+               deployment: there was no incremental benefit to deploying locally.
                Since everyone already had IPv4,
                there was no network effect benefit to deploying IPv6. Even as proponents
                argued that workarounds to extend the life of IPv4--such as CIDR, NAT, and
                stingy allocations--made it more complex, IPv4 continued to work well enough
-               for most applications. 
+               for most applications.
             </t>
             <t>Workarounds to NAT problems documented in <xref target="RFC6269"/> and <xref target="RFC7021"/>
-               included ICE, STUN, and TURN, 
-               technologies that allowed those experiencing the problems to deploy technologies to resolve 
+               included ICE, STUN, and TURN,
+               technologies that allowed those experiencing the problems to deploy technologies to resolve
                them. As with end-to-end IPv6 tunneling (e.g., Teredo), the
-               incentives there aligned the cost of fixing the problem with the benefit, and allowed 
-               for incremental benefits to those who used them. The IAB discussed NAT technology proposals 
+               incentives there aligned the cost of fixing the problem with the benefit, and allowed
+               for incremental benefits to those who used them. The IAB discussed NAT technology proposals
                <xref target="RFC3424"/> and recommended they be considered short-term fixes, and said that
-               proposals must 
-               include an exit plan, such that they would decline over time. In particular, the IAB warned 
-               against generalizing NAT solutions, which would lead to greater dependence on them. In some ways, 
-               these solutions, along with other IPv4 development (e.g., the workarounds above, and 
-               retrofitting IPsec into IPv4) continued to reduce the incentive to deploy IPv6. 
+               proposals must
+               include an exit plan, such that they would decline over time. In particular, the IAB warned
+               against generalizing NAT solutions, which would lead to greater dependence on them. In some ways,
+               these solutions, along with other IPv4 development (e.g., the workarounds above, and
+               retrofitting IPsec into IPv4) continued to reduce the incentive to deploy IPv6.
             </t>
-            <t>Indeed, not until a few years after IPv4 runout in various Regional Address Registry 
-               (RIR) regions did IPv6 deployment significantly increase. The RIRs and others conducted 
-               surveys of different industries and industry segments to learn why people did not deploy 
+            <t>Indeed, not until a few years after IPv4 runout in various Regional Address Registry
+               (RIR) regions did IPv6 deployment significantly increase. The RIRs and others conducted
+               surveys of different industries and industry segments to learn why people did not deploy
                IPv6 <xref target="IPv6Survey2011"/> <xref target="IPv6Survey2015"/>, which commonly listed
-               lack of a business case, lack of training, and lack 
-               of vendor support as primary hurdles. Arguably forward-looking companies collaborated 
-               with ISOC on World IPv6 Day and World IPv6 Launch to jump start global IPv6 deployment, 
-               and arguably their work gave vendors incentives to support IPv6 well.  
+               lack of a business case, lack of training, and lack
+               of vendor support as primary hurdles. Arguably forward-looking companies collaborated
+               with ISOC on World IPv6 Day and World IPv6 Launch to jump start global IPv6 deployment,
+               and arguably their work gave vendors incentives to support IPv6 well.
                 Key aspects of World IPv6 Day and World IPv6 Launch that contributed to their successes
                 were the communication mechanism, and the measurement metrics and contingency plans
                 that were announced in advance.
             </t>
             <t> Several efforts have been made to mitigate the lack of a business case. Some governments
-               (South Korea, Japan) provided tax incentives to include IPv6. Other governments (Belgium, 
-               Singapore) mandated IPv6 support by private companies. Few of these had enough value to 
+               (South Korea, Japan) provided tax incentives to include IPv6. Other governments (Belgium,
+               Singapore) mandated IPv6 support by private companies. Few of these had enough value to
                drive significant IPv6 deployment.
             </t>
-            <t>The concern about lack of training is often a common issue in transitions. Because IPv4 is 
-               so ubiquitous, its use is routine and simplified with common tools, and it is taught in 
-               network training everywhere. While IPv6 deployment was low, ignorance of it was no 
+            <t>The concern about lack of training is often a common issue in transitions. Because IPv4 is
+               so ubiquitous, its use is routine and simplified with common tools, and it is taught in
+               network training everywhere. While IPv6 deployment was low, ignorance of it was no
                obstacle to being hired as a network administrator or developer.
                <!-- DT removed since I don't follow what this means
                   Nathalie Kunneke-Trennaman,
                   Trainer for RIPE-NCC said, "The hardest part of teaching IPv6 is teaching remedial IPv4."
                  -->
             </t>
-            <t>Organizations with the greatest incentives to deploy IPv6 are those which continue to grow 
-               quickly, even after IPv4 free pool exhaustion. Thus, ISPs have had varying levels of 
-               commitment, based on the growth of their user base, services being added (especially video 
-               over IP), and the number of IPv4 addresses they had available. Cloud-based providers, 
-               including CDN and hosting companies, have been major buyers of IPv4 addresses, and several 
-               have been strong deployers and advocates of IPv6. 
+            <t>Organizations with the greatest incentives to deploy IPv6 are those which continue to grow
+               quickly, even after IPv4 free pool exhaustion. Thus, ISPs have had varying levels of
+               commitment, based on the growth of their user base, services being added (especially video
+               over IP), and the number of IPv4 addresses they had available. Cloud-based providers,
+               including CDN and hosting companies, have been major buyers of IPv4 addresses, and several
+               have been strong deployers and advocates of IPv6.
             </t>
-            <t>Different organizations will use different transition models for their networks, based on 
-               their needs. Some are electing to use IPv6-only hosts in the network with IPv6-IPv4 translation 
+            <t>Different organizations will use different transition models for their networks, based on
+               their needs. Some are electing to use IPv6-only hosts in the network with IPv6-IPv4 translation
                at the edge.
                <!-- (e.g., Stateful NAT64 <xref target="RFC6146"/>)  -->
                <!-- such as a data center with SIIT-DC or NAT64, or a mobile network with 464xlat. -->
@@ -875,9 +874,9 @@ Suzanne Woolf
                and IPv4 tunneled or translated through them to dual-stack edge routers.
                <!-- DS-Lite, 464xlat, etc. -->
 
-               Still others are using native dual-stack throughout the network, but that generally persists as an 
-               interim measure: adoption of two technologies is not the same as transitioning from one 
-               technology to another. 
+               Still others are using native dual-stack throughout the network, but that generally persists as an
+               interim measure: adoption of two technologies is not the same as transitioning from one
+               technology to another.
 
                Finally, some walled gardens or isolated networks, such as management networks,
                use IPv6-only end-to-end.
@@ -885,7 +884,7 @@ Suzanne Woolf
             <t>It is impossible to predict with certainty the path IPv6 deployment will have taken
                when it is complete.  Lessons learned so far include aligning costs
                and benefits (incentive), and ensuring incremental benefit (network effect, or backward
-               compatibility). 
+               compatibility).
                <!-- DT removed since I disagree with this.  It did help, and that's why Behave we rechartered
                     at the direction of the IAB (see text earlier in the document that referenced that fact).
 
@@ -898,10 +897,10 @@ Suzanne Woolf
         <section title="HTTP/2">
             <t> HTTP/2 <xref target="RFC7540"/> is a new version of the popular HTTP protocol <xref target="RFC7230"/>.
                 The original versions of HTTP (0.9 <xref target="HTTP0.9"/>, 1.0 <xref target="RFC1945"/>,
-                and 1.1 <xref target="RFC2616"/>) have only small differences; each iteration made 
+                and 1.1 <xref target="RFC2616"/>) have only small differences; each iteration made
                 small improvements over the previous version without making major changes.
             </t>
-            <t> The changes in HTTP/2 are largely aimed at improving performance.  The primary 
+            <t> The changes in HTTP/2 are largely aimed at improving performance.  The primary
                 improvement is for request multiplexing, which is supported by request prioritization
                 and flow control.  HTTP/2 includes efficiency improvements with header
                 compression <xref target="RFC7541"/> and binary framing.
@@ -909,7 +908,7 @@ Suzanne Woolf
             <section title="Bundling of Features with New Versions">
                 <t> The bundling of additional constraints on a new version of a protocol could
                     affect adoption by making the transition more costly.  However, the transition
-                    to a new version also represents an opportunity to improve multiple aspects of 
+                    to a new version also represents an opportunity to improve multiple aspects of
                     a protocol at the same time.
                 </t>
                 <t> The HTTP working group decided that a new version of the protocol represented
