@@ -923,16 +923,16 @@ Suzanne Woolf
                 <t> A number of other features or characteristics of HTTP were identified as
                     potentially undesirable. Several such features were considered for removal during
                     the design process.  This included trailers, the 1xx series of responses, certain
-                    modes of request forms, and the unsecured (http://) variant of the protocol. For
-                    each of these, the risk to the successful deployment of the new version was
-                    considered to be too great to justify removing the feature.
+                    request forms, and the unsecured (http://) variant of the protocol. For each of
+                    these, the risk to the successful deployment of the new version was considered to
+                    be too great to justify removing the feature.
                 </t>
-                <t>
-                    Of the features that were retained in the design, the ability to serve <spanx
-                    style="verb">http://</spanx> resources over unsecured HTTP/2 is not widely
-                    implemented and deployed.  The working group took the conservative position of
-                    retaining the feature, but it is possible that there is no interest in the
-                    market.
+                <t> Of the features that were retained in the design, the ability to serve <spanx
+                    style="verb">http://</spanx> resources over unsecured HTTP/2 is neither widely
+                    implemented nor deployed.  The working group took the conservative position of
+                    retaining the feature, but deployment experience shows little interest in the
+                    feature since.  This was an anticipated potential outcome that was not certain
+                    during the design stage.
                 </t>
             </section>
             <section title="Planning for Replacement">
