@@ -4,8 +4,8 @@
 
 Internet Architecture Board                               D. Thaler, Ed.
 Internet-Draft                                                 Microsoft
-Intended status: Informational                         February 21, 2017
-Expires: August 25, 2017
+Intended status: Informational                         February 22, 2017
+Expires: August 26, 2017
 
 
 Out With the Old and In With the New: Planning for Protocol Transitions
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 25, 2017.
+   This Internet-Draft will expire on August 26, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thaler                   Expires August 25, 2017                [Page 1]
+Thaler                   Expires August 26, 2017                [Page 1]
 
 Internet-Draft           Planning for Transition           February 2017
 
@@ -68,27 +68,27 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
    2.  Extensibility . . . . . . . . . . . . . . . . . . . . . . . .   4
    3.  Transition vs. Co-existence . . . . . . . . . . . . . . . . .   5
-   4.  Translation/Adaptation Location . . . . . . . . . . . . . . .   5
-   5.  Transition Plans  . . . . . . . . . . . . . . . . . . . . . .   6
+   4.  Translation/Adaptation Location . . . . . . . . . . . . . . .   6
+   5.  Transition Plans  . . . . . . . . . . . . . . . . . . . . . .   7
      5.1.  Understanding of Existing Deployment  . . . . . . . . . .   7
      5.2.  Explanation of Incentives . . . . . . . . . . . . . . . .   7
-     5.3.  Description of Phases and Proposed Criteria . . . . . . .   7
+     5.3.  Description of Phases and Proposed Criteria . . . . . . .   8
      5.4.  Measurement of Success  . . . . . . . . . . . . . . . . .   8
      5.5.  Contingency Planning  . . . . . . . . . . . . . . . . . .   8
-     5.6.  Communicating the Plan  . . . . . . . . . . . . . . . . .   8
+     5.6.  Communicating the Plan  . . . . . . . . . . . . . . . . .   9
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
    8.  Conclusion  . . . . . . . . . . . . . . . . . . . . . . . . .   9
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   9
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
    10. IAB Members at the Time of This Writing . . . . . . . . . . .  10
    11. Informative References  . . . . . . . . . . . . . . . . . . .  10
    Appendix A.  Case Studies . . . . . . . . . . . . . . . . . . . .  14
      A.1.  Explicit Congestion Notification  . . . . . . . . . . . .  14
      A.2.  Internationalized Domain Names  . . . . . . . . . . . . .  15
-     A.3.  IPv6  . . . . . . . . . . . . . . . . . . . . . . . . . .  16
-     A.4.  HTTP/2  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     A.3.  IPv6  . . . . . . . . . . . . . . . . . . . . . . . . . .  17
+     A.4.  HTTP/2  . . . . . . . . . . . . . . . . . . . . . . . . .  19
        A.4.1.  Bundling of Features with New Versions  . . . . . . .  19
-       A.4.2.  Planning for Replacement  . . . . . . . . . . . . . .  19
+       A.4.2.  Planning for Replacement  . . . . . . . . . . . . . .  20
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  20
 
 1.  Introduction
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thaler                   Expires August 25, 2017                [Page 2]
+Thaler                   Expires August 26, 2017                [Page 2]
 
 Internet-Draft           Planning for Transition           February 2017
 
@@ -165,7 +165,7 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 25, 2017                [Page 3]
+Thaler                   Expires August 26, 2017                [Page 3]
 
 Internet-Draft           Planning for Transition           February 2017
 
@@ -221,7 +221,7 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 25, 2017                [Page 4]
+Thaler                   Expires August 26, 2017                [Page 4]
 
 Internet-Draft           Planning for Transition           February 2017
 
@@ -230,6 +230,11 @@ Internet-Draft           Planning for Transition           February 2017
    whether it would be easier to transition to a new protocol than it
    would be to ensure that an extension point is correctly specified and
    implemented such that it would be available when needed.
+
+   A protocol that plans for its own eventual replacement during its
+   design makes later transitions easier.  Developing and testing a
+   design for the technical mechanisms needed to signal or negotiate a
+   replacement is essential in such a plan.
 
    When there is interest in translation between a new mechanism and an
    old one, complexity of such translation must also be considered.  The
@@ -267,20 +272,34 @@ Internet-Draft           Planning for Transition           February 2017
    period may be complicated when differing incentives are involved
    (e.g., see the case studies in the Appendix).
 
+   Some new protocols or protocol versions are developed with the intent
+   of never retiring the protocol they intend to replace.  Such a
+
+
+
+Thaler                   Expires August 26, 2017                [Page 5]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
+   protocol might only aim to address a subset of the use cases for
+   which an original is used.  For these protocols, coexistence is the
+   end state.  For instance, this would not apply to IPv6, which aims to
+   completely replace IPv4.
+
+   Indefinite coexistence as an approach could be viable if removal of
+   the existing protocol is not an urgent goal.  It might also be
+   necessary for "wildly successful" protocols that have more disparate
+   uses than can reasonably be considered during the design of a
+   replacement.  For example, HTTP/2 does not aspire to cause the
+   eventual decommissioning of HTTP/1.1 for these reasons.
+
 4.  Translation/Adaptation Location
 
    A translation or adaptation mechanism is often required if the old
    and new mechanisms are not interoperable.  Care must be taken when
    determining whether one will work and where such a translator is best
    placed.
-
-
-
-
-Thaler                   Expires August 25, 2017                [Page 5]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    A translation mechanism may not work for every use case.  For
    example, if a translation from one protocol (or protocol version) to
@@ -312,6 +331,13 @@ Internet-Draft           Planning for Transition           February 2017
    The transition plan should also consider the transition away from the
    use of translation and adaptation technologies.
 
+
+
+Thaler                   Expires August 26, 2017                [Page 6]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
 5.  Transition Plans
 
    A review of the case studies described in Appendix A suggests that a
@@ -325,18 +351,6 @@ Internet-Draft           Planning for Transition           February 2017
    thereon.  We recommend that such criteria be considered when
    evaluating proposals to transition to new or updated protocols.  Each
    of these components is discussed in the subsections below.
-
-
-
-
-
-
-
-
-Thaler                   Expires August 25, 2017                [Page 6]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
 5.1.  Understanding of Existing Deployment
 
@@ -369,9 +383,16 @@ Internet-Draft           Planning for Transition           February 2017
 
    It's worth noting that an analysis of incentives can be difficult and
    at times led astray by wishful thinking, as opposed to adequately
-   considering economic realities.  Thus, honestly considerating any
+   considering economic realities.  Thus, honestly considering any
    barriers to adoption, and justifying one's conclusions about others'
    incentives, are key to a successful analysis.
+
+
+
+Thaler                   Expires August 26, 2017                [Page 7]
+
+Internet-Draft           Planning for Transition           February 2017
+
 
 5.3.  Description of Phases and Proposed Criteria
 
@@ -383,20 +404,11 @@ Internet-Draft           Planning for Transition           February 2017
    impose on uncoordinated transitions at the scale of the Internet, but
    rough estimates can sometimes help all involved entities to
    understand the intended duration of each phase.  More often, it is
-   useful to provide criteria for what must be met in order to move to
-   the next phrase.  For example, is removal scheduled for a particular
-   date (e.g., FCC regulation to discontinue analog TV broadcasts in the
-
-
-
-Thaler                   Expires August 25, 2017                [Page 7]
-
-Internet-Draft           Planning for Transition           February 2017
-
-
-   U.S. by June 12, 2009)?  Or is removal to be based on the use of the
-   old mechanism falling below a specified level?  Or some other
-   criteria?
+   useful to provide criteria that must be met in order to move to the
+   next phase.  For example, is removal scheduled for a particular date
+   (e.g., FCC regulation to discontinue analog TV broadcasts in the U.S.
+   by June 12, 2009)?  Or is removal to be based on the use of the old
+   mechanism falling below a specified level?  Or some other criteria?
 
    As one example, RFC 5211 [RFC5211] proposed a transition plan for
    IPv6 that included a proposed timeline, and criteria specific to each
@@ -419,13 +431,24 @@ Internet-Draft           Planning for Transition           February 2017
    old protocol until an updated version of the new protocol is
    available.  Such a plan is useful in the event that unforeseen
    problems are discovered during deployment, so that such problems can
-   be quickly mitigated.  For example, World IPv6 Day was designed to
-   help discover such problems and fall back to the original state at
-   the end of the day regardless of whether any problems were found,
-   though some participants chose to leave the new state in place when
-   they did not encounter problems and so for such participants the
-   contingency plan was to fall back at the end of the day like other
-   participants did.
+   be quickly mitigated.
+
+   For example, World IPv6 Day included a contingency plan which was to
+   revert to the original state at the end of the day.  After
+   discovering no issues, some participants found that this contingency
+   plan was unnecessary and kept the new state.
+
+
+
+
+
+
+
+
+Thaler                   Expires August 26, 2017                [Page 8]
+
+Internet-Draft           Planning for Transition           February 2017
+
 
 5.6.  Communicating the Plan
 
@@ -442,14 +465,6 @@ Internet-Draft           Planning for Transition           February 2017
 
    Some transitions have a risk of breaking backwards compatibility for
    some fraction of users.  In such a case, when a transition affects
-
-
-
-Thaler                   Expires August 25, 2017                [Page 8]
-
-Internet-Draft           Planning for Transition           February 2017
-
-
    competing entities facing the risk of losing customers to each other,
    there is an economic disincentive to transition.  Thus, one role for
    a facilitating entity is to get competitors to transition during the
@@ -483,6 +498,14 @@ Internet-Draft           Planning for Transition           February 2017
    provided detailed design guidelines.  This document also covered what
    makes for a good transition plan, and includes several case studies
    that provide examples.  As more experience is gained over time on how
+
+
+
+Thaler                   Expires August 26, 2017                [Page 9]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    to successfully apply these principles and design effective
    transition plans, we encourage the community to share such learnings
    with the IETF community and on the architecture-discuss@ietf.org
@@ -495,16 +518,6 @@ Internet-Draft           Planning for Transition           February 2017
    input from many others.  In particular, Dave Crocker, Eliot Lear, Joe
    Touch, Cameron Byrne, the IETF Applications Area WG, and others
    provided helpful input on this document.
-
-
-
-
-
-
-Thaler                   Expires August 25, 2017                [Page 9]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
 10.  IAB Members at the Time of This Writing
 
@@ -538,6 +551,17 @@ Internet-Draft           Planning for Transition           February 2017
               <https://www.nro.net/wp-content/uploads/
               ipv6_deployment_survey.pdf>.
 
+
+
+
+
+
+
+Thaler                   Expires August 26, 2017               [Page 10]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    [IPv6Survey2015]
               British Telecommunications, "IPv6 Industry Survey Report",
               August 2015, <http://www.globalservices.bt.com/static/asse
@@ -552,15 +576,6 @@ Internet-Draft           Planning for Transition           February 2017
    [RFC1883]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
               (IPv6) Specification", RFC 1883, DOI 10.17487/RFC1883,
               December 1995, <http://www.rfc-editor.org/info/rfc1883>.
-
-
-
-
-
-Thaler                   Expires August 25, 2017               [Page 10]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    [RFC1933]  Gilligan, R. and E. Nordmark, "Transition Mechanisms for
               IPv6 Hosts and Routers", RFC 1933, DOI 10.17487/RFC1933,
@@ -596,6 +611,13 @@ Internet-Draft           Planning for Transition           February 2017
               DOI 10.17487/RFC3692, January 2004,
               <http://www.rfc-editor.org/info/rfc3692>.
 
+
+
+Thaler                   Expires August 26, 2017               [Page 11]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    [RFC4380]  Huitema, C., "Teredo: Tunneling IPv6 over UDP through
               Network Address Translations (NATs)", RFC 4380,
               DOI 10.17487/RFC4380, February 2006,
@@ -610,13 +632,6 @@ Internet-Draft           Planning for Transition           February 2017
               Recommendations for Internationalized Domain Names
               (IDNs)", RFC 4690, DOI 10.17487/RFC4690, September 2006,
               <http://www.rfc-editor.org/info/rfc4690>.
-
-
-
-Thaler                   Expires August 25, 2017               [Page 11]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    [RFC5211]  Curran, J., "An Internet Transition Plan", RFC 5211,
               DOI 10.17487/RFC5211, July 2008,
@@ -651,6 +666,14 @@ Internet-Draft           Planning for Transition           February 2017
               DOI 10.17487/RFC6269, June 2011,
               <http://www.rfc-editor.org/info/rfc6269>.
 
+
+
+
+Thaler                   Expires August 26, 2017               [Page 12]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    [RFC6455]  Fette, I. and A. Melnikov, "The WebSocket Protocol",
               RFC 6455, DOI 10.17487/RFC6455, December 2011,
               <http://www.rfc-editor.org/info/rfc6455>.
@@ -664,15 +687,6 @@ Internet-Draft           Planning for Transition           February 2017
               J. Doshi, "Assessing the Impact of Carrier-Grade NAT on
               Network Applications", RFC 7021, DOI 10.17487/RFC7021,
               September 2013, <http://www.rfc-editor.org/info/rfc7021>.
-
-
-
-
-
-Thaler                   Expires August 25, 2017               [Page 12]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    [RFC7228]  Bormann, C., Ersue, M., and A. Keranen, "Terminology for
               Constrained-Node Networks", RFC 7228,
@@ -708,6 +722,14 @@ Internet-Draft           Planning for Transition           February 2017
               Blocking and Filtering", RFC 7754, DOI 10.17487/RFC7754,
               March 2016, <http://www.rfc-editor.org/info/rfc7754>.
 
+
+
+
+Thaler                   Expires August 26, 2017               [Page 13]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    [TR46]     Unicode Consortium, "Unicode IDNA Compatibility
               Processing", June 2015,
               <http://www.unicode.org/reports/tr46/>.
@@ -717,18 +739,6 @@ Internet-Draft           Planning for Transition           February 2017
               of IETF 68, March 2007,
               <http://www.ietf.org/proceedings/68/slides/tsvarea-3/
               sld1.htm>.
-
-
-
-
-
-
-
-
-Thaler                   Expires August 25, 2017               [Page 13]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
 Appendix A.  Case Studies
 
@@ -767,6 +777,15 @@ A.1.  Explicit Congestion Notification
    was a further issue.  The deployment of ECN across the Interent had
    failed.
 
+
+
+
+
+Thaler                   Expires August 26, 2017               [Page 14]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    In the late 2000s, Linux and Windows servers began defaulting to
    "passive ECN support", meaning they would negotiate ECN if asked by
    the client, but would not ask to negotiate ECN by default.  This
@@ -778,14 +797,6 @@ A.1.  Explicit Congestion Notification
    2014.  In the meantime, the risk to connectivity of ECN negotiation
    has reduced dramatically [PAM2015], leading to ongoing work to make
    Windows, Apple iOS, OSX, and Linux clients negotiate ECN by default.
-
-
-
-Thaler                   Expires August 25, 2017               [Page 14]
-
-Internet-Draft           Planning for Transition           February 2017
-
-
    It is hoped that a critical mass of clients and servers negotiating
    ECN will provide an incentive to mark congestion on ECN-enabled
    traffic, thus breaking the logjam.
@@ -823,6 +834,14 @@ A.2.  Internationalized Domain Names
 
    A couple of browser vendors in particular were concerned about the
    differences between IDNA 2003 and IDNA 2008, and the fact that if a
+
+
+
+Thaler                   Expires August 26, 2017               [Page 15]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    browser stopped being able to get to some site, or unknowingly sent a
    user to a different (e.g., phishing) site instead, the browser would
    be blamed.  As such, any user-perceivable change from IDNA 2003
@@ -834,13 +853,6 @@ A.2.  Internationalized Domain Names
    applications and client-side frameworks wanted to map one string into
    another (namely, a string that would give the same result as when
    IDNA 2003 was used) before invoking DNS.
-
-
-
-Thaler                   Expires August 25, 2017               [Page 15]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    To provide such mapping (and some other functioanlity), the Unicode
    Consortium published [TR46] that continued down the path of IDNA 2003
@@ -877,6 +889,15 @@ Internet-Draft           Planning for Transition           February 2017
    In summary, all this diversity can cause problems for each affected
    entity, especially if a competitor does not have such a problem,
    e.g., for browser vendors if competing browsers do not have the same
+
+
+
+
+Thaler                   Expires August 26, 2017               [Page 16]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    problems, or for an email server provider if competing server
    providers do not have the same problems.
 
@@ -889,14 +910,6 @@ A.3.  IPv6
    co-existence (dual-stack or tunneling technology) with the
    expectation that over time, all hosts would have IPv6, and IPv4 could
    be quietly retired.
-
-
-
-
-Thaler                   Expires August 25, 2017               [Page 16]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    In the early stages, deployment was limited to peer-to-peer uses,
    tunneled over IPv4 networks.  For example, Teredo [RFC4380] aligned
@@ -933,6 +946,14 @@ Internet-Draft           Planning for Transition           February 2017
    such that they would decline over time.  In particular, the IAB
    warned against generalizing NAT solutions, which would lead to
    greater dependence on them.  In some ways, these solutions, along
+
+
+
+Thaler                   Expires August 26, 2017               [Page 17]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    with other IPv4 development (e.g., the workarounds above, and
    retrofitting IPsec into IPv4) continued to reduce the incentive to
    deploy IPv6.
@@ -946,14 +967,6 @@ Internet-Draft           Planning for Transition           February 2017
    primary hurdles.  Arguably forward-looking companies collaborated
    with ISOC on World IPv6 Day and World IPv6 Launch to jump start
    global IPv6 deployment, and arguably their work gave vendors
-
-
-
-Thaler                   Expires August 25, 2017               [Page 17]
-
-Internet-Draft           Planning for Transition           February 2017
-
-
    incentives to support IPv6 well.  Key aspects of World IPv6 Day and
    World IPv6 Launch that contributed to their successes were the
    communication mechanism, and the measurement metrics and contingency
@@ -989,6 +1002,14 @@ Internet-Draft           Planning for Transition           February 2017
    throughout the network, but that generally persists as an interim
    measure: adoption of two technologies is not the same as
    transitioning from one technology to another.  Finally, some walled
+
+
+
+Thaler                   Expires August 26, 2017               [Page 18]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
    gardens or isolated networks, such as management networks, use
    IPv6-only end-to-end.
 
@@ -1002,14 +1023,6 @@ A.4.  HTTP/2
    HTTP/2 [RFC7540] is a new version of the popular HTTP protocol
    [RFC7230].  The original versions of HTTP (0.9 [HTTP0.9], 1.0
    [RFC1945], and 1.1 [RFC2616]) have only small differences; each
-
-
-
-Thaler                   Expires August 25, 2017               [Page 18]
-
-Internet-Draft           Planning for Transition           February 2017
-
-
    iteration made small improvements over the previous version without
    making major changes.
 
@@ -1045,6 +1058,14 @@ A.4.1.  Bundling of Features with New Versions
    to be too great to justify removing the feature.  However, deployment
    of the unsecured variant of HTTP/2 remains extremely limited.
 
+
+
+
+Thaler                   Expires August 26, 2017               [Page 19]
+
+Internet-Draft           Planning for Transition           February 2017
+
+
 A.4.2.  Planning for Replacement
 
    HTTP/1.1 provides a mechanism, Upgrade, to transition to an entirely
@@ -1056,15 +1077,6 @@ A.4.2.  Planning for Replacement
    version of HTTP: Application Layer Protocol Negotiation (ALPN)
    [RFC7301].  Upgrade was used only for the unsecured variant of the
    protocol.
-
-
-
-
-
-Thaler                   Expires August 25, 2017               [Page 19]
-
-Internet-Draft           Planning for Transition           February 2017
-
 
    ALPN was identified as the way in which future protocol versions
    would be negotiated.  The mechanism was well-tested during
@@ -1105,16 +1117,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-Thaler                   Expires August 25, 2017               [Page 20]
+Thaler                   Expires August 26, 2017               [Page 20]
