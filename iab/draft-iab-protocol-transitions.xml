@@ -427,13 +427,12 @@
                 the old protocol until an updated version of the new protocol is
                 available.  Such a plan is useful in the event that unforeseen
                 problems are discovered during deployment, so that such problems
-                can be quickly mitigated.  For example, World IPv6 Day was designed
-                to help discover such problems and fall back to the original state at
-                the end of the day regardless of whether any problems were found,
-                though some participants chose to leave the new state in place when
-                they did not encounter problems and so for such participants the
-                contingency plan was to fall back at the end of the day like other
-                participants did.
+                can be quickly mitigated.
+            </t>
+            <t> For example, World IPv6 Day included a contingency plan which
+                was to revert to the original state at the end of the day.  After
+                discovering no issues, some participants found that this contingency
+                plan unnecessary and kept the new state.
             </t>
         </section>
 
