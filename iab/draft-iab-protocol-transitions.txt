@@ -384,8 +384,8 @@ Internet-Draft           Planning for Transition              March 2017
    It's worth noting that an analysis of incentives can be difficult and
    at times led astray by wishful thinking, as opposed to adequately
    considering economic realities.  Thus, honestly considering any
-   barriers to adoption, and justifying one's conclusions about others'
-   incentives, are key to a successful analysis.
+   barriers to transition, and justifying one's conclusions about
+   others' incentives, are key to a successful analysis.
 
 
 
