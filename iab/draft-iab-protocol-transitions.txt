@@ -4,8 +4,8 @@
 
 Internet Architecture Board                               D. Thaler, Ed.
 Internet-Draft                                                 Microsoft
-Intended status: Informational                         February 22, 2017
-Expires: August 26, 2017
+Intended status: Informational                             March 1, 2017
+Expires: September 2, 2017
 
 
 Out With the Old and In With the New: Planning for Protocol Transitions
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 26, 2017.
+   This Internet-Draft will expire on September 2, 2017.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thaler                   Expires August 26, 2017                [Page 1]
+Thaler                  Expires September 2, 2017               [Page 1]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thaler                   Expires August 26, 2017                [Page 2]
+Thaler                  Expires September 2, 2017               [Page 2]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    o  deployment of a new protocol that obsoletes a previous protocol,
@@ -165,9 +165,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 3]
+Thaler                  Expires September 2, 2017               [Page 3]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    2.  Incremental Deployability: Backwards compatibility makes
@@ -221,9 +221,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 4]
+Thaler                  Expires September 2, 2017               [Page 4]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    field, or the IPv6 Flow Label).  Thus, designers need to consider
@@ -277,15 +277,14 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 5]
+Thaler                  Expires September 2, 2017               [Page 5]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    protocol might only aim to address a subset of the use cases for
    which an original is used.  For these protocols, coexistence is the
-   end state.  For instance, this would not apply to IPv6, which aims to
-   completely replace IPv4.
+   end state.
 
    Indefinite coexistence as an approach could be viable if removal of
    the existing protocol is not an urgent goal.  It might also be
@@ -333,9 +332,10 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 6]
+
+Thaler                  Expires September 2, 2017               [Page 6]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
 5.  Transition Plans
@@ -389,9 +389,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 7]
+Thaler                  Expires September 2, 2017               [Page 7]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
 5.3.  Description of Phases and Proposed Criteria
@@ -445,9 +445,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 8]
+Thaler                  Expires September 2, 2017               [Page 8]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
 5.6.  Communicating the Plan
@@ -501,9 +501,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017                [Page 9]
+Thaler                  Expires September 2, 2017               [Page 9]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    to successfully apply these principles and design effective
@@ -516,8 +516,9 @@ Internet-Draft           Planning for Transition           February 2017
 
    This document is a product of the IAB Stack Evolution Program, with
    input from many others.  In particular, Dave Crocker, Eliot Lear, Joe
-   Touch, Cameron Byrne, the IETF Applications Area WG, and others
-   provided helpful input on this document.
+   Touch, Cameron Byrne, John Klensin, Patrik Faltstrom, the IETF
+   Applications Area WG, and others provided helpful input on this
+   document.
 
 10.  IAB Members at the Time of This Writing
 
@@ -556,10 +557,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-
-Thaler                   Expires August 26, 2017               [Page 10]
+Thaler                  Expires September 2, 2017              [Page 10]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    [IPv6Survey2015]
@@ -613,9 +613,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017               [Page 11]
+Thaler                  Expires September 2, 2017              [Page 11]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    [RFC4380]  Huitema, C., "Teredo: Tunneling IPv6 over UDP through
@@ -669,9 +669,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017               [Page 12]
+Thaler                  Expires September 2, 2017              [Page 12]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    [RFC6455]  Fette, I. and A. Melnikov, "The WebSocket Protocol",
@@ -725,9 +725,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017               [Page 13]
+Thaler                  Expires September 2, 2017              [Page 13]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    [TR46]     Unicode Consortium, "Unicode IDNA Compatibility
@@ -781,9 +781,9 @@ A.1.  Explicit Congestion Notification
 
 
 
-Thaler                   Expires August 26, 2017               [Page 14]
+Thaler                  Expires September 2, 2017              [Page 14]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    In the late 2000s, Linux and Windows servers began defaulting to
@@ -837,9 +837,9 @@ A.2.  Internationalized Domain Names
 
 
 
-Thaler                   Expires August 26, 2017               [Page 15]
+Thaler                  Expires September 2, 2017              [Page 15]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    browser stopped being able to get to some site, or unknowingly sent a
@@ -893,9 +893,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017               [Page 16]
+Thaler                  Expires September 2, 2017              [Page 16]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    problems, or for an email server provider if competing server
@@ -949,9 +949,9 @@ A.3.  IPv6
 
 
 
-Thaler                   Expires August 26, 2017               [Page 17]
+Thaler                  Expires September 2, 2017              [Page 17]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    with other IPv4 development (e.g., the workarounds above, and
@@ -1005,9 +1005,9 @@ Internet-Draft           Planning for Transition           February 2017
 
 
 
-Thaler                   Expires August 26, 2017               [Page 18]
+Thaler                  Expires September 2, 2017              [Page 18]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
    gardens or isolated networks, such as management networks, use
@@ -1061,9 +1061,9 @@ A.4.1.  Bundling of Features with New Versions
 
 
 
-Thaler                   Expires August 26, 2017               [Page 19]
+Thaler                  Expires September 2, 2017              [Page 19]
 
-Internet-Draft           Planning for Transition           February 2017
+Internet-Draft           Planning for Transition              March 2017
 
 
 A.4.2.  Planning for Replacement
@@ -1117,4 +1117,4 @@ Author's Address
 
 
 
-Thaler                   Expires August 26, 2017               [Page 20]
+Thaler                  Expires September 2, 2017              [Page 20]
