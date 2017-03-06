@@ -519,9 +519,9 @@
 
     <section title="Acknowledgements">
         <t> This document is a product of the IAB Stack Evolution Program, with input from
-            many others.  In particular, Dave Crocker, Eliot Lear, Joe Touch, Cameron Byrne,
-            John Klensin, Patrik Faltstrom, the IETF Applications Area WG, and others provided
-            helpful input on this document.
+            many others.  In particular, Mark Nottingham, Dave Crocker, Eliot Lear, Joe Touch,
+            Cameron Byrne, John Klensin, Patrik Faltstrom, the IETF Applications Area WG,
+            and others provided helpful input on this document.
         </t>
     </section>
 
