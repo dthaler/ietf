@@ -718,12 +718,6 @@ Suzanne Woolf
             </t>
         </section>
 
-        <!--
-        <section title="Classless Inter-Domain Routing (CIDR)">
-            <t>TODO To be filled in... <xref target="RFC4632"/></t>
-        </section>
-        -->
-
         <section title="Internationalized Domain Names">
             <t>The deployment of Internationalized Domain Names (IDN) has a long
                and complicated history.  This should not be surprising, since
@@ -823,15 +817,12 @@ Suzanne Woolf
             <t> Operating System vendors had incentives because with such tunneling protocols,
                 they could get peer-to-peer apps working without depending on any infrastructure changes.
                 That resulted in the main apps using IPv6 being in the peer-to-peer category
-                (BitTorrent, XBox gaming, etc.).
+                (BitTorrent, Xbox gaming, etc.).
             </t>
             <t> Router vendors had some incentive because IPv6 could be used within an
                 intra-domain network more efficiently than tunneling, once the OS vendors already
                 had IPv6 support and some special-purpose apps existed.
             </t>
-            <!-- For most of that time, few organizations made significant progress in
-                 deployment on the Internet.
-            -->
             <t>
                For content providers and ISPs, on the other hand, there was little incentive for
                deployment: there was no incremental benefit to deploying locally.
@@ -854,17 +845,32 @@ Suzanne Woolf
                these solutions, along with other IPv4 development (e.g., the workarounds above, and
                retrofitting IPsec into IPv4) continued to reduce the incentive to deploy IPv6.
             </t>
-            <t>Indeed, not until a few years after IPv4 runout in various Regional Address Registry
-               (RIR) regions did IPv6 deployment significantly increase. The RIRs and others conducted
+            <t> Some early advocates overstated the benefits of IPv6, suggesting that it had better
+                security (because IPsec was required) or that NAT was worse than it often appeared to be
+                or that IPv4 exhaustion would happen years sooner than it actually did. Some people pushed 
+                back on these exaggerations, and decided that the protocol itself somehow lacked credibility. 
+            </t>
+            <t>Not until a few years after IPv4 runout in various Regional Address Registry
+               (RIR) regions did IPv6 deployment significantly increase.  The RIRs had been
+               advocating in their communities for IPv6 for some time, reducing fees for IPv6,
+               and in some cases providing training; there is little to suggest that these had
+               a significant effect. The RIRs and others conducted
                surveys of different industries and industry segments to learn why people did not deploy
                IPv6 <xref target="IPv6Survey2011"/> <xref target="IPv6Survey2015"/>, which commonly listed
                lack of a business case, lack of training, and lack
-               of vendor support as primary hurdles. Arguably forward-looking companies collaborated
-               with ISOC on World IPv6 Day and World IPv6 Launch to jump start global IPv6 deployment,
-               and arguably their work gave vendors incentives to support IPv6 well.
-                Key aspects of World IPv6 Day and World IPv6 Launch that contributed to their successes
-                were the communication mechanism, and the measurement metrics and contingency plans
-                that were announced in advance.
+               of vendor support as primary hurdles.
+            </t>
+            <t> Arguably forward-looking companies collaborated,
+               with ISOC, on World IPv6 Day and World IPv6 Launch to jump start global IPv6 deployment.
+               By including multiple competitors, World IPv6 Day reduced the risk 
+               that any of them would lose customers if a user's IPv6 implementation
+               was broken. World IPv6 Launch then set a goal for content providers to
+               permanently enable IPv6, and for large ISPs to enable IPv6 for at 
+               least 1% of end users. These large, visible deployments gave vendors 
+               specific features and target dates to support IPv6 well. 
+               Key aspects of World IPv6 Day and World IPv6 Launch that contributed to their successes
+               (measured as increased deployment of IPv6) were the communication through ISOC, and
+               that measurement metrics and contingency plans that were announced in advance.
             </t>
             <t> Several efforts have been made to mitigate the lack of a business case. Some governments
                (South Korea, Japan) provided tax incentives to include IPv6. Other governments (Belgium,
@@ -875,10 +881,6 @@ Suzanne Woolf
                so ubiquitous, its use is routine and simplified with common tools, and it is taught in
                network training everywhere. While IPv6 deployment was low, ignorance of it was no
                obstacle to being hired as a network administrator or developer.
-               <!-- DT removed since I don't follow what this means
-                  Nathalie Kunneke-Trennaman,
-                  Trainer for RIPE-NCC said, "The hardest part of teaching IPv6 is teaching remedial IPv4."
-                 -->
             </t>
             <t>Organizations with the greatest incentives to deploy IPv6 are those which continue to grow
                quickly, even after IPv4 free pool exhaustion. Thus, ISPs have had varying levels of
@@ -908,12 +910,6 @@ Suzanne Woolf
                when it is complete.  Lessons learned so far include aligning costs
                and benefits (incentive), and ensuring incremental benefit (network effect, or backward
                compatibility).
-               <!-- DT removed since I disagree with this.  It did help, and that's why Behave we rechartered
-                    at the direction of the IAB (see text earlier in the document that referenced that fact).
-
-                  Better translation would not have helped, since it did not work for
-                  protocols that use IP addresses (or other layer 3 information) in other parts of the packet.
-                 -->
             </t>
         </section>
 
