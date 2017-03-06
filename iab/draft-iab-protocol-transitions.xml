@@ -936,7 +936,7 @@ Suzanne Woolf
 
           <section title="Protocol Versioning, Extensions and 'Grease'">
 
-            <t>During the development of HTTP/1.1, there was a fair amount of confusing regarding
+            <t>During the development of HTTP/1.1, there was a fair amount of confusion regarding
             the semantics of HTTP version numbers, resulting in <xref target="RFC2145"/>. Later, it
             was felt that minor versioning in a protocol caused more confusion than it was worth,
             and so HTTP/2.0 became HTTP/2.</t>
