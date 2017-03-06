@@ -975,8 +975,8 @@ Suzanne Woolf
             that did not lend themselves to supporting pipelining; this led to partial
             implementations, incorrect implementations, or even missing implementation. Since
             support for pipelining was indicated by the protocol version number itself, interop was
-            difficult to achieve, and furthermore its inability to completely address HoL blocking
-            issues made pipelining unattractive (ultimately contributing to the need for
+            difficult to achieve, and furthermore its inability to completely address head of line
+            blocking issues made pipelining unattractive (ultimately contributing to the need for
             HTTP/2).</t>
 
             <t>Likewise, HTTP/1.1's Expect/Continue mechanism relied on wide support for the new
