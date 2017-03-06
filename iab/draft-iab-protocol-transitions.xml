@@ -34,6 +34,7 @@
 <!ENTITY RFC7540 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
 <!ENTITY RFC7541 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7541.xml">
 <!ENTITY RFC7754 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7754.xml">
+<!ENTITY I-D.ietf-tls-grease PUBLIC "" "https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tls-grease-00.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
@@ -581,6 +582,7 @@ Suzanne Woolf
       &RFC7540;
       &RFC7541;
       &RFC7754;
+      &I-D.ietf-tls-grease;
 
       <reference anchor="IPv6Survey2011"
                  target="https://www.nro.net/wp-content/uploads/ipv6_deployment_survey.pdf">
@@ -948,10 +950,11 @@ Suzanne Woolf
             enough, and so had become "rusted" so that only a limited range of values could
             interoperate.</t>
 
-            <t>This phenomenon has been observed in other protocols, such as TLS, and there are
-            active efforts to identify extension points that are in need of such "grease" so that
-            they remain flexible. This can be achieved both by good extension point design, and
-            through use of unplanned values by common implementations.</t>
+            <t>This phenomenon has been observed in other protocols, such as TLS (as exemplified by
+            <xref target="I-D.ietf-tls-grease"/>), and there are active efforts to identify
+            extension points that are in need of such "grease" so that they remain flexible. This
+            can be achieved both by good extension point design, and through use of unplanned
+            values by common implementations.</t>
 
             <t>Besides the protocol version, HTTP's extension points that are well-greased include
             header fields, status codes, media types and cache-control extensions; HTTP methods,
