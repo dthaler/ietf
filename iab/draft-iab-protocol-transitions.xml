@@ -946,15 +946,14 @@ Suzanne Woolf
 
             <t>This decision was informed by the observation that many implementations ignored the
             major version number of the protocol, or misinterpreted it. As is the case with many
-            protocol extension points, HTTP versioning had failed to be "greased" by change often
+            protocol extension points, HTTP versioning had failed to be "greased" by use often
             enough, and so had become "rusted" so that only a limited range of values could
             interoperate.</t>
 
             <t>This phenomenon has been observed in other protocols, such as TLS (as exemplified by
             <xref target="I-D.ietf-tls-grease"/>), and there are active efforts to identify
-            extension points that are in need of such "grease" so that they remain flexible. This
-            can be achieved both by good extension point design, and through use of unplanned
-            values by common implementations.</t>
+            extension points that are in need of such "grease" and making it appear as if they are
+            in use.</t>
 
             <t>Besides the protocol version, HTTP's extension points that are well-greased include
             header fields, status codes, media types and cache-control extensions; HTTP methods,
