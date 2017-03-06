@@ -926,17 +926,7 @@ Suzanne Woolf
           deployments and users.</t>
 
           <t>HTTP/1.1 <xref target="RFC2616"/> was an attempt to make the protocol suitable for the
-          massive scale it was being deployed upon, and to introduce some new features. These
-          included:</t>
-
-          <t><list style="symbols">
-            <t>Pipelining - the ability to have more than one request to a server on the wire, to
-            mitigate Head of Line Blocking issues.</t>
-
-            <t>Expect/Continue - the ability to request that a server indicate that a request
-            header set is serviceable, so that the client can continue to send a request body with
-            reduced risk of it being rejected (thereby sacrificing the connection).</t>
-          </list></t>
+          massive scale it was being deployed upon, and to introduce some new features.</t>
 
           <t>HTTP/2 <xref target="RFC7540"/> was largely aimed at improving performance. The
           primary improvement was the introduction of request multiplexing, which is supported by
