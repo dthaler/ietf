@@ -960,13 +960,9 @@ Suzanne Woolf
           </section>
           <section title="Limits on Changes in Major Versions">
 
-            <t>Although a new "major" version is an opportunity to break compatibility with the old
-            one and improve multiple aspects of a protocol, care needs to be taken to assure that
-            it can be successfully deployed.</t>
-
-            <t>In particular, if the changes negatively affect existing implementations,
-            deployments or use cases, a new version of a protocol could affect adoption by making
-            the transition more costly.</t>
+            <t>Each update to the "major" version of HTTP have been accompanied by changes that
+            weren't compatible with previous versions. This was not uniformly successful given the
+            diversity and scale of deployment and implementations.</t>
 
             <t>For example, HTTP/1.1 introduced pipelining to improve protocol efficiency. Although
             it did enjoy implementation, interoperability did not follow.</t>
