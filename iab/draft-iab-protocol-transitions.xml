@@ -968,8 +968,8 @@ Suzanne Woolf
             it did enjoy implementation, interoperability did not follow.</t>
 
             <t>This was partially because many existing implementations had chosen architectures
-            that did not lend themselves to supporting pipelining; this led to partial
-            implementations, incorrect implementations, or even missing implementation. Since
+            that did not lend themselves to supporting it; pipelining was not uniformly
+            implemented and where it was, support was sometimes incorrect or incomplete. Since
             support for pipelining was indicated by the protocol version number itself, interop was
             difficult to achieve, and furthermore its inability to completely address head of line
             blocking issues made pipelining unattractive (ultimately contributing to the need for
