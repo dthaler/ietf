@@ -9,7 +9,7 @@ Expires: September 6, 2017
 
 
 Out With the Old and In With the New: Planning for Protocol Transitions
-                 draft-iab-protocol-transitions-06.txt
+                 draft-iab-protocol-transitions-07.txt
 
 Abstract
 
