@@ -123,15 +123,6 @@
           attempts to summarize some basic principles to enable future transitions,
           and also summarizes what makes for a good transition plan.
       </t>
-      <t> In this document we use the term transition generically to apply to any of:
-         <list style="symbols">
-         <t> adoption of a new protocol where none existed before,
-         </t>
-         <t> deployment of a new protocol that obsoletes a previous protocol,
-         </t>
-         <t> deployment of a updated version of an existing protocol, or
-         </t>
-         <t> decommissioning of an obsolete protocol.
     </abstract>
   </front>
 
