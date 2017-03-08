@@ -960,7 +960,7 @@ Suzanne Woolf
           </section>
           <section title="Limits on Changes in Major Versions">
 
-            <t>Each update to the "major" version of HTTP have been accompanied by changes that
+            <t>Each update to the "major" version of HTTP has been accompanied by changes that
             weren't compatible with previous versions. This was not uniformly successful given the
             diversity and scale of deployment and implementations.</t>
 
@@ -981,7 +981,7 @@ Suzanne Woolf
 
             <t>More recently, the HTTP working group decided that HTTP/2 represented an opportunity
             to improve security, making the protocol much stricter than previous versions about the
-            use of TLS. To this end, a long list of TLS cipher suites are prohibited, constraints
+            use of TLS. To this end, a long list of TLS cipher suites were prohibited, constraints
             were placed on the key exchange method, and renegotiation was prohibited.</t>
 
             <t>This did cause deployment problems. Though most were minor and transitory, disabling
@@ -1001,7 +1001,7 @@ Suzanne Woolf
           <section title="Planning for Replacement">
 
             <t>HTTP/1.1 provided the Upgrade header field to enable transitioning a connection to
-            an entirely different protocol. So far, this has little-used, other than to enable the
+            an entirely different protocol. So far, this has been little-used, other than to enable the
             use of WebSockets <xref target="RFC6455"/>.</t>
 
             <t>With performance being a primary motivation for HTTP/2, a new mechanism was needed

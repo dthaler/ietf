@@ -1099,7 +1099,7 @@ A.4.1.  Protocol Versioning, Extensions and 'Grease'
 
 A.4.2.  Limits on Changes in Major Versions
 
-   Each update to the "major" version of HTTP have been accompanied by
+   Each update to the "major" version of HTTP has been accompanied by
    changes that weren't compatible with previous versions.  This was not
    uniformly successful given the diversity and scale of deployment and
    implementations.
@@ -1134,7 +1134,7 @@ Internet-Draft           Planning for Transition              March 2017
    More recently, the HTTP working group decided that HTTP/2 represented
    an opportunity to improve security, making the protocol much stricter
    than previous versions about the use of TLS.  To this end, a long
-   list of TLS cipher suites are prohibited, constraints were placed on
+   list of TLS cipher suites were prohibited, constraints were placed on
    the key exchange method, and renegotiation was prohibited.
 
    This did cause deployment problems.  Though most were minor and
@@ -1156,7 +1156,7 @@ Internet-Draft           Planning for Transition              March 2017
 A.4.3.  Planning for Replacement
 
    HTTP/1.1 provided the Upgrade header field to enable transitioning a
-   connection to an entirely different protocol.  So far, this has
+   connection to an entirely different protocol.  So far, this has been
    little-used, other than to enable the use of WebSockets [RFC6455].
 
    With performance being a primary motivation for HTTP/2, a new
