@@ -61,7 +61,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-iab-protocol-transitions-07.txt"
+<rfc category="info" docName="draft-iab-protocol-transitions-08.txt"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -74,7 +74,7 @@
     <!-- The abbreviated title is used in the page header - it is only necessary if the
          full title is longer than 39 characters -->
 
-    <title abbrev="Planning for Transition">Out With the Old and In With the New: Planning for Protocol Transitions</title>
+    <title abbrev="Planning for Transition">Planning for Protocol Adoption and Subsequent Transitions</title>
 
     <!--add 'role="editor"' below for the editors if appropriate -->
 
