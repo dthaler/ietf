@@ -8,10 +8,12 @@
       <!ENTITY rfc3986 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3986.xml">
       <!ENTITY rfc5630 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5630.xml">
       <!ENTITY rfc6335 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6335.xml">
-      <!ENTITY rfc6973 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6973.xml">
-      <!ENTITY rfc7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
+      <!ENTITY rfc6555 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6555.xml">
+      <!ENTITY rfc6724 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6724.xml">
+      <!ENTITY rfc6943 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6943.xml">
+      <!ENTITY rfc7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
       <!ENTITY rfc7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml">
-      <!ENTITY rfc7721 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7721.xml">
+      <!ENTITY rfc7595 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7595.xml">
       <!-- For each Internet Draft you want to reference, add a line like
            below and then see the references section at the end. -->
       <!ENTITY I-D.ietf-core-coap-tcp-tls PUBLIC ''
@@ -28,7 +30,7 @@
 
 <rfc docName="draft-thaler-appsawg-uri-transports-00" ipr="trust200902" category="info">
   <front>
-    <title abbrev='On URIs and Transport Stacks'>On URIs and Transport Stacks</title>
+    <title abbrev='Using URIs With Multiple Transport Stacks'>Multiple-Transport URIs</title>
     <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
       <organization>Microsoft</organization>
       <address>
@@ -42,7 +44,7 @@
         <email>dthaler@microsoft.com</email>
       </address>
     </author>
-    <date year='2016' />
+    <date year='2017' />
     <area>ART</area>
     <!-- <keyword>unlinkability</keyword>
          <keyword>anonymity</keyword>
@@ -50,24 +52,38 @@
          <keyword>Secure Neighbor Discovery</keyword>
       -->
     <abstract>
-      <t> This document discusses issues that arise when defining URI schemes, where
-          the same resource can be reached over multiple protocol stacks, and discusses
-          various approaches that have been used, and the tradeoffs between them.
+      <t> Many Uniform Resource Identifiers (URIs) today have some mechanism to resolve
+          them to one or more specific endpoints where that resource is available.
+          This document discusses issues that arise when the same resource can be reached 
+          over multiple protocol stacks, and discusses various approaches that have been 
+          used, and the tradeoffs between them. Such issues are important to consider
+          when defining new URI schemes and resolution mechanisms.
       </t>
     </abstract>
   </front>
  
   <middle>
     <section title='Introduction' anchor='intro'>
-        <t> Requirements for URI scheme definitions are discussed in <xref target="RFC3986"/>,
+        <t> For Uniform Resource Identifier (URI) schemes that function as locators,
+            <xref target="RFC3986"/> explains that URI "resolution" is the process of
+            determining an access mechanism and the appropriate parameters necessary to
+            deference a URI; this resolution may require several iterations.  To use that
+            access mechanism to perform an action on the URI's resource is to "dereference"
+            the URI.  The specific details vary by URI scheme and hence are up to each
+            URI scheme definition to specify.
+        </t>
+        <t> Requirements for URI scheme definitions are covered in <xref target="RFC3986"/>,
             <xref target="RFC7230"/>, and <xref target="RFC7595"/>.  RFC 7595 section 3.3
             states:
             <list style="empty">
-                For schemes that function as locators, it is important that the
-                mechanism of resource location be clearly defined.
+                <t> For schemes that function as locators, it is important that the
+                    mechanism of resource location be clearly defined.
+                </t>
             </list>
         </t>
-        <t> RFC 3986 section 6.1 states:
+        <t> Closely related to the concept of resolving a URI to a resource that may have
+            multiple ways to reach it, is the concept of "equivalence".
+            <xref target="RFC3986"/> section 6.1 states:
             <list style="empty">
                 <t> Even though it is possible to determine that two URIs are equivalent,
                     URI comparison is not sufficient to determine whether two URIs
@@ -78,12 +94,12 @@
                     positives.
                 </t>
             </list>
-            Thus, it is already possible that two URIs refer to the same resource.
-            The goal is simply to "minimize" such cases, but such minimization often comes
-            at a cost.  For example, for many URIs, a DNS name can be used in the authority
-            component rather than using many URIs that differ only in IP address, with
-            the cost being a dependency on DNS name resolution and the potential latency
-            and traffic involved.  
+            Thus, it is possible that two distinct URIs refer to the same resource.
+            The goal, as RFC 3986 stated above, is simply to "minimize" such cases, but such
+            minimization often comes at a cost.  For example, for many URIs schemes, a DNS name can be
+            used in the authority component rather than using several URIs that differ only in
+            IP address literal, with the cost being a dependency on DNS name resolution and
+            the potential latency and traffic involved.  
         </t>
         <t> As another example, <xref target="RFC5630"/> section 4.1 states:
             <list style="empty">
@@ -101,98 +117,132 @@
                     addressable with SIP, it will also be addressable with SIPS.
                 </t>
             </list>
+            Thus, the same resource might be identified by multiple URIs that differ only in
+            URI scheme, or authority component, or path (e.g., using ".." resolution).
         </t>
+        <!--
+            <t> The focus of this draft is on handling of different transport endpoints for the same
+                resource, whether that is done using a single URI or multiple URIs with the
+                same URI scheme or multiple URIs with different URI schemes.
+            </t>
+        -->
     </section>
 
-    <section title='Problem Stetement' anchor='problem'>
-        <t> There are two problems when multiple transports are available:
+    <section title='Problem Statement' anchor='problem'>
+        <t> Besides specifying one or more URI scheme names to be used and the syntax for each (e.g.,
+            what the authority component contains), there are two issues a URI scheme definer must 
+            deal with when multiple transports are available for accessing a given resource:
             <list style="numbers">
-                <t> Discovery of a set of transport endpoint identifiers (e.g., port numbers), and
+                <t> Specifying how the set of transport endpoint identifiers (e.g., TCP and UDP port
+                    numbers) for a given URI can be discovered by an entity wishing to resolve it, and
                 </t>
-                <t> Choosing an appropriate transport endpoint to use among the discovered set.
+                <t> Specifying how an appropriate transport endpoint can be selected for use,
+                    from among the discovered set.
                 </t>
             </list>
+            At a high level, these issues are equivalent to those arising when multiple IP addresses
+            are available for the same resource.  However, in general there may be multiple
+            layers in a transport stack, each with their own identifiers, so the problems are compounded
+            when multiple choices exist at each of multiple layers below the resource itself.
         </t>
+    </section>
 
-        <section title='Port Numbers' anchor='ports'>
-            <t> Historically it was sometimes assumed that multiple transport protocols
-                (e.g., UDP and TCP) would use the same port number, so specifying a single
-                port number would be sufficient for multiple transports.  When port numbers 
-                appear in URIs, they are not the default ports that might be IANA-assigned
-                (since default ports should be omitted from the URI per <xref target="RFC3986"/>
-                section 3.2.3), but instead are either statically configured on the server 
-                or be emphemeral ports dynamically chosen on the server.  In most TCP/IP
-                stacks, ephemeral ports used by UDP endpoints have no relationship to ephemeral
-                ports used by TCP endpoints in the same application and so it cannot be guaranteed
-                that the port numbers are the same.  For example, port 51000 might be allocated
-                to one application for UDP, and a different application for TCP.
+    <section title='Possible Approaches' anchor='approaches'>
+        <section title="Transport endpoint discovery">
+            <section title='Embed full transport information in the URI'>
+                <t> Historically it was sometimes assumed that multiple transport protocols
+                    (e.g., UDP and TCP) would use the same port number, so specifying a single
+                    port number would be sufficient for multiple transports.  When port numbers 
+                    appear in URIs, they are not the default ports that might be IANA-assigned
+                    (since default ports should be omitted from the URI per <xref target="RFC3986"/>
+                    section 3.2.3), but instead are either statically chosen by the server application,
+                    or are emphemeral ports dynamically allocated on the server hosting the resource.  In
+                    most TCP/IP stacks, ephemeral ports used by UDP endpoints have no relationship to ephemeral
+                    ports used by TCP endpoints in the same application and so it cannot be guaranteed
+                    that the port numbers are the same.  For example, port 51000 might be allocated
+                    to one application for UDP, and a different application for TCP.
+                </t>
+                <t> Since 2011, this same issue also occurs with IANA-assigned ports if IANA assigns
+                    port numbers to different applications that share a common URI scheme, since such applications
+                    cannot use the default port for that URI scheme.
+                    <xref target="RFC6335"/> section 7.2 explains:
+                    <list style="empty">
+                        <t> Effective with the publication of this document, IANA will begin
+                            assigning port numbers for only those transport protocols explicitly
+                            included in an assignment request.  This ends the long-standing
+                            practice of automatically assigning a port number to an application
+                            for both TCP and UDP, even if the request is for only one of these
+                            transport protocols.
+                        </t>
+                    </list>
+                </t>
+                <t> Thus, for most URI schemes, a port number appearing in a URI authority component
+                    must be specified as being in a specific transport-layer protocol's numbering space 
+                    since its value for a given resource may differ by transport protocol.
+                    If a URI scheme wishes for the port number in URI authority component to be able to
+                    apply to multiple transport protocols, the URI scheme would typically have to assume 
+                    static configuration on servers; this may be acceptable in some circumstances and
+                    unacceptable in others.
+                </t>
+                <t> XXX fill in more about the section title...
+                </t>
+            </section>
+    
+            <section title='Use separate URIs for each transport stack'>
+                <t> Use separate URI schemes and simply accept the fact that two URIs 
+                    might refer to the same resource as RFC 3986 already allows.
+                </t>
+                <t> XXX scheme:
+                    For example, there might be a separate URI scheme per transport stack.
+                </t>
+                <t> XXX elsewhere in the URI
+                </t>
+            </section>
+
+            <section title='Use another mechanism to discover the transport stack identifiers'>
+            <t> In this approach, a URI scheme definer would specify a mechanism whereby lower-layer 
+                identifiers (e.g., transport specific URIs like the wss: URI shown in the coap-tcp draft -09) 
+                can be resolved for a given coap URI.  E.g., via a resource directory or similar functionality 
+                built into a server.  The downside is extra complexity in both clients and servers, and extra 
+                specification work for the URI scheme definer.  If TCP and UDP are used, this also requires
+                a way to discover TCP or UDP endpoint information either by defining generic URI schemes for
+                TCP and UDP or by making the discovery mechanism be capable of discovering transport identifiers
+                using a syntax other than URIs (e.g., SRV records).
             </t>
-            <t> Since 2011, this same issue also occurs even with IANA-assigned ports, if ports
-                are assigned to applications that share a common URI scheme and hence cannot use the
-                default port for that URI scheme.  <xref target="RFC6335"/> section 7.2 explains:
-                <list style="empty">
-                    <t> Effective with the publication of this document, IANA will begin
-                        assigning port numbers for only those transport protocols explicitly
-                        included in an assignment request.  This ends the long-standing
-                        practice of automatically assigning a port number to an application
-                        for both TCP and UDP, even if the request is for only one of these
-                        transport protocols.
-                    </t>
-                </list>
+            </section>
+
+            <!-- Hypothetical "Hybrid" approach (omit for now):
+                <t> Specify that the port number, if any, in a URI scheme, is specifically a port number used
+                    with a single specific transport protocol stack.  Identifiers for use with any other transport
+                    stack must be resolved using a specific mechanism (e.g., SRV record lookups) as specified
+                    by the URI scheme.  
+                </t>
+             -->
+        </section>
+
+        <section title="Transport endpoint selection">
+            <t> The URI scheme must specify the mechanism for choosing
+                among transport protocol stacks, such as specifying one that is mandatory to implement
+                and an algorithm for trying possible transport stacks in some order until one works.
             </t>
-            <t> Thus, in general for a port number in a URI to apply to multiple transport protocols,
-                the URI scheme would typically have to assume static configuration on servers.  For 
-                most URI schemes on the other hand, the presence of a port number must be specified 
-                as being in a specific transport-layer protocol's numbering space since its value 
-                may differ by transport protocol.
+            <t> This problem is similar to that of choosing among multiple IP discovered addresses for
+                the same transport stack, and two common solutions are used today in that context.
+                One category of algorithm is to sort the choices according to some criteria, and then
+                to try them in order of preference.  XXX reference RFC 6724 and SRV records also for
+                priority among port numbers.
+            </t>
+            <t> Another category of such algorithms is called "Happy Eyeballs" <xref target="RFC6555"/>
+                where multiple possibilities are attempted in parallel (possibly with some delay added
+                before starting non-preferred choices) and keeping the first one that successfully connects.
+                The advantage is faster connection when a non-preferred choice is needed, and the disadvantages
+                are extra complexity in the client, extra traffic on the network, and extra connections
+                at the server if multiple parallel attempts succeed.
+            </t>
+            <t> XXX text about componded when multiple layers exist
             </t>
         </section>
     </section>
 
-    <section title='Potential Approaches'>
-        <section title='Use another mechanism to discover the transport stack identifiers'>
-        <t> XXX below convolutes two concepts: trying among a well known set until one is found that works,
-            XXX and using a dynamic lookup mechanism to get the identifiers.
-        </t>
-        <t> Specify that the port number, if any, in a URI scheme, is specifically a port number used
-            with a single specific transport protocol stack.  Identifiers for use with any other transport
-            stack must be resolved using a specific mechanism (e.g., SRV record lookups) as specified
-            by the URI scheme.  Furthermore, URI scheme must also specify the mechanism for choosing
-            among transport protocol stacks, such as specifying one that is mandatory to implement
-            and an algorithm for trying possible transport stacks in some order until one works.
-            The downside is extra complexity in the client, and extra traffic on the network, both of 
-            which might be significant downsides in a constrained network or a constrained client.
-        </t>
-        </section>
-
-        <section title='Use another mechanism to discover the transport stack identifiers'>
-        <t> In this approach, a URI scheme definer would specify a mechanism whereby lower-layer 
-            identifiers (e.g., transport specific URIs like the wss: URI shown in the coap-tcp draft -09) 
-            can be resolved for a given coap URI.  E.g., via a resource directory or similar functionality 
-            built into a server.  The downside is extra complexity in both clients and servers, and extra 
-            specification work for the URI scheme definer.  If TCP and UDP are used, this also requires
-            a way to discover TCP or UDP endpoint information either by defining generic URI schemes for
-            TCP and UDP or by making the discovery mechanism be capable of discovering transport identifiers
-            using a syntax other than URIs (e.g., SRV records).
-        </t>
-        </section>
-
-        <section title='Embed full transport information in the URI'>
-        <t> XXX 
-        </t>
-        </section>
-
-        <section title='Use separate URIs for each transport stack'>
-        <t> Use separate URI schemes and simply accept the fact that two URIs 
-            might refer to the same resource as RFC 3986 already allows.
-        </t>
-        <t> XXX scheme:
-            For example, there might be a separate URI scheme per transport stack.
-        </t>
-        <t> XXX elsewhere in the URI
-        </t>
-        </section>
-    </section>
 
     <section title='IANA Considerations'>
         <t> This document has no actions for IANA.
@@ -200,7 +250,11 @@
     </section>
 
     <section title='Security Considerations'>
-      <t> XXX
+      <t> The security considerations in section 3.7 of <xref target="RFC7595"/> and
+          section 7 of <xref target="RFC3986"/> apply.  <xref target="RFC6943"/> also
+          discusses security considerations with determining equivalence, and section
+          3.1.4 of that document is relevant to resolution.  This document does not 
+          raise additional security issues.
       </t>
     </section>
 
@@ -214,12 +268,14 @@
     </references>
    
     <references title='Informative References'>
-      &rfc6335;
       &rfc5630;
-      &rfc6973;
-      &rfc7231;
+      &rfc6335;
+      &rfc6555;
+      &rfc6724;
+      &rfc6943;
+      &rfc7230;
       &rfc7252;
-      &rfc7721;
+      &rfc7595;
       &I-D.ietf-core-coap-tcp-tls;
 
       <reference anchor='ListDiscussion' target='https://www.ietf.org/mail-archive/web/core/current/msg04867.html'>
