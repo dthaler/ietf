@@ -56,7 +56,7 @@
           them to one or more specific endpoints where that resource is available.
           This document discusses issues that arise when the same resource can be reached 
           over multiple protocol stacks, and discusses various approaches that have been 
-          used, and the tradeoffs between them. Such issues are important to consider
+          used or discussed, and the tradeoffs between them. Such issues are important to consider
           when defining new URI schemes and resolution mechanisms.
       </t>
     </abstract>
@@ -69,10 +69,11 @@
             determining an access mechanism and the appropriate parameters necessary to
             deference a URI; this resolution may require several iterations.  To use that
             access mechanism to perform an action on the URI's resource is to "dereference"
-            the URI.  The specific details vary by URI scheme and hence are up to each
-            URI scheme definition to specify.
+            the URI.
         </t>
-        <t> Requirements for URI scheme definitions are covered in <xref target="RFC3986"/>,
+        <t> The specific details vary by URI scheme and hence are up to each
+            URI scheme definition to specify.
+            Requirements for URI scheme definitions are covered in <xref target="RFC3986"/>,
             <xref target="RFC7320"/>, and <xref target="RFC7595"/>.  RFC 7595 section 3.3
             states:
             <list style="empty">
@@ -141,9 +142,9 @@
                 </t>
             </list>
             At a high level, these issues are equivalent to those arising when multiple IP addresses
-            are available for the same resource.  However, in general there may be multiple
+            are available for the same resource.  However, in general, there may be multiple
             layers in a transport stack, each with their own identifiers, so the problems are compounded
-            when multiple choices exist at each of multiple layers below the resource itself.
+            when multiple choices exist at each of multiple layers below the application-layer protocol itself.
         </t>
     </section>
 
@@ -153,22 +154,22 @@
             <t> A client wishing to access a resource needs to know, for each layer in the transport stack,
                 what protocol(s) to use, and what identifier(s) are needed by each such protocol.
                 There are several possible approaches to transport endpoint identifier discovery,
-                which we cover in the following sections.  
-                For simplicity we will discuss them
+                which we cover in the following sections.  For simplicity, we will discuss them
                 as if the same approach is used for both types of information, but it is important to
-                remember that a URI scheme could discover the set of transport protocols via one approach, 
-                and discover the identifier(s) for each transport protocol via another approach.  
+                remember that a URI scheme could specify discovery of the set of transport protocols via one approach, 
+                and discovery of the identifier(s) for each transport protocol via another approach.  
             </t>
 
             <section title='Specified by the URI scheme specification'>
             <t> In this approach, every resource is assumed to use the exact same set of transport
-                protocols and identifiers.  The identifiers can be IANA assigned and specified as part
+                protocols (i.e., stacks of protocols above the network layer) and identifiers.  The 
+                identifiers can be IANA assigned and specified as part
                 of the URI scheme specification.  If support for a new transport protocol is added
                 later, different entities may thus have different hard-coded assumptions about the set of 
                 possible transport protocols, which just pushes the rest of the burden to the problem
-                of selection among the known set.
+                of selection among the known set (see <xref target="selection"/>).
             </t>
-            <t> A disadvantage of this approach for some use cases is that it does not allow for 
+            <t> A disadvantage of this approach for many use cases is that it does not allow for 
                 non-default configurations such as custom ports.
             </t>
             </section>
@@ -184,7 +185,7 @@
                     appear in URIs, they are not the default ports that might be IANA-assigned
                     (since default ports should be omitted from the URI per <xref target="RFC3986"/>
                     section 3.2.3), but instead are either statically chosen by the server application,
-                    or are emphemeral ports dynamically allocated on the server hosting the resource.  In
+                    or are ephemeral ports dynamically allocated on the server hosting the resource.  In
                     most TCP/IP stacks, ephemeral ports used by UDP endpoints have no relationship to ephemeral
                     ports used by TCP endpoints in the same application and so it cannot be guaranteed
                     that the port numbers are the same.  For example, port 51000 might be allocated
@@ -210,7 +211,7 @@
                 </t>
                 <t> Thus, for most URI schemes, a port number appearing in a URI authority component
                     must be specified as being in a specific transport-layer protocol's numbering space 
-                    since its value for a given resource may differ by transport protocol.
+                    since its value for a given resource might differ by transport protocol.
                     If a URI scheme wishes for the port number in URI authority component to be able to
                     apply to multiple transport protocols, the URI scheme would typically have to assume 
                     static configuration on servers; this may be acceptable in some circumstances and
@@ -226,7 +227,7 @@
                             possible.
                         </t>
                     </list>
-                    Unfortunately, it is not possible to follow this recommendation with the URIs authority
+                    Unfortunately, it is not possible to follow this recommendation with the URI authority
                     component, since the URI syntax does not support the use of service names in the authority.
                     Another limitation of service names is that they are currently limited only to
                     TCP, UDP, SCTP, and DCCP, and so cannot be used with other layers (e.g., websockets)
@@ -234,12 +235,14 @@
                     as possible transports for resource access, cannot use a service name as a common identifier
                     for transport-layer endpoint resolution.
                 </t>
-                <t> It is usually also undesirable to put transport-layer endpoint information (whether
-                    a list of supported transport protocols or the identifier(s) for a given transport protocol)
-                    in the path or query components for two reasons.  First, those components are passed over the wire 
+                <t> It is usually also undesirable to put transport-layer endpoint information (the
+                    list of supported transport protocols or the identifier(s) used with the transport protocols)
+                    in the path or query components for two reasons.  First, those components are typically 
+                    passed over the wire 
                     to the server when accessing a resource, which only consumes extra bandwidth with no benefit.
                     Second, if the transport-layer identifiers might change over the lifetime of the resource,
-                    then the URI would need to change.  Such a change would negatively affect equivalence with
+                    then the URI would need to change even if the change did not affect the actual endpoint
+                    chosen by the client.  Such a change would negatively affect equivalence with
                     the previous URI, e.g., resulting in cache misses.
                 </t>
                 <t> Thus, an advantage of this approach is that it can work without any dependency on
@@ -251,8 +254,8 @@
             </section>
     
             <section title='Use separate URI for each transport endpoint'>
-                <t> Use separate URIs and simply accept the fact that multiple URIs 
-                    might refer to the same resource as RFC 3986 already allows. This is similar to
+                <t> In this approach, one must simply accept the fact that multiple URIs 
+                    might refer to the same resource as RFC 3986 already allows. This is similar
                     to using a set of URIs that differ only in IP address literal, for a case when
                     the resource server is not resolvable via a protocol such as DNS or SIP.
                 </t>
@@ -263,7 +266,7 @@
                 </t>
                 <t> For cases where there are multiple transport protocols but only one such layer,
                     this approach results in needing to identify a single transport protocol per URI.
-                    As discussed in section <xref target="allin"/>, this often cannot be put in the
+                    As discussed in <xref target="allin"/>, this often cannot be put in the
                     authority component and is undesirable to put in the path or query component.  As a result,
                     such cases involve specifying a separate URI scheme per transport.  For example,
                     "sip" and "sips" do this.  The CoRE WG also proposed this approach for CoAP
@@ -271,17 +274,17 @@
                 </t>
             </section>
 
-            <section title='Use another mechanism to discover the transport stack identifiers'>
+            <section title='Use another protocol for discovery'>
             <t> In this approach, a URI scheme definer would specify a mechanism whereby transport stack
                 identifiers can be resolved for a given URI.  If multiple layers exist, then such
                 resolution might involve a resolution step for each layer.
             </t>
-            <t> DNS records (e.g., SRV) is one potential protocol that could be used to discover
-                the set of supported transports and their associated identifiers.  Other types of
+            <t> DNS records (e.g., SRV records) provide one potential mechanism that can be used to discover
+                a set of supported transports and their associated identifiers.  Other types of
                 directories might be usable in other cases.
             </t>
             <t> One challenge is defining a common mechanism that could discover identifiers for 
-                different tranport protocols.  For example, websockets uses URIs and TCP uses port
+                different transport protocols.  For example, websockets use URIs and TCP uses port
                 numbers (and there is currently no URI scheme for TCP itself), and so the syntax
                 of such identifiers may differ if an application layer protocol could use both TCP
                 and websockets.
@@ -289,8 +292,8 @@
             <t> The advantage of requiring a resolution protocol is that the resource URI itself
                 can be kept short and simple.  The downside is extra complexity in both clients 
                 and servers, and potentially extra specification work for the URI scheme definer, and
-                possible additional deployment burden of operating extra protocols or servers to facilitate
-                such resolution.
+                the possible additional deployment burden of provisioning and operating extra protocols 
+                or servers to facilitate such resolution.
             </t>
             <!--
                 If TCP and UDP are used, this also requires
@@ -311,12 +314,12 @@
              -->
         </section>
 
-        <section title="Transport endpoint selection">
+        <section title="Transport endpoint selection" anchor="selection">
             <t> The URI scheme must specify the mechanism for choosing
-                among transport protocol stacks, such as specifying one that is mandatory to implement
+                among transport protocol stacks, such as specifying at least one that is mandatory to implement
                 and an algorithm for trying possible transport stacks in some order until one works.
             </t>
-            <t> This problem is similar to that of choosing among multiple IP discovered addresses for
+            <t> This problem is similar to that of choosing among multiple discovered IP addresses for
                 the same transport stack, and two common solutions are used today in that context.
                 One category of algorithm is to sort the choices according to some criteria, and then
                 to try them in order of preference.  For example, SRV records provide a priority and weight
