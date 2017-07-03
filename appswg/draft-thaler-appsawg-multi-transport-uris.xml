@@ -11,15 +11,14 @@
       <!ENTITY rfc6555 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6555.xml">
       <!ENTITY rfc6724 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6724.xml">
       <!ENTITY rfc6943 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6943.xml">
-      <!ENTITY rfc7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml">
+      <!-- ENTITY rfc7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml" -->
       <!ENTITY rfc7320 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7320.xml">
       <!ENTITY rfc7595 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7595.xml">
+      <!ENTITY rfc7838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7838.xml">
       <!-- For each Internet Draft you want to reference, add a line like
            below and then see the references section at the end. -->
-      <!ENTITY I-D.ietf-core-coap-tcp-tls PUBLIC ''
-          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-core-coap-tcp-tls.xml'>
-      <!ENTITY I-D.winfaa-intarea-broadcast-consider PUBLIC ''
-          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.winfaa-intarea-broadcast-consider.xml'>
+      <!-- ENTITY I-D.ietf-core-coap-tcp-tls PUBLIC ''
+          'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-core-coap-tcp-tls.xml' -->
       ]>
 <?rfc toc='yes' ?>
 <?rfc symrefs='yes' ?>
@@ -28,7 +27,7 @@
 <!-- <?rfc-ext parse-xml-in-artwork='yes' ?> -->
 <!-- <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?> -->
 
-<rfc docName="draft-thaler-appsawg-multi-transport-uris-00" ipr="trust200902" category="info">
+<rfc docName="draft-thaler-appsawg-multi-transport-uris-01" ipr="trust200902" category="info">
   <front>
     <title abbrev='Multi-Transport URIs'>Using URIs With Multiple Transport Stacks</title>
     <author initials='D.' surname='Thaler' fullname='Dave Thaler'>
@@ -121,6 +120,14 @@
             Thus, the same resource might be identified by multiple URIs that differ only in
             URI scheme, or authority component, or path (e.g., using ".." resolution).
         </t>
+        <t> For URIs used in the World Wide Web, Section 2.3.1 of "Architecture of the World 
+            Wide Web" <xref target="AWWW" /> further discusses such aliasing, explaining
+            that links to a resource increase the value of that resource, and multiple URIs
+            for it interfere with such valuation, and also makes
+            it difficult to correlate two sources as pointing to the same resource
+            via differing aliases.  Thus to maximize the benefit to the Web, URI aliases
+            should be minimized.
+        </t>
         <!--
             <t> The focus of this draft is on handling of different transport endpoints for the same
                 resource, whether that is done using a single URI or multiple URIs with the
@@ -163,9 +170,12 @@
             <section title='Specified by the URI scheme specification'>
             <t> In this approach, every resource is assumed to use the exact same set of transport
                 protocols (i.e., stacks of protocols above the network layer) and identifiers.  The 
-                identifiers can be IANA assigned and specified as part
-                of the URI scheme specification.  If support for a new transport protocol is added
-                later, different entities may thus have different hard-coded assumptions about the set of 
+                identifiers can be IANA assigned and specified as part of the URI scheme or protocol
+                specification.  For example, TFTP only supports UDP port 69, and so
+                no port number is permitted in a tftp URI.
+            </t>
+            <t> If support for a new transport protocol is later added under a protocol with a given URI scheme,
+                different entities may thus have different hard-coded assumptions about the set of 
                 possible transport protocols, which just pushes the rest of the burden to the problem
                 of selection among the known set (see <xref target="selection"/>).
             </t>
@@ -227,9 +237,16 @@
                             possible.
                         </t>
                     </list>
-                    Unfortunately, it is not possible to follow this recommendation with the URI authority
-                    component, since the URI syntax does not support the use of service names in the authority.
-                    Another limitation of service names is that they are currently limited only to
+                    Unfortunately, it is not possible to follow this recommendation with the port field
+                    in URI authority component, since the URI syntax only allows integers in the port field.
+                </t>
+                <t> For new URI schemes, it may be possible in some cases to place a service name in the
+                    host field, such as "_myservice._tcp.example.org" as would be used with a DNS SRV record
+                    <xref target="RFC2782" />.
+                    That example still specifies only a single transport protocol stack ("_tcp") however,
+                    rather than a list of supported stacks.
+                </t>
+                <t> Another limitation of service names is that they are currently limited only to
                     TCP, UDP, SCTP, and DCCP, and so cannot be used with other layers (e.g., websockets)
                     or protocols.  Thus, a URI scheme for a protocol that supports both, say, websockets and raw TCP
                     as possible transports for resource access, cannot use a service name as a common identifier
@@ -274,26 +291,31 @@
                 </t>
             </section>
 
-            <section title='Use another protocol for discovery'>
+            <section title='Use another mechanism for discovery'>
             <t> In this approach, a URI scheme definer would specify a mechanism whereby transport stack
                 identifiers can be resolved for a given URI.  If multiple layers exist, then such
                 resolution might involve a resolution step for each layer.
             </t>
             <t> DNS records (e.g., SRV records) provide one potential mechanism that can be used to discover
                 a set of supported transports and their associated identifiers.  Other types of
-                directories might be usable in other cases.
+                directories might be usable in other cases. For example, HTTP now provides an "Alt-Svc"
+                <xref target="RFC7838" /> mechanism that can discover alternate transport endpoints for the
+                same HTTP URI.
             </t>
-            <t> One challenge is defining a common mechanism that could discover identifiers for 
+            <t> One challenge in many cases is defining a common mechanism that could discover identifiers for 
                 different transport protocols.  For example, websockets use URIs and TCP uses port
                 numbers (and there is currently no URI scheme for TCP itself), and so the syntax
                 of such identifiers may differ if an application layer protocol could use both TCP
                 and websockets.
             </t>
-            <t> The advantage of requiring a resolution protocol is that the resource URI itself
+            <t> The advantage of requiring a separate resolution mechanism is that the resource URI itself
                 can be kept short and simple.  The downside is extra complexity in both clients 
                 and servers, and potentially extra specification work for the URI scheme definer, and
                 the possible additional deployment burden of provisioning and operating extra protocols 
                 or servers to facilitate such resolution.
+            </t>
+            <t> In some contexts, it might also be feasible to discover the additional identifiers using the
+                same mechanism used to discover the URI itself, perhaps even in the same message.
             </t>
             <!--
                 If TCP and UDP are used, this also requires
@@ -354,6 +376,12 @@
       </t>
     </section>
 
+    <section title='Acknowledgements'>
+      <t> Thanks to Graham Klyne, Alexey Melnikov, and Gabriel Montenegro for helpful suggestions
+          on this document.
+      </t>
+    </section>
+
   </middle>
 
   <back>
@@ -366,18 +394,20 @@
       &rfc6555;
       &rfc6724;
       &rfc6943;
-      &rfc7252;
+      <!-- &rfc7252; -->
       &rfc7320;
       &rfc7595;
-      &I-D.ietf-core-coap-tcp-tls;
+      &rfc7838;
+      <!-- &I-D.ietf-core-coap-tcp-tls; -->
 
-      <reference anchor='ListDiscussion' target='https://www.ietf.org/mail-archive/web/core/current/msg04867.html'>
+      <reference anchor='AWWW' target='http://www.w3.org/TR/webarch'>
         <front>
-          <title>Question about Location and redirection</title>
-          <author initials='C.' surname='Bormann' fullname='Carsten Bormann'/>
-          <date year="2013" month="October" day="3"/>
+          <title>Architecture of the World Wide Web, Volume One</title>
+          <author initials='I.' surname='Jacobs' fullname='Ian Jacobs'/>
+          <author initials='N.' surname='Walsh' fullname='Norman Walsh'/>
+          <date year="2004" month="December" day="15"/>
         </front>
-        <seriesInfo name="Symposium on Security and Privacy" value="2003"/>
+        <!-- seriesInfo name="Symposium on Security and Privacy" value="2003"/ -->
       </reference>
 
     </references>
